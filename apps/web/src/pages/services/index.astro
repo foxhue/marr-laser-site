@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ServicesGrid from '@components/ServicesGrid.astro';
+import { sanityClient } from '@lib/sanity';
+import { servicesQuery } from '@lib/queries';
+import type { Service } from '@foxhue/shared';
+
+const services: Service[] = await sanityClient.fetch(servicesQuery);
+---
+
+<BaseLayout title="Our Services" description="Browse the full range of services we offer.">
+  <section class="services-page" aria-labelledby="services-heading">
+    <div class="container">
+      <h1 id="services-heading">Our Services</h1>
+      <ServicesGrid services={services} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .services-page {
+    padding-block: var(--space-20);
+  }
+
+  .services-page h1 {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+</style>

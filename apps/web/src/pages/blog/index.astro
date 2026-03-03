@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BlogList from '@components/BlogList.astro';
+import { sanityClient } from '@lib/sanity';
+import { blogPostsQuery } from '@lib/queries';
+import type { BlogPost } from '@foxhue/shared';
+
+const posts: BlogPost[] = await sanityClient.fetch(blogPostsQuery);
+---
+
+<BaseLayout title="Blog" description="Read our latest articles, tips, and insights.">
+  <section class="blog-page" aria-labelledby="blog-heading">
+    <div class="container">
+      <h1 id="blog-heading">Blog</h1>
+      <BlogList posts={posts} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-page {
+    padding-block: var(--space-20);
+  }
+
+  .blog-page h1 {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+</style>

@@ -1,0 +1,201 @@
+---
+import type { Service } from '@foxhue/shared';
+import SanityImage from '@components/SanityImage.astro';
+
+interface Props {
+  services: Service[];
+  heading?: string;
+}
+
+const { services, heading = 'Our Services' } = Astro.props;
+---
+
+<section class="services-section" aria-labelledby="services-heading">
+  <div class="container">
+    <h2 id="services-heading" class="section-heading">{heading}</h2>
+    {services.length > 0 ? (
+      <ul class="services-grid" role="list">
+        {services.map((service) => (
+          <li class="service-card">
+            <a
+              href={`/services/${service.slug.current}`}
+              class="service-link"
+              aria-label={`Learn more about ${service.title}`}
+            >
+              {service.image && (
+                <div class="service-image-wrap">
+                  <SanityImage
+                    source={service.image.image}
+                    alt={service.image.alt || service.title}
+                    width={600}
+                    height={400}
+                    class="service-image"
+                  />
+                </div>
+              )}
+              <div class="service-body">
+                <h3 class="service-title">{service.title}</h3>
+                {service.excerpt && (
+                  <p class="service-excerpt">{service.excerpt}</p>
+                )}
+                {(service.price || service.duration) && (
+                  <div class="service-meta">
+                    {service.price && (
+                      <span class="service-price">{service.price}</span>
+                    )}
+                    {service.duration && (
+                      <span class="service-duration">{service.duration}</span>
+                    )}
+                  </div>
+                )}
+                <span class="service-cta" aria-hidden="true">
+                  Learn more &rarr;
+                </span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="services-empty">No services available at this time.</p>
+    )}
+  </div>
+</section>
+
+<style>
+  .services-section {
+    padding-block: var(--space-16);
+  }
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--color-neutral-900);
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .service-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .service-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .service-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+
+  .service-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-lg);
+  }
+
+  .service-image-wrap {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+
+  .service-image-wrap :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .service-card:hover .service-image-wrap :global(img) {
+    transform: scale(1.03);
+  }
+
+  .service-body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .service-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-neutral-900);
+  }
+
+  .service-excerpt {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .service-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+  }
+
+  .service-price {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .service-duration {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-500);
+  }
+
+  .service-cta {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    transition: color var(--transition-fast);
+  }
+
+  .service-card:hover .service-cta {
+    color: var(--color-primary-dark);
+  }
+
+  .services-empty {
+    text-align: center;
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Tablet: 2 columns */
+  @media (min-width: 768px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Desktop: 3 columns */
+  @media (min-width: 1024px) {
+    .services-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

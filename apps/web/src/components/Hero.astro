@@ -1,0 +1,168 @@
+---
+import type { SanityImage as SanityImageType } from '@foxhue/shared';
+import { sanityImageUrl } from '@lib/image';
+
+interface Props {
+  heading: string;
+  tagline?: string;
+  image?: SanityImageType;
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+const { heading, tagline, image, ctaText, ctaUrl } = Astro.props;
+
+const bgImageUrl = image ? sanityImageUrl(image, 1600, 900) : null;
+---
+
+<section
+  class="hero"
+  role="banner"
+  style={bgImageUrl ? `--hero-bg: url(${bgImageUrl})` : undefined}
+>
+  {bgImageUrl && <div class="hero-overlay" aria-hidden="true"></div>}
+  <div class="hero-inner container">
+    <div class="hero-content">
+      <h1 class="hero-heading">{heading}</h1>
+      {tagline && <p class="hero-tagline">{tagline}</p>}
+      {ctaText && ctaUrl && (
+        <a href={ctaUrl} class="hero-cta">
+          {ctaText}
+        </a>
+      )}
+    </div>
+    {bgImageUrl && <div class="hero-image-spacer" aria-hidden="true"></div>}
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--space-16);
+    background-color: var(--color-neutral-100);
+  }
+
+  .hero[style*="--hero-bg"] {
+    background-image: var(--hero-bg);
+    background-size: cover;
+    background-position: center;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.4) 60%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+    z-index: 1;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 40rem;
+  }
+
+  .hero-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--color-neutral-900);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero[style*="--hero-bg"] .hero-heading {
+    color: var(--color-white);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-lg);
+    line-height: 1.6;
+    color: var(--color-neutral-600);
+    margin-bottom: var(--space-8);
+  }
+
+  .hero[style*="--hero-bg"] .hero-tagline {
+    color: var(--color-neutral-200);
+  }
+
+  .hero-cta {
+    display: inline-block;
+    padding: var(--space-3) var(--space-8);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .hero-cta:hover {
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+  }
+
+  .hero-cta:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .hero-image-spacer {
+    display: none;
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .hero {
+      padding-block: var(--space-20);
+    }
+
+    .hero-heading {
+      font-size: var(--font-size-5xl);
+    }
+
+    .hero-tagline {
+      font-size: var(--font-size-xl);
+    }
+  }
+
+  /* Desktop: split layout when image is present */
+  @media (min-width: 1024px) {
+    .hero-inner {
+      flex-direction: row;
+      text-align: left;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    .hero[style*="--hero-bg"] .hero-inner {
+      text-align: left;
+      align-items: center;
+    }
+
+    .hero-content {
+      flex: 1;
+    }
+
+    .hero-image-spacer {
+      display: block;
+      flex: 1;
+    }
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/Hero.astro';
+import ServicesGrid from '@components/ServicesGrid.astro';
+import Testimonials from '@components/Testimonials.astro';
+import CTABanner from '@components/CTABanner.astro';
+import { sanityClient } from '@lib/sanity';
+import {
+  siteSettingsQuery,
+  featuredServicesQuery,
+  testimonialsQuery,
+} from '@lib/queries';
+import type { SiteSettings, Service, Testimonial } from '@foxhue/shared';
+
+const settings: SiteSettings = await sanityClient.fetch(siteSettingsQuery);
+const services: Service[] = await sanityClient.fetch(featuredServicesQuery);
+const testimonials: Testimonial[] = await sanityClient.fetch(testimonialsQuery);
+---
+
+<BaseLayout>
+  <Hero
+    heading={settings?.siteName ?? 'Welcome'}
+    tagline={settings?.tagline}
+  />
+
+  {services?.length > 0 && (
+    <ServicesGrid services={services} />
+  )}
+
+  {testimonials?.length > 0 && (
+    <Testimonials testimonials={testimonials} />
+  )}
+
+  <CTABanner />
+</BaseLayout>
+

@@ -1,0 +1,122 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SanityImage from '@components/SanityImage.astro';
+import PortableText from '@components/PortableText.astro';
+import { sanityClient } from '@lib/sanity';
+import { blogPostsQuery, blogPostBySlugQuery } from '@lib/queries';
+import type { BlogPost } from '@foxhue/shared';
+
+export async function getStaticPaths() {
+  const posts: BlogPost[] = await sanityClient.fetch(blogPostsQuery);
+
+  return posts.map((post) => ({
+    params: { slug: post.slug.current },
+  }));
+}
+
+const { slug } = Astro.params;
+const post: BlogPost = await sanityClient.fetch(blogPostBySlugQuery, { slug });
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+const formattedDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout
+  title={post.seo?.title ?? post.title}
+  description={post.seo?.description ?? post.excerpt}
+>
+  <article class="blog-post">
+    {post.coverImage && (
+      <div class="post-cover">
+        <SanityImage
+          source={post.coverImage.image}
+          alt={post.coverImage.alt}
+          width={1200}
+          height={600}
+        />
+      </div>
+    )}
+
+    <div class="container">
+      <header class="post-header">
+        <time datetime={post.publishedAt}>{formattedDate}</time>
+        <h1>{post.title}</h1>
+
+        {post.categories?.length > 0 && (
+          <ul class="post-categories" role="list" aria-label="Post categories">
+            {post.categories.map((category) => (
+              <li class="tag">{category}</li>
+            ))}
+          </ul>
+        )}
+      </header>
+
+      {post.body && (
+        <div class="post-body prose">
+          <PortableText value={post.body} />
+        </div>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    padding-bottom: var(--space-20);
+  }
+
+  .post-cover {
+    width: 100%;
+    max-height: 480px;
+    overflow: hidden;
+  }
+
+  .post-cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-header {
+    max-width: var(--max-width-narrow);
+    padding-block: var(--space-12);
+  }
+
+  .post-header time {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-500);
+    margin-bottom: var(--space-2);
+  }
+
+  .post-header h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .post-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--color-neutral-100);
+    color: var(--color-neutral-700);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    border-radius: var(--radius-full);
+  }
+
+  .post-body {
+    padding-bottom: var(--space-16);
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import FAQAccordion from '@components/FAQAccordion.astro';
+import { sanityClient } from '@lib/sanity';
+import { faqsQuery } from '@lib/queries';
+import type { FAQ } from '@foxhue/shared';
+
+const faqs: FAQ[] = await sanityClient.fetch(faqsQuery);
+---
+
+<BaseLayout title="FAQ" description="Frequently asked questions and answers.">
+  <section class="faq-page" aria-labelledby="faq-heading">
+    <div class="container">
+      <h1 id="faq-heading">Frequently Asked Questions</h1>
+      <FAQAccordion faqs={faqs} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq-page {
+    padding-block: var(--space-20);
+  }
+
+  .faq-page h1 {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+</style>

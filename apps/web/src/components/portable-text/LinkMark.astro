@@ -1,0 +1,16 @@
+---
+/**
+ * Custom portable text mark renderer for external links.
+ * Receives the mark value and children via Astro.props from astro-portabletext.
+ */
+const { node } = Astro.props;
+const href = node?.href ?? '#';
+const isExternal = href.startsWith('http');
+---
+
+<a
+  href={href}
+  {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+>
+  <slot />
+</a>

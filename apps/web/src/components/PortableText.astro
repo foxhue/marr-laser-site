@@ -1,0 +1,30 @@
+---
+import { PortableText as AstroPortableText } from 'astro-portabletext';
+import ImageBlock from '@components/portable-text/ImageBlock.astro';
+import LinkMark from '@components/portable-text/LinkMark.astro';
+import InternalLinkMark from '@components/portable-text/InternalLinkMark.astro';
+import type { SanityBlock } from '@foxhue/shared';
+
+interface Props {
+  value: SanityBlock[] | undefined | null;
+  class?: string;
+}
+
+const { value, class: className } = Astro.props;
+
+const components = {
+  type: {
+    image: ImageBlock,
+  },
+  mark: {
+    link: LinkMark,
+    internalLink: InternalLinkMark,
+  },
+};
+---
+
+{value && value.length > 0 && (
+  <div class:list={['prose', className]}>
+    <AstroPortableText value={value} components={components} />
+  </div>
+)}

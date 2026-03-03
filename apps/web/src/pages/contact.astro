@@ -1,0 +1,133 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ContactForm from '@components/ContactForm.astro';
+import { sanityClient } from '@lib/sanity';
+import { siteSettingsQuery } from '@lib/queries';
+import type { SiteSettings } from '@foxhue/shared';
+
+const settings: SiteSettings = await sanityClient.fetch(siteSettingsQuery);
+---
+
+<BaseLayout title="Contact" description="Get in touch with us. We would love to hear from you.">
+  <section class="contact-page" aria-labelledby="contact-heading">
+    <div class="container">
+      <h1 id="contact-heading">Contact Us</h1>
+
+      <div class="contact-grid">
+        <div class="contact-form-column">
+          <ContactForm email={settings?.contactEmail} />
+        </div>
+
+        <aside class="contact-info-column" aria-label="Contact information">
+          {settings?.contactEmail && (
+            <div class="info-block">
+              <h2>Email</h2>
+              <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>
+            </div>
+          )}
+
+          {settings?.contactPhone && (
+            <div class="info-block">
+              <h2>Phone</h2>
+              <a href={`tel:${settings.contactPhone}`}>{settings.contactPhone}</a>
+            </div>
+          )}
+
+          {settings?.address && (
+            <div class="info-block">
+              <h2>Address</h2>
+              <p>{settings.address}</p>
+            </div>
+          )}
+
+          {settings?.openingHours?.length > 0 && (
+            <div class="info-block">
+              <h2>Opening Hours</h2>
+              <dl class="hours-list">
+                {settings.openingHours.map((hours) => (
+                  <div class="hours-row">
+                    <dt>{hours.day}</dt>
+                    <dd>
+                      {hours.closed
+                        ? 'Closed'
+                        : `${hours.open} - ${hours.close}`}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-page {
+    padding-block: var(--space-20);
+  }
+
+  .contact-page h1 {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .contact-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+    }
+  }
+
+  .contact-info-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .info-block h2 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-2);
+  }
+
+  .info-block a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .info-block a:hover {
+    color: var(--color-primary-dark);
+  }
+
+  .info-block p {
+    color: var(--color-neutral-600);
+  }
+
+  .hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .hours-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .hours-row dt {
+    font-weight: 500;
+    color: var(--color-neutral-700);
+  }
+
+  .hours-row dd {
+    color: var(--color-neutral-600);
+  }
+</style>

@@ -1,0 +1,73 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/Hero.astro';
+import PortableText from '@components/PortableText.astro';
+import TeamSection from '@components/TeamSection.astro';
+import { sanityClient } from '@lib/sanity';
+import { pageBySlugQuery, teamMembersQuery } from '@lib/queries';
+import type { Page, TeamMember } from '@foxhue/shared';
+
+const page: Page = await sanityClient.fetch(pageBySlugQuery, { slug: 'about' });
+const teamMembers: TeamMember[] = await sanityClient.fetch(teamMembersQuery);
+---
+
+<BaseLayout
+  title={page?.seo?.title ?? page?.title ?? 'About'}
+  description={page?.seo?.description ?? 'Learn more about our team and story.'}
+>
+  {page?.hero ? (
+    <Hero
+      heading={page.hero.heading}
+      tagline={page.hero.tagline}
+      image={page.hero.image}
+      cta={page.hero.cta}
+    />
+  ) : (
+    <section class="page-header">
+      <div class="container">
+        <h1>{page?.title ?? 'About Us'}</h1>
+      </div>
+    </section>
+  )}
+
+  {page?.body && (
+    <section class="about-content" aria-label="About page content">
+      <div class="container">
+        <div class="prose">
+          <PortableText value={page.body} />
+        </div>
+      </div>
+    </section>
+  )}
+
+  {teamMembers?.length > 0 && (
+    <section class="team-section" aria-labelledby="team-heading">
+      <div class="container">
+        <h2 id="team-heading">Meet the Team</h2>
+        <TeamSection members={teamMembers} />
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-20);
+    background-color: var(--color-neutral-50);
+    text-align: center;
+  }
+
+  .about-content {
+    padding-block: var(--space-16);
+  }
+
+  .team-section {
+    padding-block: var(--space-20);
+    background-color: var(--color-neutral-50);
+  }
+
+  .team-section h2 {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+</style>

@@ -1,0 +1,63 @@
+{
+  "client": {
+    "name": "Client Name",
+    "slug": "client-name",
+    "tagline": "Your tagline here",
+    "description": "Brief description of the business"
+  },
+  "brand": {
+    "colors": {
+      "primary": "#2563eb",
+      "primaryLight": "#3b82f6",
+      "primaryDark": "#1d4ed8",
+      "secondary": "#f59e0b",
+      "secondaryLight": "#fbbf24",
+      "secondaryDark": "#d97706",
+      "accent": "#10b981",
+      "neutral50": "#fafafa",
+      "neutral100": "#f5f5f5",
+      "neutral200": "#e5e5e5",
+      "neutral300": "#d4d4d4",
+      "neutral400": "#a3a3a3",
+      "neutral500": "#737373",
+      "neutral600": "#525252",
+      "neutral700": "#404040",
+      "neutral800": "#262626",
+      "neutral900": "#171717",
+      "white": "#ffffff",
+      "black": "#000000",
+      "success": "#22c55e",
+      "warning": "#f59e0b",
+      "error": "#ef4444"
+    },
+    "fonts": {
+      "heading": "'Inter', sans-serif",
+      "body": "'Inter', sans-serif"
+    },
+    "borderRadius": {
+      "sm": "0.25rem",
+      "md": "0.5rem",
+      "lg": "1rem",
+      "full": "9999px"
+    }
+  },
+  "pages": [
+    "home",
+    "services",
+    "about",
+    "blog",
+    "contact",
+    "faq"
+  ],
+  "features": {
+    "blog": true,
+    "faq": true,
+    "testimonials": true,
+    "team": true,
+    "gallery": false
+  },
+  "forms": {
+    "provider": "formsubmit",
+    "contactEmail": "hello@example.com"
+  }
+}

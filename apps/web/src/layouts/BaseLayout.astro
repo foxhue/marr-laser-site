@@ -1,0 +1,113 @@
+---
+import { SEO } from 'astro-seo';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { sanityClient } from '@lib/sanity';
+import { siteSettingsQuery } from '@lib/queries';
+import { sanityImageUrl } from '@lib/image';
+import type { SiteSettings } from '@foxhue/shared';
+import '@styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+
+const settings: SiteSettings = await sanityClient.fetch(siteSettingsQuery);
+
+const siteTitle = title
+  ? `${title} | ${settings?.siteName ?? 'Foxhue'}`
+  : settings?.siteName ?? 'Foxhue';
+
+const siteDescription =
+  description ?? settings?.defaultSeo?.description ?? '';
+
+const siteOgImage =
+  ogImage ??
+  (settings?.defaultSeo?.ogImage
+    ? sanityImageUrl(settings.defaultSeo.ogImage, 1200, 630)
+    : undefined);
+
+const jsonLd = settings
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      name: settings.siteName,
+      description: siteDescription,
+      ...(settings.contactEmail && { email: settings.contactEmail }),
+      ...(settings.contactPhone && {
+        telephone: settings.contactPhone,
+      }),
+      ...(settings.address && {
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: settings.address,
+        },
+      }),
+      ...(settings.openingHours?.length && {
+        openingHoursSpecification: settings.openingHours
+          .filter((h) => !h.closed)
+          .map((h) => ({
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: h.day,
+            opens: h.open,
+            closes: h.close,
+          })),
+      }),
+    }
+  : null;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <SEO
+      title={siteTitle}
+      description={siteDescription}
+      openGraph={{
+        basic: {
+          title: siteTitle,
+          type: 'website',
+          ...(siteOgImage && { image: siteOgImage }),
+        },
+      }}
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
+  </head>
+
+  <body>
+    <Header
+      siteName={settings?.siteName ?? 'Foxhue'}
+      logo={settings?.logo}
+    />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer
+      siteName={settings?.siteName ?? 'Foxhue'}
+      contactEmail={settings?.contactEmail}
+      contactPhone={settings?.contactPhone}
+      address={settings?.address}
+      socialLinks={settings?.socialLinks}
+    />
+  </body>
+</html>

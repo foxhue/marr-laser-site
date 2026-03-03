@@ -1,0 +1,158 @@
+---
+import type { SanityImage as SanityImageType } from '@foxhue/shared';
+import SanityImage from '@components/SanityImage.astro';
+import { sanityImageUrl } from '@lib/image';
+
+interface GalleryItem {
+  image: SanityImageType;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  images: GalleryItem[];
+  heading?: string;
+}
+
+const { images, heading = 'Gallery' } = Astro.props;
+---
+
+<section class="gallery-section" aria-labelledby="gallery-heading">
+  <div class="container">
+    <h2 id="gallery-heading" class="section-heading">{heading}</h2>
+    {images.length > 0 ? (
+      <ul class="gallery-grid" role="list">
+        {images.map((item, index) => {
+          const fullSizeUrl = sanityImageUrl(item.image, 1600);
+          return (
+            <li class="gallery-item">
+              <a
+                href={fullSizeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="gallery-link"
+                aria-label={`View full size: ${item.alt}`}
+              >
+                <SanityImage
+                  source={item.image}
+                  alt={item.alt}
+                  width={600}
+                  height={450}
+                  class="gallery-image"
+                />
+                <span class="gallery-zoom" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="11" y1="8" x2="11" y2="14"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                  </svg>
+                </span>
+              </a>
+              {item.caption && (
+                <p class="gallery-caption">{item.caption}</p>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <p class="gallery-empty">No images in the gallery yet.</p>
+    )}
+  </div>
+</section>
+
+<style>
+  .gallery-section {
+    padding-block: var(--space-16);
+  }
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--color-neutral-900);
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  .gallery-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gallery-link {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    aspect-ratio: 4 / 3;
+  }
+
+  .gallery-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .gallery-link :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .gallery-link:hover :global(img) {
+    transform: scale(1.05);
+  }
+
+  .gallery-zoom {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--color-white);
+    opacity: 0;
+    transition: background-color var(--transition-base), opacity var(--transition-base);
+  }
+
+  .gallery-link:hover .gallery-zoom {
+    background-color: rgba(0, 0, 0, 0.3);
+    opacity: 1;
+  }
+
+  .gallery-caption {
+    margin-top: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-500);
+    line-height: 1.4;
+  }
+
+  .gallery-empty {
+    text-align: center;
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Tablet: 3 columns */
+  @media (min-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+
+  /* Desktop: 4 columns */
+  @media (min-width: 1024px) {
+    .gallery-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

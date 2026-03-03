@@ -1,0 +1,28 @@
+---
+import type { SanityImage as SanityImageType } from '@foxhue/shared';
+import { sanityImageUrl } from '@lib/image';
+
+interface Props {
+  source: SanityImageType | undefined | null;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+}
+
+const { source, alt, width, height, class: className } = Astro.props;
+
+const src = source ? sanityImageUrl(source, width, height) : null;
+---
+
+{src && (
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading="lazy"
+    decoding="async"
+    class={className}
+  />
+)}

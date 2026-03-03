@@ -1,0 +1,42 @@
+---
+import SanityImage from '@components/SanityImage.astro';
+
+/**
+ * Custom portable text block renderer for image type nodes.
+ * Receives the node value via Astro.props from astro-portabletext.
+ */
+const { node } = Astro.props;
+const { asset, alt, caption } = node ?? {};
+---
+
+{asset && (
+  <figure class="portable-image">
+    <SanityImage
+      source={{ _type: 'image', asset }}
+      alt={alt ?? ''}
+      width={800}
+    />
+    {caption && (
+      <figcaption>{caption}</figcaption>
+    )}
+  </figure>
+)}
+
+<style>
+  .portable-image {
+    margin-block: var(--space-6);
+  }
+
+  .portable-image img {
+    border-radius: var(--radius-md);
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-500);
+    text-align: center;
+  }
+</style>

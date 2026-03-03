@@ -1,0 +1,208 @@
+---
+import type { BlogPost } from '@foxhue/shared';
+import SanityImage from '@components/SanityImage.astro';
+
+interface Props {
+  posts: BlogPost[];
+  heading?: string;
+}
+
+const { posts, heading = 'Latest Posts' } = Astro.props;
+
+/**
+ * Format an ISO date string into a human-readable date.
+ * Example: "2025-03-15" -> "March 15, 2025"
+ */
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<section class="blog-section" aria-labelledby="blog-heading">
+  <div class="container">
+    <h2 id="blog-heading" class="section-heading">{heading}</h2>
+    {posts.length > 0 ? (
+      <ul class="blog-grid" role="list">
+        {posts.map((post) => (
+          <li class="blog-card">
+            <a
+              href={`/blog/${post.slug.current}`}
+              class="blog-link"
+              aria-label={`Read "${post.title}"`}
+            >
+              {post.coverImage && (
+                <div class="blog-image-wrap">
+                  <SanityImage
+                    source={post.coverImage.image}
+                    alt={post.coverImage.alt || post.title}
+                    width={600}
+                    height={340}
+                    class="blog-image"
+                  />
+                </div>
+              )}
+              <div class="blog-body">
+                {post.categories && post.categories.length > 0 && (
+                  <div class="blog-tags">
+                    {post.categories.map((cat) => (
+                      <span class="blog-tag">{cat}</span>
+                    ))}
+                  </div>
+                )}
+                <h3 class="blog-title">{post.title}</h3>
+                {post.excerpt && (
+                  <p class="blog-excerpt">{post.excerpt}</p>
+                )}
+                <time class="blog-date" datetime={post.publishedAt}>
+                  {formatDate(post.publishedAt)}
+                </time>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="blog-empty">No posts published yet. Check back soon.</p>
+    )}
+  </div>
+</section>
+
+<style>
+  .blog-section {
+    padding-block: var(--space-16);
+  }
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--color-neutral-900);
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .blog-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .blog-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .blog-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+
+  .blog-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-lg);
+  }
+
+  .blog-image-wrap {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .blog-image-wrap :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .blog-card:hover .blog-image-wrap :global(img) {
+    transform: scale(1.03);
+  }
+
+  .blog-body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .blog-tag {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    border-radius: var(--radius-full);
+    text-transform: capitalize;
+  }
+
+  .blog-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-neutral-900);
+    line-height: 1.3;
+  }
+
+  .blog-excerpt {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .blog-date {
+    display: block;
+    margin-top: auto;
+    padding-top: var(--space-3);
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-500);
+  }
+
+  .blog-empty {
+    text-align: center;
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Tablet: 2 columns */
+  @media (min-width: 768px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Desktop: 3 columns */
+  @media (min-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

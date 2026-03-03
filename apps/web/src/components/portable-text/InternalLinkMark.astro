@@ -1,0 +1,14 @@
+---
+/**
+ * Custom portable text mark renderer for internal links.
+ * The mark definition includes a reference to an internal document.
+ * Receives the mark value via Astro.props from astro-portabletext.
+ */
+const { node } = Astro.props;
+const slug = node?.slug?.current;
+const href = slug ? `/${slug}` : '#';
+---
+
+<a href={href}>
+  <slot />
+</a>

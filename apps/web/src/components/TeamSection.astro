@@ -1,0 +1,164 @@
+---
+import type { TeamMember, SanityBlock } from '@foxhue/shared';
+import SanityImage from '@components/SanityImage.astro';
+
+interface Props {
+  members: TeamMember[];
+  heading?: string;
+}
+
+const { members, heading = 'Our Team' } = Astro.props;
+
+/**
+ * Extract the first sentence from portable text blocks for a truncated bio.
+ */
+function extractFirstSentence(bio: SanityBlock[] | undefined): string {
+  if (!bio || bio.length === 0) return '';
+  const firstBlock = bio.find((b) => b._type === 'block');
+  if (!firstBlock) return '';
+  const fullText = firstBlock.children.map((c) => c.text).join('');
+  const match = fullText.match(/^[^.!?]+[.!?]/);
+  return match ? match[0] : fullText;
+}
+---
+
+<section class="team-section" aria-labelledby="team-heading">
+  <div class="container">
+    <h2 id="team-heading" class="section-heading">{heading}</h2>
+    {members.length > 0 ? (
+      <ul class="team-grid" role="list">
+        {members.map((member) => {
+          const snippet = extractFirstSentence(member.bio);
+          return (
+            <li class="team-card">
+              <div class="team-photo-wrap">
+                {member.photo ? (
+                  <SanityImage
+                    source={member.photo.image}
+                    alt={member.photo.alt || member.name}
+                    width={300}
+                    height={300}
+                    class="team-photo"
+                  />
+                ) : (
+                  <div class="team-photo-placeholder" aria-hidden="true">
+                    <span>{member.name.charAt(0)}</span>
+                  </div>
+                )}
+              </div>
+              <h3 class="team-name">{member.name}</h3>
+              {member.role && <p class="team-role">{member.role}</p>}
+              {snippet && <p class="team-bio">{snippet}</p>}
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <p class="team-empty">Team information coming soon.</p>
+    )}
+  </div>
+</section>
+
+<style>
+  .team-section {
+    padding-block: var(--space-16);
+  }
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--color-neutral-900);
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .team-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .team-photo-wrap {
+    width: 10rem;
+    height: 10rem;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-4);
+    flex-shrink: 0;
+  }
+
+  .team-photo-wrap :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .team-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary-light);
+    color: var(--color-white);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+  }
+
+  .team-name {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-neutral-900);
+    margin-bottom: var(--space-1);
+  }
+
+  .team-role {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .team-bio {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.6;
+    max-width: 24rem;
+  }
+
+  .team-empty {
+    text-align: center;
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Tablet: 2 columns */
+  @media (min-width: 768px) {
+    .team-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Desktop: 3-4 columns depending on count */
+  @media (min-width: 1024px) {
+    .team-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .team-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

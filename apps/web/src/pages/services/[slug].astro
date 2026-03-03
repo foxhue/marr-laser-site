@@ -1,0 +1,114 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SanityImage from '@components/SanityImage.astro';
+import PortableText from '@components/PortableText.astro';
+import CTABanner from '@components/CTABanner.astro';
+import { sanityClient } from '@lib/sanity';
+import { servicesQuery, serviceBySlugQuery } from '@lib/queries';
+import type { Service } from '@foxhue/shared';
+
+export async function getStaticPaths() {
+  const services: Service[] = await sanityClient.fetch(servicesQuery);
+
+  return services.map((service) => ({
+    params: { slug: service.slug.current },
+  }));
+}
+
+const { slug } = Astro.params;
+const service: Service = await sanityClient.fetch(serviceBySlugQuery, { slug });
+
+if (!service) {
+  return Astro.redirect('/404');
+}
+---
+
+<BaseLayout
+  title={service.seo?.title ?? service.title}
+  description={service.seo?.description ?? service.excerpt}
+>
+  <article class="service-detail">
+    {service.image && (
+      <div class="service-hero">
+        <SanityImage
+          source={service.image.image}
+          alt={service.image.alt}
+          width={1200}
+          height={600}
+        />
+      </div>
+    )}
+
+    <div class="container">
+      <div class="service-header">
+        <h1>{service.title}</h1>
+
+        {(service.price || service.duration) && (
+          <div class="service-meta" role="list" aria-label="Service details">
+            {service.price && (
+              <span class="badge" role="listitem">{service.price}</span>
+            )}
+            {service.duration && (
+              <span class="badge" role="listitem">{service.duration}</span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {service.body && (
+        <div class="service-body prose">
+          <PortableText value={service.body} />
+        </div>
+      )}
+    </div>
+
+    <CTABanner />
+  </article>
+</BaseLayout>
+
+<style>
+  .service-detail {
+    padding-bottom: var(--space-20);
+  }
+
+  .service-hero {
+    width: 100%;
+    max-height: 480px;
+    overflow: hidden;
+  }
+
+  .service-hero :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .service-header {
+    max-width: var(--max-width-narrow);
+    padding-block: var(--space-12);
+  }
+
+  .service-header h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .service-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--color-primary-light);
+    color: var(--color-white);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+  }
+
+  .service-body {
+    padding-bottom: var(--space-16);
+  }
+</style>
