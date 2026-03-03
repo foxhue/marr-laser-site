@@ -11,9 +11,10 @@ const { siteName, logo } = Astro.props;
 
 const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
+  { label: 'Treatments', href: '/services' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'About', href: '/about' },
-  { label: 'Blog', href: '/blog' },
+  { label: 'Team', href: '/team' },
   { label: 'Contact', href: '/contact' },
 ];
 
@@ -22,19 +23,21 @@ const currentPath = Astro.url.pathname;
 
 <header class="site-header">
   <div class="header-inner container">
-    <a href="/" class="logo-link" aria-label={`${siteName} - Home`}>
-      {logo ? (
-        <img
-          src={sanityImageUrl(logo, 160, 48)}
-          alt={siteName}
-          class="logo-image"
-          width="160"
-          height="48"
-        />
-      ) : (
-        <span class="logo-text">{siteName}</span>
-      )}
-    </a>
+    <div class="header-top">
+      <a href="/" class="logo-link" aria-label={`${siteName} - Home`}>
+        {logo ? (
+          <img
+            src={sanityImageUrl(logo, 200, 60)}
+            alt={siteName}
+            class="logo-image"
+            width="200"
+            height="60"
+          />
+        ) : (
+          <span class="logo-text">{siteName}</span>
+        )}
+      </a>
+    </div>
 
     <input type="checkbox" id="nav-toggle" class="nav-checkbox sr-only" aria-hidden="true" />
     <label for="nav-toggle" class="nav-toggle" aria-label="Toggle navigation menu">
@@ -66,10 +69,10 @@ const currentPath = Astro.url.pathname;
     position: sticky;
     top: 0;
     z-index: 100;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--color-neutral-200);
+    background-color: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-accent);
   }
 
   .header-inner {
@@ -77,25 +80,31 @@ const currentPath = Astro.url.pathname;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    min-height: 4rem;
+    min-height: 4.5rem;
   }
 
-  /* Logo */
-  .logo-link {
-    text-decoration: none;
+  /* Logo — centered on desktop */
+  .header-top {
     flex-shrink: 0;
   }
 
+  .logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
   .logo-image {
-    height: 2rem;
+    height: 2.5rem;
     width: auto;
   }
 
   .logo-text {
     font-family: var(--font-heading);
-    font-size: var(--font-size-xl);
-    font-weight: 700;
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
     color: var(--color-neutral-900);
+    letter-spacing: 0.02em;
   }
 
   /* Checkbox (visually hidden, drives menu state) */
@@ -119,13 +128,13 @@ const currentPath = Astro.url.pathname;
   }
 
   .nav-toggle:hover {
-    background-color: var(--color-neutral-100);
+    background-color: var(--color-accent);
   }
 
   .hamburger-line {
     display: block;
     width: 100%;
-    height: 2px;
+    height: 1.5px;
     background-color: var(--color-neutral-700);
     border-radius: 1px;
     transition: transform var(--transition-base), opacity var(--transition-base);
@@ -137,7 +146,7 @@ const currentPath = Astro.url.pathname;
     display: none;
     flex-basis: 100%;
     background-color: var(--color-white);
-    border-top: 1px solid var(--color-neutral-200);
+    border-top: 1px solid var(--color-accent);
     order: 2;
   }
 
@@ -150,22 +159,26 @@ const currentPath = Astro.url.pathname;
   .nav-link {
     display: block;
     padding: var(--space-3) var(--space-4);
-    font-size: var(--font-size-base);
-    font-weight: 500;
-    color: var(--color-neutral-700);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-neutral-600);
     text-decoration: none;
-    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: var(--radius-full);
     transition: color var(--transition-fast), background-color var(--transition-fast);
   }
 
   .nav-link:hover {
     color: var(--color-primary);
-    background-color: var(--color-neutral-50);
+    background-color: var(--color-accent);
   }
 
   .nav-link--active {
     color: var(--color-primary);
-    font-weight: 600;
+    background-color: var(--color-accent);
+    font-weight: 500;
   }
 
   /* Checkbox hack: show nav when checked */
@@ -186,10 +199,13 @@ const currentPath = Astro.url.pathname;
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Desktop layout */
+  /* Desktop layout — centered logo above nav */
   @media (min-width: 768px) {
     .header-inner {
+      flex-direction: column;
       flex-wrap: nowrap;
+      gap: var(--space-2);
+      padding-block: var(--space-3);
     }
 
     .nav-toggle {
@@ -210,12 +226,13 @@ const currentPath = Astro.url.pathname;
 
     .nav-list {
       flex-direction: row;
+      justify-content: center;
       gap: var(--space-1);
       padding: 0;
     }
 
     .nav-link {
-      padding: var(--space-2) var(--space-3);
+      padding: var(--space-2) var(--space-4);
     }
   }
 </style>

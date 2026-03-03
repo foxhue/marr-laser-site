@@ -1,0 +1,141 @@
+---
+interface PathwayItem {
+  title: string;
+  description: string;
+  href: string;
+  icon: string;
+}
+
+interface Props {
+  heading?: string;
+  items?: PathwayItem[];
+}
+
+const { heading = 'Your Treatment Pathway', items } = Astro.props;
+
+const defaultItems: PathwayItem[] = [
+  {
+    title: 'Laser Hair Removal',
+    description: 'Permanent hair reduction with medical-grade laser technology for all skin types.',
+    href: '/services/laser-hair-removal',
+    icon: '✦',
+  },
+  {
+    title: 'Skin Treatments',
+    description: 'Advanced skin rejuvenation, anti-ageing, and corrective treatments.',
+    href: '/services/skin-treatments',
+    icon: '✦',
+  },
+  {
+    title: 'Book a Consultation',
+    description: 'Free initial consultation to discuss your goals and create a personalised plan.',
+    href: '/contact',
+    icon: '✦',
+  },
+];
+
+const pathways = items ?? defaultItems;
+---
+
+<section class="pathway-section" aria-labelledby="pathway-heading">
+  <div class="container">
+    <h2 id="pathway-heading" class="pathway-title">{heading}</h2>
+    <div class="pathway-grid">
+      {pathways.map((item, i) => (
+        <a href={item.href} class="pathway-card">
+          <span class="pathway-number">{String(i + 1).padStart(2, '0')}</span>
+          <span class="pathway-icon" aria-hidden="true">{item.icon}</span>
+          <h3 class="pathway-card-title">{item.title}</h3>
+          <p class="pathway-card-desc">{item.description}</p>
+          <span class="pathway-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pathway-section {
+    padding-block: var(--space-20);
+    background-color: var(--color-neutral-50);
+  }
+
+  .pathway-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 400;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .pathway-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .pathway-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-8);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .pathway-card:hover {
+    box-shadow: 0 8px 24px rgba(60, 60, 59, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .pathway-number {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    color: var(--color-secondary-dark);
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-4);
+  }
+
+  .pathway-icon {
+    font-size: var(--font-size-xl);
+    color: var(--color-secondary);
+    margin-bottom: var(--space-3);
+  }
+
+  .pathway-card-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .pathway-card-desc {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .pathway-arrow {
+    margin-top: var(--space-4);
+    font-size: var(--font-size-lg);
+    color: var(--color-secondary-dark);
+    transition: transform var(--transition-fast);
+  }
+
+  .pathway-card:hover .pathway-arrow {
+    transform: translateX(4px);
+  }
+
+  @media (min-width: 768px) {
+    .pathway-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

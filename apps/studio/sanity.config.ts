@@ -6,7 +6,7 @@ import { deskStructure } from './src/deskStructure';
 
 export default defineConfig({
   name: 'default',
-  title: 'Client Name Studio',
+  title: 'MARR Laser & Skin Clinic Studio',
 
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'your_project_id',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',

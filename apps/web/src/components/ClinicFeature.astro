@@ -1,0 +1,102 @@
+---
+interface Props {
+  heading?: string;
+  text?: string;
+  features?: string[];
+}
+
+const {
+  heading = 'Why Choose MARR Laser & Skin Clinic',
+  text = 'We combine advanced technology with personalised care to deliver results you can see and feel. Every treatment is carried out by qualified professionals in our modern Newry clinic.',
+  features = [
+    'Medical-grade laser technology',
+    'Fully qualified practitioners',
+    'Free consultations',
+    'Personalised treatment plans',
+    'Comfortable, modern clinic',
+    'Newry, Co. Down location',
+  ],
+} = Astro.props;
+---
+
+<section class="clinic-feature" aria-labelledby="clinic-feature-heading">
+  <div class="container">
+    <div class="clinic-feature-inner">
+      <div class="clinic-feature-content">
+        <h2 id="clinic-feature-heading" class="clinic-feature-heading">{heading}</h2>
+        <p class="clinic-feature-text">{text}</p>
+      </div>
+      <ul class="clinic-feature-list" role="list">
+        {features.map((feature) => (
+          <li class="clinic-feature-item">
+            <span class="feature-check" aria-hidden="true">✓</span>
+            {feature}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .clinic-feature {
+    padding-block: var(--space-20);
+  }
+
+  .clinic-feature-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  .clinic-feature-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 400;
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+    line-height: 1.2;
+  }
+
+  .clinic-feature-text {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.7;
+  }
+
+  .clinic-feature-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .clinic-feature-item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-700);
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--color-neutral-50);
+    border-radius: var(--radius-md);
+  }
+
+  .feature-check {
+    color: var(--color-success);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .clinic-feature-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+      align-items: center;
+    }
+
+    .clinic-feature-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

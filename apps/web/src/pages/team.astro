@@ -1,0 +1,52 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import TeamSection from '@components/TeamSection.astro';
+import CTABanner from '@components/CTABanner.astro';
+import { sanityClient } from '@lib/sanity';
+import { teamMembersQuery } from '@lib/queries';
+import type { TeamMember } from '@foxhue/shared';
+
+const teamMembers: TeamMember[] = await sanityClient.fetch(teamMembersQuery);
+---
+
+<BaseLayout
+  title="Our Team"
+  description="Meet the qualified team at MARR Laser & Skin Clinic, Newry. Experienced practitioners dedicated to your care."
+>
+  <section class="team-hero">
+    <div class="container">
+      <h1 class="team-title">Our Team</h1>
+      <p class="team-subtitle">
+        Meet the qualified professionals behind MARR Laser & Skin Clinic. Every member of our team is dedicated to delivering safe, effective treatments with personalised care.
+      </p>
+    </div>
+  </section>
+
+  <TeamSection members={teamMembers} />
+
+  <CTABanner />
+</BaseLayout>
+
+<style>
+  .team-hero {
+    background-color: var(--color-accent);
+    padding-block: var(--space-16);
+    text-align: center;
+  }
+
+  .team-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-4xl);
+    font-weight: 400;
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .team-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-neutral-600);
+    max-width: 40rem;
+    margin-inline: auto;
+    line-height: 1.7;
+  }
+</style>

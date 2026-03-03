@@ -13,9 +13,10 @@ const { siteName, contactEmail, contactPhone, address, socialLinks } = Astro.pro
 
 const quickLinks = [
   { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
+  { label: 'Treatments', href: '/services' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'About', href: '/about' },
-  { label: 'Blog', href: '/blog' },
+  { label: 'Team', href: '/team' },
   { label: 'Contact', href: '/contact' },
 ];
 
@@ -37,7 +38,7 @@ const socialIcons: Record<string, string> = {
       <!-- Brand column -->
       <div class="footer-col footer-brand">
         <p class="footer-logo">{siteName}</p>
-        <p class="footer-tagline">Professional services you can trust.</p>
+        <p class="footer-tagline">Advanced Laser & Skin Treatments in Newry, Co. Down</p>
         {socialLinks && socialLinks.length > 0 && (
           <ul class="social-links" role="list" aria-label="Social media links">
             {socialLinks.map((link) => (

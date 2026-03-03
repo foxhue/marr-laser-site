@@ -3,32 +3,32 @@
 
 :root {
   /* Colors */
-  --color-primary: #2563eb;
-  --color-primary-light: #3b82f6;
-  --color-primary-dark: #1d4ed8;
-  --color-secondary: #f59e0b;
-  --color-secondary-light: #fbbf24;
-  --color-secondary-dark: #d97706;
-  --color-accent: #10b981;
-  --color-neutral-50: #fafafa;
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-200: #e5e5e5;
-  --color-neutral-300: #d4d4d4;
-  --color-neutral-400: #a3a3a3;
-  --color-neutral-500: #737373;
-  --color-neutral-600: #525252;
-  --color-neutral-700: #404040;
-  --color-neutral-800: #262626;
-  --color-neutral-900: #171717;
-  --color-white: #ffffff;
-  --color-black: #000000;
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
+  --color-primary: #3C3C3B;
+  --color-primary-light: #4A4A49;
+  --color-primary-dark: #2E2E2D;
+  --color-secondary: #C6BCB3;
+  --color-secondary-light: #D4CBC3;
+  --color-secondary-dark: #B4A89D;
+  --color-accent: #ECE5E0;
+  --color-neutral-50: #FAFAF9;
+  --color-neutral-100: #F9F9F8;
+  --color-neutral-200: #ECE5E0;
+  --color-neutral-300: #D4CBC3;
+  --color-neutral-400: #C6BCB3;
+  --color-neutral-500: #A39890;
+  --color-neutral-600: #6B6462;
+  --color-neutral-700: #4A4A49;
+  --color-neutral-800: #3C3C3B;
+  --color-neutral-900: #2E2E2D;
+  --color-white: #FFFFFF;
+  --color-black: #1A1A1A;
+  --color-success: #5B8C5A;
+  --color-warning: #D4A853;
+  --color-error: #C45B5B;
 
   /* Typography */
-  --font-heading: 'Inter', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Noto Sans', sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -57,9 +57,9 @@
   --max-width-narrow: 768px;
 
   /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
   --radius-full: 9999px;
 
   /* Shadows */

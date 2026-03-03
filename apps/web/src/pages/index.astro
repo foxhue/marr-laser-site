@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/Hero.astro';
+import PathwayCards from '@components/PathwayCards.astro';
+import ClinicFeature from '@components/ClinicFeature.astro';
 import ServicesGrid from '@components/ServicesGrid.astro';
 import Testimonials from '@components/Testimonials.astro';
 import CTABanner from '@components/CTABanner.astro';
@@ -19,12 +21,18 @@ const testimonials: Testimonial[] = await sanityClient.fetch(testimonialsQuery);
 
 <BaseLayout>
   <Hero
-    heading={settings?.siteName ?? 'Welcome'}
-    tagline={settings?.tagline}
+    heading={settings?.siteName ?? 'MARR Laser & Skin Clinic'}
+    tagline={settings?.tagline ?? 'Advanced laser hair removal and skin treatments in Newry, Co. Down. Professional results in a comfortable, modern clinic.'}
+    ctaText="Book a Consultation"
+    ctaUrl="/contact"
   />
 
+  <PathwayCards />
+
+  <ClinicFeature />
+
   {services?.length > 0 && (
-    <ServicesGrid services={services} />
+    <ServicesGrid services={services} heading="Featured Treatments" />
   )}
 
   {testimonials?.length > 0 && (
@@ -33,4 +41,3 @@ const testimonials: Testimonial[] = await sanityClient.fetch(testimonialsQuery);
 
   <CTABanner />
 </BaseLayout>
-

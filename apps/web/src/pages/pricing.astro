@@ -1,0 +1,185 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import CTABanner from '@components/CTABanner.astro';
+import { sanityClient } from '@lib/sanity';
+import { servicesQuery } from '@lib/queries';
+import type { Service } from '@foxhue/shared';
+
+const services: Service[] = await sanityClient.fetch(servicesQuery);
+
+// Group services by category (using the first word of the title as a simple grouping)
+// In production, you'd add a 'category' field to the service schema
+const grouped = services.reduce<Record<string, Service[]>>((acc, service) => {
+  const category = service.featured ? 'Featured Treatments' : 'All Treatments';
+  if (!acc[category]) acc[category] = [];
+  acc[category].push(service);
+  return acc;
+}, {});
+---
+
+<BaseLayout
+  title="Pricing"
+  description="Treatment pricing for MARR Laser & Skin Clinic, Newry. Transparent pricing for laser hair removal, skin treatments, and more."
+>
+  <section class="pricing-hero">
+    <div class="container">
+      <h1 class="pricing-title">Treatment Pricing</h1>
+      <p class="pricing-subtitle">Transparent pricing for all our treatments. Free consultations available.</p>
+    </div>
+  </section>
+
+  <section class="pricing-content">
+    <div class="container">
+      {Object.entries(grouped).map(([category, categoryServices]) => (
+        <div class="pricing-category">
+          <h2 class="category-title">{category}</h2>
+          <div class="pricing-table">
+            <div class="pricing-table-header">
+              <span>Treatment</span>
+              <span>Duration</span>
+              <span>Price</span>
+            </div>
+            {categoryServices.map((service) => (
+              <a href={`/services/${service.slug.current}`} class="pricing-row">
+                <span class="pricing-treatment">
+                  <strong>{service.title}</strong>
+                  {service.excerpt && (
+                    <span class="pricing-excerpt">{service.excerpt}</span>
+                  )}
+                </span>
+                <span class="pricing-duration">{service.duration ?? '—'}</span>
+                <span class="pricing-price">{service.price ?? 'Enquire'}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {services.length === 0 && (
+        <p class="pricing-empty">Pricing information coming soon. Please contact us for details.</p>
+      )}
+    </div>
+  </section>
+
+  <CTABanner />
+</BaseLayout>
+
+<style>
+  .pricing-hero {
+    background-color: var(--color-accent);
+    padding-block: var(--space-16);
+    text-align: center;
+  }
+
+  .pricing-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-4xl);
+    font-weight: 400;
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .pricing-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-neutral-600);
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+
+  .pricing-content {
+    padding-block: var(--space-16);
+  }
+
+  .pricing-category {
+    margin-bottom: var(--space-12);
+  }
+
+  .category-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-2xl);
+    font-weight: 400;
+    color: var(--color-primary);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--color-accent);
+  }
+
+  .pricing-table {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pricing-table-header {
+    display: none;
+  }
+
+  .pricing-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--color-accent);
+    text-decoration: none;
+    color: inherit;
+    transition: background-color var(--transition-fast);
+  }
+
+  .pricing-row:hover {
+    background-color: var(--color-neutral-50);
+  }
+
+  .pricing-treatment strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    color: var(--color-primary);
+  }
+
+  .pricing-excerpt {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-500);
+    margin-top: var(--space-1);
+  }
+
+  .pricing-duration {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-500);
+  }
+
+  .pricing-price {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--color-primary);
+  }
+
+  .pricing-empty {
+    text-align: center;
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-lg);
+    padding-block: var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .pricing-table-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-6);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--color-neutral-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--color-accent);
+    }
+
+    .pricing-row {
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: var(--space-4);
+      align-items: center;
+    }
+  }
+</style>
