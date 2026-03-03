@@ -5,5 +5,5 @@ export default defineCliConfig({
     projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'your_project_id',
     dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   },
-  studioHost: 'client-name',
+  studioHost: 'marr-laser',
 });

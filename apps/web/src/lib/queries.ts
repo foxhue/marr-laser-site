@@ -1,4 +1,5 @@
-import { groq } from '@sanity/client';
+// groq is just a tagged template literal for syntax highlighting — plain strings work fine
+const groq = String.raw;
 
 // ---------------------------------------------------------------------------
 // Site Settings

@@ -71,13 +71,15 @@ const jsonLd = settings
     <SEO
       title={siteTitle}
       description={siteDescription}
-      openGraph={{
-        basic: {
-          title: siteTitle,
-          type: 'website',
-          ...(siteOgImage && { image: siteOgImage }),
+      {...(siteOgImage && {
+        openGraph: {
+          basic: {
+            title: siteTitle,
+            type: 'website',
+            image: siteOgImage,
+          },
         },
-      }}
+      })}
     />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
