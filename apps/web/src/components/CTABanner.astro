@@ -11,7 +11,7 @@ const {
   heading = 'Ready to Start Your Treatment Journey?',
   text = 'Book a free consultation to discuss your goals with our expert team.',
   buttonText = 'Book a Consultation',
-  buttonUrl = '/contact',
+  buttonUrl = 'https://phorest.com/book/salons/marrbeauty',
   style = 'primary',
 } = Astro.props;
 ---
@@ -56,12 +56,11 @@ const {
     display: inline-block;
     margin-top: var(--space-4);
     padding: var(--space-3) var(--space-10);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     font-weight: 500;
     text-decoration: none;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    font-size: var(--font-size-sm);
     border-radius: var(--radius-full);
     transition: background-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast);
   }

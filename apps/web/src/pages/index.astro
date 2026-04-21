@@ -3,8 +3,10 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/Hero.astro';
 import PathwayCards from '@components/PathwayCards.astro';
 import ClinicFeature from '@components/ClinicFeature.astro';
+import TechnologySection from '@components/TechnologySection.astro';
 import ServicesGrid from '@components/ServicesGrid.astro';
 import Testimonials from '@components/Testimonials.astro';
+import InstagramFeed from '@components/InstagramFeed.astro';
 import CTABanner from '@components/CTABanner.astro';
 import { sanityClient } from '@lib/sanity';
 import {
@@ -24,12 +26,14 @@ const testimonials: Testimonial[] = await sanityClient.fetch(testimonialsQuery);
     heading={settings?.siteName ?? 'MARR Laser & Skin Clinic'}
     tagline={settings?.tagline ?? 'Our wonderful team are highly trained and have all the advanced technology and techniques to support every avenue in laser, skin, aesthetics & even more.'}
     ctaText="Book a Consultation"
-    ctaUrl="/contact"
+    ctaUrl="https://phorest.com/book/salons/marrbeauty"
   />
 
   <PathwayCards />
 
   <ClinicFeature />
+
+  <TechnologySection />
 
   {services?.length > 0 && (
     <ServicesGrid services={services} heading="Featured Treatments" />
@@ -38,6 +42,8 @@ const testimonials: Testimonial[] = await sanityClient.fetch(testimonialsQuery);
   {testimonials?.length > 0 && (
     <Testimonials testimonials={testimonials} />
   )}
+
+  <InstagramFeed />
 
   <CTABanner />
 </BaseLayout>

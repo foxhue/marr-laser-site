@@ -1,0 +1,117 @@
+---
+const instagramUrl = 'https://www.instagram.com/marrlaserandskin';
+const handle = '@marrlaserandskin';
+---
+
+<section class="instagram-section" aria-labelledby="instagram-heading">
+  <div class="container">
+    <h2 id="instagram-heading" class="section-heading">Follow Us on Instagram</h2>
+    <p class="section-handle">{handle}</p>
+
+    <!-- Placeholder grid — replace with Elfsight/SnapWidget embed when ready -->
+    <div class="instagram-grid" aria-label="Instagram photo placeholders">
+      {Array.from({ length: 6 }).map(() => (
+        <div class="instagram-placeholder" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="instagram-icon">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+            <circle cx="12" cy="12" r="5" />
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+      ))}
+    </div>
+
+    <div class="instagram-cta">
+      <a href={instagramUrl} target="_blank" rel="noopener" class="instagram-button">
+        Follow {handle}<span class="sr-only"> (opens in new tab)</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .instagram-section {
+    padding-block: var(--space-20);
+  }
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 400;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: var(--space-2);
+  }
+
+  .section-handle {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-500);
+    text-align: center;
+    margin-bottom: var(--space-10);
+  }
+
+  .instagram-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+
+  .instagram-placeholder {
+    aspect-ratio: 1;
+    background-color: var(--color-accent);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-secondary-dark);
+  }
+
+  .instagram-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    opacity: 0.5;
+  }
+
+  .instagram-cta {
+    text-align: center;
+    margin-top: var(--space-8);
+  }
+
+  .instagram-button {
+    display: inline-block;
+    padding: var(--space-3) var(--space-8);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .instagram-button:hover {
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+  }
+
+  .instagram-button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 768px) {
+    .instagram-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .section-heading {
+      font-size: var(--font-size-4xl);
+    }
+  }
+</style>

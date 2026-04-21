@@ -9,15 +9,25 @@ interface Props {
 
 const { siteName, logo } = Astro.props;
 
+const treatmentCategories = [
+  { label: 'Laser Treatments', href: '/services/laser-treatments' },
+  { label: 'Skin Treatments', href: '/services/skin-treatments' },
+  { label: 'Aesthetic Treatments', href: '/services/aesthetic-treatments' },
+  { label: 'PMU Treatments', href: '/services/pmu-treatments' },
+  { label: 'CACI Treatments', href: '/services/caci-treatments' },
+];
+
 const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'Treatments', href: '/services' },
+  { label: 'Treatments', href: '/services', children: treatmentCategories },
   { label: 'Pricing', href: '/pricing' },
   { label: 'About', href: '/about' },
   { label: 'Team', href: '/team' },
+  { label: 'FAQ', href: '/faq' },
   { label: 'Contact', href: '/contact' },
 ];
 
+const bookingUrl = 'https://phorest.com/book/salons/marrbeauty';
 const currentPath = Astro.url.pathname;
 ---
 
@@ -49,18 +59,42 @@ const currentPath = Astro.url.pathname;
     <nav class="main-nav" aria-label="Main navigation">
       <ul class="nav-list" role="list">
         {navItems.map((item) => (
-          <li class="nav-item">
+          <li class:list={['nav-item', { 'nav-item--has-dropdown': item.children }]}>
             <a
               href={item.href}
-              class:list={['nav-link', { 'nav-link--active': currentPath === item.href }]}
+              class:list={['nav-link', { 'nav-link--active': currentPath === item.href || (item.children && currentPath.startsWith('/services/')) }]}
               aria-current={currentPath === item.href ? 'page' : undefined}
+              aria-haspopup={item.children ? 'true' : undefined}
+              aria-expanded={item.children ? 'false' : undefined}
             >
               {item.label}
+              {item.children && <span class="dropdown-arrow" aria-hidden="true">&#9662;</span>}
             </a>
+            {item.children && (
+              <ul class="dropdown" role="list">
+                {item.children.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      class:list={['dropdown-link', { 'dropdown-link--active': currentPath === child.href }]}
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ul>
+      <a href={bookingUrl} target="_blank" rel="noopener" class="book-now-btn mobile-book-now">
+        Book Now<span class="sr-only"> (opens in new tab)</span>
+      </a>
     </nav>
+
+    <a href={bookingUrl} target="_blank" rel="noopener" class="book-now-btn desktop-book-now">
+      Book Now<span class="sr-only"> (opens in new tab)</span>
+    </a>
   </div>
 </header>
 
@@ -83,7 +117,7 @@ const currentPath = Astro.url.pathname;
     min-height: 4.5rem;
   }
 
-  /* Logo — centered on desktop */
+  /* Logo */
   .header-top {
     flex-shrink: 0;
   }
@@ -97,14 +131,6 @@ const currentPath = Astro.url.pathname;
   .logo-image {
     height: 2.5rem;
     width: auto;
-  }
-
-  .logo-text {
-    font-family: var(--font-heading);
-    font-size: var(--font-size-2xl);
-    font-weight: 500;
-    color: var(--color-neutral-900);
-    letter-spacing: 0.02em;
   }
 
   /* Checkbox (visually hidden, drives menu state) */
@@ -156,8 +182,14 @@ const currentPath = Astro.url.pathname;
     padding: var(--space-4) 0;
   }
 
+  .nav-item {
+    position: relative;
+  }
+
   .nav-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
     padding: var(--space-3) var(--space-4);
     font-family: var(--font-body);
     font-size: var(--font-size-sm);
@@ -181,6 +213,80 @@ const currentPath = Astro.url.pathname;
     font-weight: 500;
   }
 
+  /* Dropdown arrow */
+  .dropdown-arrow {
+    font-size: 0.6em;
+    transition: transform var(--transition-fast);
+  }
+
+  /* Dropdown menu */
+  .dropdown {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .dropdown-link {
+    display: block;
+    padding: var(--space-2) var(--space-4) var(--space-2) var(--space-8);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-neutral-600);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    border-radius: var(--radius-full);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .dropdown-link:hover {
+    color: var(--color-primary);
+    background-color: var(--color-accent);
+  }
+
+  .dropdown-link--active {
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  /* Book Now button */
+  .book-now-btn {
+    display: inline-block;
+    padding: var(--space-2) var(--space-6);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-radius: var(--radius-full);
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .book-now-btn:hover {
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+  }
+
+  .book-now-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Mobile: show book now inside menu, hide desktop one */
+  .mobile-book-now {
+    display: block;
+    text-align: center;
+    margin: var(--space-4);
+  }
+
+  .desktop-book-now {
+    display: none;
+  }
+
   /* Checkbox hack: show nav when checked */
   .nav-checkbox:checked ~ .main-nav {
     display: block;
@@ -199,7 +305,7 @@ const currentPath = Astro.url.pathname;
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Desktop layout — centered logo above nav */
+  /* Desktop layout */
   @media (min-width: 768px) {
     .header-inner {
       flex-direction: column;
@@ -217,7 +323,9 @@ const currentPath = Astro.url.pathname;
     }
 
     .main-nav {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
       flex-basis: auto;
       background: none;
       border: none;
@@ -233,6 +341,48 @@ const currentPath = Astro.url.pathname;
 
     .nav-link {
       padding: var(--space-2) var(--space-4);
+    }
+
+    /* Desktop dropdown: hidden by default, shown on hover/focus */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 14rem;
+      background-color: var(--color-white);
+      border: 1px solid var(--color-accent);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-2) 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--transition-fast), visibility var(--transition-fast);
+      z-index: 200;
+    }
+
+    .dropdown-link {
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .nav-item--has-dropdown:hover > .dropdown,
+    .nav-item--has-dropdown:focus-within > .dropdown {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-item--has-dropdown:hover .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Desktop: show book-now next to nav, hide mobile one */
+    .mobile-book-now {
+      display: none;
+    }
+
+    .desktop-book-now {
+      display: inline-block;
+      order: 2;
     }
   }
 </style>

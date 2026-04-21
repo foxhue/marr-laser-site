@@ -1,0 +1,133 @@
+---
+interface Machine {
+  name: string;
+  description: string;
+  icon: string;
+}
+
+const machines: Machine[] = [
+  {
+    name: 'Cynosure Elite+',
+    description: 'Dual wavelength laser system combining Alexandrite 755nm and Nd:YAG 1064nm for safe, effective treatment across all skin types.',
+    icon: '◎',
+  },
+  {
+    name: 'Excelight IPL',
+    description: 'Advanced IPL photo-rejuvenation system for pigmentation correction, vascular lesions, and overall skin renewal.',
+    icon: '◈',
+  },
+  {
+    name: 'CO₂ Fractional Laser',
+    description: 'Fractional CO₂ resurfacing for scar revision, skin tightening, and deep textural improvement with minimal downtime.',
+    icon: '◇',
+  },
+  {
+    name: 'Focus Dual',
+    description: 'Combines HIFU ultrasound with RF microneedling for non-surgical skin lifting, tightening, and collagen remodelling.',
+    icon: '◆',
+  },
+];
+---
+
+<section class="technology-section" aria-labelledby="technology-heading">
+  <div class="container">
+    <h2 id="technology-heading" class="section-heading">Our Technology</h2>
+    <p class="section-intro">
+      We invest in medical-grade technology so you receive the safest, most effective treatments available.
+    </p>
+    <div class="tech-grid">
+      {machines.map((machine) => (
+        <div class="tech-card">
+          <span class="tech-icon" aria-hidden="true">{machine.icon}</span>
+          <h3 class="tech-name">{machine.name}</h3>
+          <p class="tech-desc">{machine.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .technology-section {
+    padding-block: var(--space-20);
+    background-color: var(--color-neutral-50);
+  }
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 400;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .section-intro {
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    color: var(--color-neutral-600);
+    text-align: center;
+    max-width: 36rem;
+    margin-inline: auto;
+    margin-bottom: var(--space-12);
+    line-height: 1.6;
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .tech-card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-align: center;
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .tech-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .tech-icon {
+    display: block;
+    font-size: var(--font-size-3xl);
+    color: var(--color-secondary-dark);
+    margin-bottom: var(--space-4);
+  }
+
+  .tech-name {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .tech-desc {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    .tech-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section-heading {
+      font-size: var(--font-size-4xl);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .tech-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>
