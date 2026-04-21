@@ -8,7 +8,7 @@
  */
 
 import { createClient } from '@sanity/client';
-import { readFileSync } from 'fs';
+import { readFileSync, createReadStream } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -61,6 +61,28 @@ function paragraph(key, text) {
     _key: key,
     _type: 'block',
     style: 'normal',
+    children: [{ _key: `${key}c`, _type: 'span', text, marks: [] }],
+    markDefs: [],
+  };
+}
+
+function subheading(key, text) {
+  return {
+    _key: key,
+    _type: 'block',
+    style: 'h3',
+    children: [{ _key: `${key}c`, _type: 'span', text, marks: [] }],
+    markDefs: [],
+  };
+}
+
+function bulletItem(key, text) {
+  return {
+    _key: key,
+    _type: 'block',
+    style: 'normal',
+    listItem: 'bullet',
+    level: 1,
     children: [{ _key: `${key}c`, _type: 'span', text, marks: [] }],
     markDefs: [],
   };
@@ -679,11 +701,412 @@ const pages = [
 ];
 
 // ---------------------------------------------------------------------------
+// Blog Posts
+// ---------------------------------------------------------------------------
+
+const blogPosts = [
+  // 1. Why I Stopped Recommending Fillers
+  {
+    _id: 'blog-stopped-recommending-fillers',
+    _type: 'blogPost',
+    title: 'Why I Stopped Recommending Fillers (And What I Do Instead)',
+    slug: { _type: 'slug', current: 'why-i-stopped-recommending-fillers' },
+    publishedAt: '2026-04-21T09:00:00Z',
+    excerpt:
+      'After years in the industry, I stopped recommending dermal fillers. Here\u2019s what I\u2019ve seen, why I changed my mind, and the treatments I genuinely believe in now.',
+    categories: ['Skin Advice', 'Anti-Ageing', 'Treatments'],
+    body: [
+      paragraph(
+        'bf1',
+        'I\u2019ll be honest with you. A few years ago, dermal fillers were everywhere in this industry, and plenty of clinics were happy to keep injecting them into anyone who asked. I used to sit with clients who\u2019d come in wanting more filler because they\u2019d seen someone on Instagram with sculpted cheekbones and puffy lips, and I\u2019d think to myself, is this actually helping her skin, or am I just chasing a trend?'
+      ),
+      paragraph(
+        'bf2',
+        'So I stopped. And I want to explain why, because I think women in their 30s, 40s and 50s deserve to know what\u2019s really going on before they sit in anyone\u2019s treatment chair.'
+      ),
+      heading('bf3', 'The problem with how fillers are being used'),
+      paragraph(
+        'bf4',
+        'Fillers aren\u2019t evil. In the right hands, for the right reason, they have their place. But the way they\u2019re being used on the high street now is a different story. Too much, too often, in the wrong areas, and without any real long-term thinking.'
+      ),
+      paragraph(
+        'bf5',
+        'Here\u2019s what I\u2019ve seen with my own eyes over the years:'
+      ),
+      bulletItem('bf6', 'Filler migrating away from where it was injected and settling in places it shouldn\u2019t'),
+      bulletItem('bf7', 'Chronic low-grade swelling that clients didn\u2019t even realise was swelling, because it had been there for years'),
+      bulletItem('bf8', 'That heavy, overfilled look that ages a face rather than freshening it'),
+      bulletItem('bf9', 'Skin that looked stretched, tired and genuinely worse than when we started'),
+      paragraph(
+        'bf10',
+        'The research coming out now is catching up with what a lot of us practitioners have been quietly saying for years. Filler doesn\u2019t always fully dissolve. It can sit in the tissue for far longer than we were told, and it can cause problems you only notice when you finally stop.'
+      ),
+      heading('bf11', 'So what do I actually recommend now?'),
+      paragraph(
+        'bf12',
+        'I work with a few treatments that do the opposite of what filler does. Instead of adding volume from the outside, they work with your own skin to improve quality, tone and firmness from within. Here\u2019s the honest breakdown.'
+      ),
+      subheading('bf13', 'Focus Dual HIFU'),
+      paragraph(
+        'bf14',
+        'This is one of my favourites for women who want lift without anything injected. It uses focused ultrasound energy to target the deeper layers of your skin, the same layer a surgeon would tighten in a facelift. No needles, no downtime, and the results build gradually over a few months. It looks like you, just a fresher, lifted version of you.'
+      ),
+      subheading('bf15', 'Calecim Exosome Microneedling'),
+      paragraph(
+        'bf16',
+        'If you\u2019ve not heard of exosomes yet, you will soon. They\u2019re tiny signalling molecules that tell your skin cells to behave younger, and when combined with medical microneedling, the results on skin texture, tone and radiance are genuinely impressive. It\u2019s become one of the most requested treatments at the clinic, and for good reason.'
+      ),
+      subheading('bf17', 'Preventative anti-wrinkle treatments'),
+      paragraph(
+        'bf18',
+        'Small, thoughtful doses of anti-wrinkle injections in the right muscles can soften lines before they become permanent. Done properly, nobody should be able to tell you\u2019ve had anything done. You just look well-rested.'
+      ),
+      heading('bf19', 'What this means for you'),
+      paragraph(
+        'bf20',
+        'If you\u2019ve been thinking about fillers, or you\u2019ve had them before and you\u2019re not sure what to do next, my advice is this. Don\u2019t rush into another syringe. Come in for a proper consultation and let\u2019s look at your skin, your face and your goals together. There\u2019s almost always a better way to get you where you want to be.'
+      ),
+      paragraph(
+        'bf21',
+        'You\u2019re not a canvas for whatever trend is passing through TikTok. You\u2019re a real woman with real skin, and the goal should always be healthier skin, not more stuff in your face.'
+      ),
+      paragraph(
+        'bf22',
+        'Ready to chat through your options? Book a consultation at Marr Laser & Skin Clinic in Paisley. We\u2019ll give you an honest assessment, no pressure, and a plan that\u2019s actually right for your skin.'
+      ),
+    ],
+    seo: {
+      _type: 'seo',
+      title: 'Why I Stopped Recommending Fillers | Marr Laser & Skin Clinic Paisley',
+      description:
+        'Clinic owner Emma Marr on why she moved away from dermal fillers and the HIFU, exosome and anti-wrinkle treatments she recommends instead. Paisley clinic.',
+    },
+  },
+
+  // 2. Preventative Botox in Your 30s
+  {
+    _id: 'blog-preventative-botox-30s',
+    _type: 'blogPost',
+    title: 'Preventative Botox in Your 30s: What I Wish I\u2019d Known Sooner',
+    slug: { _type: 'slug', current: 'preventative-botox-in-your-30s' },
+    publishedAt: '2026-04-14T09:00:00Z',
+    excerpt:
+      'Emma Marr explains why starting anti-wrinkle treatment in your 30s, in small thoughtful doses, is about preserving your skin rather than chasing youth.',
+    categories: ['Anti-Wrinkle', 'Preventative Care', 'Skin Advice'],
+    body: [
+      paragraph(
+        'bb1',
+        'When I was in my early 30s, anti-wrinkle injections felt like something you did when the damage was already done. You waited until the lines were carved into your forehead, then you panicked and booked in. Now, years later and having treated hundreds of women, I honestly wish someone had sat me down and explained how much easier it is if you start earlier, in small, considered doses.'
+      ),
+      paragraph(
+        'bb2',
+        'This is the blog I wish I\u2019d read when I was 32.'
+      ),
+      heading('bb3', 'What does \u201Cpreventative\u201D actually mean?'),
+      paragraph(
+        'bb4',
+        'When we talk about lines on your face, there are two types. Dynamic lines are the ones that appear when you move, so when you frown, smile, or raise your eyebrows. Static lines are the ones that stay there even when your face is relaxed, because the skin has been creased in the same spot so many times that it can\u2019t fully smooth out anymore.'
+      ),
+      paragraph(
+        'bb5',
+        'Preventative anti-wrinkle treatment is about softening those dynamic lines before they have a chance to become static. Once a static line has formed properly, no injection in the world will fully erase it. You can soften it, improve it, but not undo it. So the clever play is getting in before that happens.'
+      ),
+      heading('bb6', 'But won\u2019t I look frozen?'),
+      paragraph(
+        'bb7',
+        'This is the single most common question I get asked, and I love it because it tells me the client actually cares about looking like herself. The answer is no, not if it\u2019s done properly.'
+      ),
+      paragraph(
+        'bb8',
+        'Preventative treatment uses much smaller doses than traditional anti-wrinkle treatment. The goal isn\u2019t to freeze your face. It\u2019s to gently soften the muscle activity that\u2019s creating the creases, while leaving enough movement that you still look expressive and alive. If your practitioner is telling you they\u2019re going to wipe out all movement, find a different practitioner.'
+      ),
+      paragraph(
+        'bb9',
+        'A well-done treatment should leave your friends saying you look well-rested, not asking if you\u2019ve had something done.'
+      ),
+      heading('bb10', 'When should you start?'),
+      paragraph(
+        'bb11',
+        'There\u2019s no magic age. It depends on your skin, your muscle strength, your lifestyle and your genetics. Some women in their late 20s start noticing dynamic lines that bother them. Others sail through their 30s without a concern. A good consultation will tell you whether you actually need it yet, and if you don\u2019t, I\u2019ll tell you that. I\u2019d much rather send you home and see you in a year than sell you something you don\u2019t need.'
+      ),
+      heading('bb12', 'How often do you need treatments?'),
+      paragraph(
+        'bb13',
+        'Most clients come in every three to four months. Some can stretch it to five or six, especially once they\u2019ve been having treatment for a while and their muscles have gently re-trained. It\u2019s not a monthly commitment. It\u2019s a quiet bit of maintenance a few times a year.'
+      ),
+      heading('bb14', 'Things nobody tells you about preventative treatment'),
+      bulletItem('bb15', 'You\u2019ll probably need less product over time, not more. Muscles that aren\u2019t constantly contracting become easier to manage.'),
+      bulletItem('bb16', 'The first couple of weeks can feel slightly heavy while your muscles adjust. This settles quickly.'),
+      bulletItem('bb17', 'Your makeup will sit differently on smoother skin. In a good way.'),
+      bulletItem('bb18', 'It\u2019s not a replacement for good skincare. It works alongside it, not instead of it.'),
+      heading('bb19', 'My honest take'),
+      paragraph(
+        'bb20',
+        'If I could rewind and speak to my 32 year old self, I\u2019d tell her to stop worrying about whether it was \u201Ctoo soon\u201D and just go and get a proper consultation. Not to book a treatment necessarily, but to get a real, expert opinion on what her face actually needed.'
+      ),
+      paragraph(
+        'bb21',
+        'Most of the women I treat in their 30s tell me the same thing six months in. They wish they\u2019d done it sooner.'
+      ),
+      paragraph(
+        'bb22',
+        'Curious whether preventative anti-wrinkle treatment is right for you? Book a no-obligation consultation at Marr Laser & Skin Clinic in Paisley and we\u2019ll have a proper, honest chat about your skin.'
+      ),
+    ],
+    seo: {
+      _type: 'seo',
+      title: 'Preventative Botox in Your 30s | Marr Laser & Skin Clinic Paisley',
+      description:
+        'Thinking about preventative anti-wrinkle injections in your 30s? Emma Marr explains when to start, what to expect and why natural-looking results matter. Paisley.',
+    },
+  },
+
+  // 3. Laser Hair Removal: Why the Machine Matters
+  {
+    _id: 'blog-laser-machine-matters',
+    _type: 'blogPost',
+    title: 'Laser Hair Removal: Why the Machine Matters More Than the Price',
+    slug: { _type: 'slug', current: 'laser-hair-removal-machine-matters' },
+    publishedAt: '2026-04-07T09:00:00Z',
+    excerpt:
+      'Most women who come to us frustrated with laser hair removal haven\u2019t been having laser at all. Here\u2019s why the machine matters more than the price tag.',
+    categories: ['Laser Hair Removal', 'Treatments', 'Buyer\u2019s Guide'],
+    body: [
+      paragraph(
+        'bl1',
+        'There\u2019s a conversation I have at least once a week. A woman books in, tells me she\u2019s already had eight sessions of laser hair removal somewhere else, and she\u2019s frustrated because the hair is still growing back. She paid a decent amount of money, followed the aftercare, did everything right, and her legs still need shaving.'
+      ),
+      paragraph(
+        'bl2',
+        'And then she sits on my treatment bed, we do a patch test with the Alexandrite laser, and she books a course. Because it turns out she hadn\u2019t actually been having laser hair removal at all.'
+      ),
+      heading('bl3', 'Laser vs IPL: they\u2019re not the same thing'),
+      paragraph(
+        'bl4',
+        'This is the big one, and it\u2019s where most women get caught out. IPL and laser are not the same treatment. They\u2019re not even close, despite being marketed like they are.'
+      ),
+      paragraph(
+        'bl5',
+        'IPL stands for Intense Pulsed Light. It uses a broad spectrum of light wavelengths that scatter across the skin. It\u2019s cheaper to buy, cheaper to run, and cheaper to deliver. That\u2019s why you see it in so many salons on the high street at bargain prices. The problem is that because the light is scattered, only a small portion of it is actually doing anything useful to the hair follicle. You need more sessions, the results are less reliable, and it simply doesn\u2019t work as well on finer hair, darker skin tones or stubborn areas.'
+      ),
+      paragraph(
+        'bl6',
+        'A proper laser uses a single, focused wavelength specifically tuned to target the pigment in the hair follicle. That\u2019s it. No scattering. No guessing. Just precise, targeted energy going exactly where it needs to go.'
+      ),
+      heading('bl7', 'Why we chose the Alexandrite'),
+      paragraph(
+        'bl8',
+        'When I was researching which laser to invest in for the clinic, I wasn\u2019t looking for the cheapest option. I was looking for the one that actually worked. After a lot of digging and speaking to practitioners across the country, I kept hearing the same answer. The Alexandrite is the gold standard for laser hair removal, particularly for the skin tones we most commonly treat in Scotland.'
+      ),
+      paragraph(
+        'bl9',
+        'We\u2019re the only clinic in Paisley with a genuine medical-grade Alexandrite laser. Not a similar machine. Not an IPL dressed up with fancy branding. The actual Alexandrite.'
+      ),
+      paragraph(
+        'bl10',
+        'Here\u2019s why that matters to you:'
+      ),
+      bulletItem('bl11', 'Fewer sessions. Most clients see genuine reduction within 6 to 8 sessions, rather than the 12 plus you might need with IPL.'),
+      bulletItem('bl12', 'Better results on finer hairs, which IPL really struggles with.'),
+      bulletItem('bl13', 'Faster treatment times, because the Alexandrite delivers energy more efficiently.'),
+      bulletItem('bl14', 'Long-term reduction you can actually see, rather than temporary thinning that grows back in full within a year.'),
+      heading('bl15', 'The hidden cost of \u201Ccheap\u201D laser'),
+      paragraph(
+        'bl16',
+        'I understand the appeal of a cheaper price. We\u2019re all watching what we spend. But here\u2019s the maths I always share with clients who are weighing it up.'
+      ),
+      paragraph(
+        'bl17',
+        'If you spend ten pounds less per session but need double the sessions, you\u2019ve not saved money. You\u2019ve spent more, and you\u2019ve been shaving and plucking through an extra year of your life while you waited for it to work. The cheap option usually ends up being the expensive one, once you add it all up.'
+      ),
+      heading('bl18', 'What to ask before you book anywhere'),
+      bulletItem('bl19', 'What make and model is the machine? A good clinic will tell you without hesitation.'),
+      bulletItem('bl20', 'Is it laser or IPL? If they dodge the question, you have your answer.'),
+      bulletItem('bl21', 'Who operates it and what training do they have?'),
+      bulletItem('bl22', 'Do they do a patch test before starting a course?'),
+      paragraph(
+        'bl23',
+        'If a clinic can\u2019t answer those four questions confidently, keep your money in your purse.'
+      ),
+      paragraph(
+        'bl24',
+        'Book a free patch test at Marr Laser & Skin Clinic in Paisley and see the difference real laser hair removal makes. It\u2019s time to stop shaving.'
+      ),
+    ],
+    seo: {
+      _type: 'seo',
+      title: 'Laser Hair Removal Paisley: Why the Machine Matters | Marr Clinic',
+      description:
+        'Confused between laser and IPL hair removal? Emma Marr explains why the Alexandrite laser delivers better, faster results. Paisley\u2019s only medical-grade clinic.',
+    },
+  },
+
+  // 4. Exosomes Explained
+  {
+    _id: 'blog-exosomes-explained',
+    _type: 'blogPost',
+    title: 'Exosomes Explained: The Skincare Breakthrough That Actually Lives Up to the Hype',
+    slug: { _type: 'slug', current: 'exosomes-explained-calecim-microneedling' },
+    publishedAt: '2026-03-31T09:00:00Z',
+    excerpt:
+      'Everyone\u2019s talking about exosomes, but what do they actually do? Emma Marr breaks down the science, why Calecim stands out, and what to expect from treatment.',
+    categories: ['Skincare Science', 'Exosomes', 'Treatments'],
+    body: [
+      paragraph(
+        'be1',
+        'Every few years, a new word takes over the skincare world. Peptides had their moment. Then it was retinol, then hyaluronic acid, then stem cells. Right now, the word on everyone\u2019s lips is exosomes, and I\u2019ll be completely honest with you. For once, the hype is justified.'
+      ),
+      paragraph(
+        'be2',
+        'But you probably don\u2019t want a biology lecture. You want to know what they actually do, whether they\u2019re worth the money, and whether they\u2019re going to do something real for your skin. So let\u2019s break it down properly.'
+      ),
+      heading('be3', 'What on earth is an exosome?'),
+      paragraph(
+        'be4',
+        'Think of exosomes as tiny messengers. They\u2019re microscopic packages that cells use to send information to each other. When a young, healthy cell sends an exosome to another cell, it essentially tells that cell how to behave. Repair faster. Produce more collagen. Calm down inflammation. Wake up.'
+      ),
+      paragraph(
+        'be5',
+        'As we age, our cells stop sending as many of these messages, and the messages they do send aren\u2019t as strong. Which is part of the reason skin starts to look tired, dull and slower to recover.'
+      ),
+      paragraph(
+        'be6',
+        'Exosome treatments are essentially a way of delivering those youthful, high-quality messages directly back into your skin, so your cells remember what they\u2019re supposed to be doing.'
+      ),
+      heading('be7', 'Why Calecim, specifically'),
+      paragraph(
+        'be8',
+        'Here\u2019s where I need to be really clear. Not all exosomes are equal. There are a lot of products on the market right now claiming to contain exosomes, and frankly, some of them are marketing fluff dressed up in a fancy bottle.'
+      ),
+      paragraph(
+        'be9',
+        'We use Calecim at the clinic because it\u2019s one of the most clinically studied exosome products in the world. It\u2019s derived from ethically sourced red deer umbilical cord lining stem cells, which sounds strange when you say it out loud, but the science behind it is genuinely impressive. The exosomes are potent, stable, and actually do what they say they\u2019ll do.'
+      ),
+      paragraph(
+        'be10',
+        'We chose it because it works. It\u2019s that simple.'
+      ),
+      heading('be11', 'What does the treatment actually involve?'),
+      paragraph(
+        'be12',
+        'We combine the Calecim with medical microneedling. The microneedling creates thousands of tiny channels in your skin, which does two things. First, it kicks your own collagen production into gear, which is already beneficial on its own. Second, it gives the exosomes a direct route into the deeper layers of your skin where they can actually get to work.'
+      ),
+      paragraph(
+        'be13',
+        'The treatment itself takes about an hour. Most clients describe it as a prickling or scratching sensation rather than painful, and we use numbing cream beforehand to keep things comfortable. Afterwards, your skin will feel warm and look a bit pink, like a mild sunburn. By the next morning, most people are back to normal.'
+      ),
+      heading('be14', 'Who is it actually for?'),
+      paragraph(
+        'be15',
+        'Honestly, most women over 30 will see a benefit. But it\u2019s particularly brilliant for:'
+      ),
+      bulletItem('be16', 'Dull, tired-looking skin that\u2019s lost its bounce'),
+      bulletItem('be17', 'Fine lines, especially around the eyes and mouth'),
+      bulletItem('be18', 'Acne scarring or uneven texture'),
+      bulletItem('be19', 'Post-laser recovery, to speed up healing and enhance results'),
+      bulletItem('be20', 'Anyone who wants genuine skin quality improvement without anything injected'),
+      heading('be21', 'What sort of results should you expect?'),
+      paragraph(
+        'be22',
+        'I\u2019ll be straight with you. You won\u2019t leave the clinic looking like a different person. Exosome treatments work with your skin over time, not overnight. Most clients start seeing a proper difference around the four week mark, and the results keep improving over the following two to three months as your collagen builds.'
+      ),
+      paragraph(
+        'be23',
+        'Skin looks brighter. Feels firmer. Sits differently under makeup. Old scars soften. That kind of change.'
+      ),
+      paragraph(
+        'be24',
+        'We usually recommend a course of three treatments spaced four to six weeks apart for the best results, then a top-up once or twice a year to maintain.'
+      ),
+      heading('be25', 'Is it worth it?'),
+      paragraph(
+        'be26',
+        'If you\u2019re looking for a treatment that actually improves the quality of your skin, rather than just masking the surface, yes. This is one of the treatments I\u2019m most proud to offer, because the results speak for themselves. I\u2019ve got clients in their 50s whose skin genuinely looks better now than it did in their 40s, and this is a big part of that.'
+      ),
+      paragraph(
+        'be27',
+        'Want to find out whether Calecim Exosome Microneedling is right for your skin? Book a consultation at Marr Laser & Skin Clinic in Paisley and let\u2019s have a proper look together.'
+      ),
+    ],
+    seo: {
+      _type: 'seo',
+      title: 'Calecim Exosome Microneedling Paisley | Marr Laser & Skin Clinic',
+      description:
+        'Curious about exosome microneedling? Emma Marr explains how Calecim works, what results to expect and who it\u2019s best for. Book a consultation in Paisley.',
+    },
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Seed function
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Blog cover image mapping
+// ---------------------------------------------------------------------------
+
+const blogCoverImages = [
+  {
+    blogId: 'blog-stopped-recommending-fillers',
+    file: 'services/skin-hero.jpg',
+    alt: 'Emma Marr consulting with a client about non-filler facial treatments at Marr Laser & Skin Clinic in Paisley',
+    caption: 'There\u2019s almost always a better way to get you where you want to be.',
+  },
+  {
+    blogId: 'blog-preventative-botox-30s',
+    file: 'services/aesthetic-hero.jpg',
+    alt: 'Close-up of a woman in her 30s smiling confidently after preventative anti-wrinkle treatment at Marr Laser & Skin Clinic',
+    caption: 'Most of the women I treat in their 30s tell me the same thing six months in. They wish they\u2019d done it sooner.',
+  },
+  {
+    blogId: 'blog-laser-machine-matters',
+    file: 'services/laser-hero.jpg',
+    alt: 'Medical-grade Alexandrite laser hair removal treatment in progress at Marr Laser & Skin Clinic in Paisley',
+    caption: 'If you spend ten pounds less per session but need double the sessions, you\u2019ve not saved money.',
+  },
+  {
+    blogId: 'blog-exosomes-explained',
+    file: 'tech/focus-dual.jpg',
+    alt: 'Calecim exosome microneedling treatment being performed on a female client at Marr Laser & Skin Clinic in Paisley',
+    caption: 'I\u2019ve got clients in their 50s whose skin genuinely looks better now than it did in their 40s.',
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Seed function
+// ---------------------------------------------------------------------------
+
+async function uploadImage(filePath) {
+  const stream = createReadStream(filePath);
+  const asset = await client.assets.upload('image', stream, {
+    filename: filePath.split('/').pop(),
+  });
+  return asset._id;
+}
+
 async function seed() {
   console.log('Seeding Marr Laser & Skin Clinic content...\n');
+
+  // Upload blog cover images
+  const imagesDir = resolve(root, 'apps/web/public/images');
+  console.log('Uploading blog cover images...');
+  for (const img of blogCoverImages) {
+    const filePath = resolve(imagesDir, img.file);
+    const assetId = await uploadImage(filePath);
+    const post = blogPosts.find((p) => p._id === img.blogId);
+    if (post) {
+      post.coverImage = {
+        _type: 'figure',
+        image: {
+          _type: 'image',
+          asset: { _type: 'reference', _ref: assetId },
+        },
+        alt: img.alt,
+        caption: img.caption,
+      };
+      console.log(`  \u2713 ${img.file} \u2192 ${post.title.slice(0, 50)}...`);
+    }
+  }
 
   const allDocuments = [
     siteSettings,
@@ -692,6 +1115,7 @@ async function seed() {
     ...testimonials,
     ...faqs,
     ...pages,
+    ...blogPosts,
   ];
 
   const transaction = client.transaction();
@@ -702,13 +1126,14 @@ async function seed() {
 
   try {
     const result = await transaction.commit();
-    console.log(`\u2713 Seeded ${allDocuments.length} documents`);
+    console.log(`\n\u2713 Seeded ${allDocuments.length} documents`);
     console.log(`  - 1 siteSettings`);
     console.log(`  - ${services.length} services`);
     console.log(`  - ${teamMembers.length} team members`);
     console.log(`  - ${testimonials.length} testimonials`);
     console.log(`  - ${faqs.length} FAQs`);
     console.log(`  - ${pages.length} pages`);
+    console.log(`  - ${blogPosts.length} blog posts (with cover images)`);
     console.log(`\nTransaction ID: ${result.transactionId}`);
   } catch (err) {
     console.error('Failed to seed content:', err.message);

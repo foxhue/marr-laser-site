@@ -1,0 +1,72 @@
+---
+/**
+ * CSS-only crossfade carousel for showcasing clinic images.
+ * 5 images, ~5s visible each, ~1s crossfade = 30s total cycle.
+ * Respects prefers-reduced-motion by pausing on first image.
+ */
+interface Props {
+  class?: string;
+}
+
+const images = [
+  { src: '/images/hero.jpg', alt: 'Marr Laser & Skin Clinic' },
+  { src: '/images/services/laser-hero.jpg', alt: 'Laser treatments at the clinic' },
+  { src: '/images/services/skin-hero.jpg', alt: 'Skin treatments at the clinic' },
+  { src: '/images/tech/cynosure.jpg', alt: 'Medical-grade Cynosure technology' },
+  { src: '/images/team/team-hero.jpg', alt: 'The MARR clinic team' },
+];
+---
+
+<div class:list={['carousel', Astro.props.class]} aria-hidden="true">
+  {images.map((img, i) => (
+    <img
+      src={img.src}
+      alt=""
+      class="carousel-image"
+      style={`animation-delay: ${i * 6}s`}
+      loading="eager"
+      decoding="async"
+      fetchpriority={i === 0 ? 'high' : 'low'}
+      width="1600"
+      height="900"
+    />
+  ))}
+</div>
+
+<style>
+  .carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: crossfade 30s infinite;
+    will-change: opacity;
+  }
+
+  @keyframes crossfade {
+    0%, 3.33% { opacity: 1; }   /* visible immediately, stay for fade-in window */
+    20% { opacity: 1; }         /* visible for ~5s */
+    23.33% { opacity: 0; }      /* fade out over 1s */
+    100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-image {
+      animation: none;
+      opacity: 0;
+    }
+
+    .carousel-image:first-child {
+      opacity: 1;
+    }
+  }
+</style>

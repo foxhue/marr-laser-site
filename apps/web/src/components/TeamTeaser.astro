@@ -1,0 +1,151 @@
+---
+import type { TeamMember } from '@foxhue/shared';
+
+interface Props {
+  members: TeamMember[];
+}
+
+const { members } = Astro.props;
+
+const teamFallbackPhotos: Record<string, string> = {
+  'Emma': '/images/team/emma.jpg',
+  'Jennifer Graham': '/images/team/jennifer.jpg',
+  'Fraser': '/images/team/fraser.jpg',
+  'Katie': '/images/team/katie.jpg',
+};
+
+const displayMembers = members.slice(0, 4);
+---
+
+<section class="team-teaser" aria-labelledby="team-teaser-heading">
+  <div class="container">
+    <h2 id="team-teaser-heading" class="teaser-heading">Meet the Team</h2>
+    {displayMembers.length > 0 ? (
+      <ul class="teaser-grid" role="list">
+        {displayMembers.map((member) => (
+          <li class="teaser-item">
+            <div class="teaser-photo-wrap">
+              <img
+                src={teamFallbackPhotos[member.name] || '/placeholders/team.svg'}
+                alt={`Photo of ${member.name}`}
+                width="120"
+                height="120"
+                class="teaser-photo"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <p class="teaser-name">{member.name}</p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="teaser-empty">Team information coming soon.</p>
+    )}
+    <div class="teaser-cta-wrap">
+      <a href="/team" class="teaser-cta">Meet the Full Team</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .team-teaser {
+    padding-block: var(--space-16);
+    background-color: var(--color-neutral-50);
+  }
+
+  .teaser-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 400;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: var(--space-10);
+  }
+
+  .teaser-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+    max-width: 36rem;
+    margin-inline: auto;
+    margin-bottom: var(--space-10);
+  }
+
+  .teaser-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .teaser-photo-wrap {
+    width: 7rem;
+    height: 7rem;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+  }
+
+  .teaser-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .teaser-name {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-neutral-900);
+  }
+
+  .teaser-empty {
+    text-align: center;
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-10);
+  }
+
+  .teaser-cta-wrap {
+    text-align: center;
+  }
+
+  .teaser-cta {
+    display: inline-block;
+    padding: var(--space-3) var(--space-8);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .teaser-cta:hover {
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+  }
+
+  .teaser-cta:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 768px) {
+    .teaser-grid {
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 48rem;
+    }
+
+    .teaser-photo-wrap {
+      width: 8rem;
+      height: 8rem;
+    }
+  }
+</style>
