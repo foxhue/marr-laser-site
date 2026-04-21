@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="60" viewBox="0 0 200 60" preserveAspectRatio="xMidYMid slice">
+  <!-- Decorative diamond before text -->
+  <g transform="translate(28,30)" opacity="0.6">
+    <rect x="-8" y="-8" width="16" height="16" rx="1" fill="none" stroke="#3C3C3B" stroke-width="1" transform="rotate(45)"/>
+    <circle cx="0" cy="0" r="2" fill="#3C3C3B"/>
+  </g>
+  <text x="52" y="35" font-family="'Cormorant Garamond', Georgia, serif" font-size="20" fill="#3C3C3B" font-weight="400" letter-spacing="0.12em">MARR</text>
+  <text x="52" y="49" font-family="'Cormorant Garamond', Georgia, serif" font-size="8" fill="#C6BCB3" letter-spacing="0.2em">LASER &amp; SKIN CLINIC</text>
+</svg>

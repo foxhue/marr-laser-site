@@ -22,8 +22,8 @@ const { services, heading = 'Our Services' } = Astro.props;
               class="service-link"
               aria-label={`Learn more about ${service.title}`}
             >
-              {service.image && (
-                <div class="service-image-wrap">
+              <div class="service-image-wrap">
+                {service.image ? (
                   <SanityImage
                     source={service.image.image}
                     alt={service.image.alt || service.title}
@@ -31,8 +31,10 @@ const { services, heading = 'Our Services' } = Astro.props;
                     height={400}
                     class="service-image"
                   />
-                </div>
-              )}
+                ) : (
+                  <img src="/placeholders/service.svg" alt={service.title} width={600} height={400} class="service-image" loading="lazy" decoding="async" />
+                )}
+              </div>
               <div class="service-body">
                 <h3 class="service-title">{service.title}</h3>
                 {service.excerpt && (

@@ -28,16 +28,18 @@ if (!service) {
   description={service.seo?.description ?? service.excerpt}
 >
   <article class="service-detail">
-    {service.image && (
-      <div class="service-hero">
+    <div class="service-hero">
+      {service.image ? (
         <SanityImage
           source={service.image.image}
           alt={service.image.alt}
           width={1200}
           height={600}
         />
-      </div>
-    )}
+      ) : (
+        <img src="/placeholders/service-hero.svg" alt={service.title} width={1200} height={600} loading="eager" decoding="async" />
+      )}
+    </div>
 
     <div class="container">
       <div class="service-header">

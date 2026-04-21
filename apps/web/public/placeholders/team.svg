@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice">
+  <rect width="300" height="300" fill="#C6BCB3"/>
+  <!-- Subtle person silhouette -->
+  <g transform="translate(150,130)" opacity="0.2">
+    <circle cx="0" cy="-10" r="30" fill="#3C3C3B"/>
+    <ellipse cx="0" cy="55" rx="45" ry="35" fill="#3C3C3B"/>
+  </g>
+  <!-- Decorative sparkle -->
+  <g transform="translate(150,120)" opacity="0.15">
+    <circle cx="0" cy="0" r="3" fill="#3C3C3B"/>
+    <line x1="0" y1="-8" x2="0" y2="-14" stroke="#3C3C3B" stroke-width="0.8"/>
+    <line x1="0" y1="8" x2="0" y2="14" stroke="#3C3C3B" stroke-width="0.8"/>
+    <line x1="-8" y1="0" x2="-14" y2="0" stroke="#3C3C3B" stroke-width="0.8"/>
+    <line x1="8" y1="0" x2="14" y2="0" stroke="#3C3C3B" stroke-width="0.8"/>
+  </g>
+  <text x="150" y="225" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-size="13" fill="#3C3C3B" opacity="0.3" letter-spacing="0.1em">TEAM MEMBER</text>
+</svg>

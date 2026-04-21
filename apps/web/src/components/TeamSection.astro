@@ -41,9 +41,7 @@ function extractFirstSentence(bio: SanityBlock[] | undefined): string {
                     class="team-photo"
                   />
                 ) : (
-                  <div class="team-photo-placeholder" aria-hidden="true">
-                    <span>{member.name.charAt(0)}</span>
-                  </div>
+                  <img src="/placeholders/team.svg" alt={member.name} width={300} height={300} class="team-photo" loading="lazy" decoding="async" />
                 )}
               </div>
               <h3 class="team-name">{member.name}</h3>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <rect width="1200" height="600" fill="#ECE5E0"/>
+  <rect width="1200" height="600" fill="url(#sgrad)" opacity="0.3"/>
+  <defs>
+    <linearGradient id="sgrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#C6BCB3"/>
+      <stop offset="100%" stop-color="#ECE5E0"/>
+    </linearGradient>
+  </defs>
+  <!-- Decorative diamond motif -->
+  <g transform="translate(600,270)" opacity="0.18">
+    <rect x="-50" y="-50" width="100" height="100" rx="4" fill="none" stroke="#3C3C3B" stroke-width="1.2" transform="rotate(45)"/>
+    <rect x="-28" y="-28" width="56" height="56" rx="2" fill="none" stroke="#3C3C3B" stroke-width="0.8" transform="rotate(45)"/>
+    <circle cx="0" cy="0" r="5" fill="#3C3C3B"/>
+    <line x1="0" y1="-14" x2="0" y2="-25" stroke="#3C3C3B" stroke-width="1"/>
+    <line x1="0" y1="14" x2="0" y2="25" stroke="#3C3C3B" stroke-width="1"/>
+    <line x1="-14" y1="0" x2="-25" y2="0" stroke="#3C3C3B" stroke-width="1"/>
+    <line x1="14" y1="0" x2="25" y2="0" stroke="#3C3C3B" stroke-width="1"/>
+  </g>
+  <text x="600" y="360" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-size="18" fill="#3C3C3B" opacity="0.3" letter-spacing="0.15em">TREATMENT DETAILS</text>
+</svg>
