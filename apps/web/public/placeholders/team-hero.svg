@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="500" viewBox="0 0 1600 500" preserveAspectRatio="xMidYMid slice">
+  <rect width="1600" height="500" fill="#C6BCB3"/>
+  <rect width="1600" height="500" fill="url(#thgrad)" opacity="0.4"/>
+  <defs>
+    <linearGradient id="thgrad" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0%" stop-color="#ECE5E0"/>
+      <stop offset="100%" stop-color="#C6BCB3"/>
+    </linearGradient>
+  </defs>
+  <!-- Group of person silhouettes suggesting a team -->
+  <g transform="translate(800,210)" opacity="0.15">
+    <!-- Center person -->
+    <circle cx="0" cy="-20" r="28" fill="#3C3C3B"/>
+    <ellipse cx="0" cy="40" rx="38" ry="30" fill="#3C3C3B"/>
+    <!-- Left person -->
+    <circle cx="-80" cy="-10" r="24" fill="#3C3C3B"/>
+    <ellipse cx="-80" cy="42" rx="34" ry="28" fill="#3C3C3B"/>
+    <!-- Right person -->
+    <circle cx="80" cy="-10" r="24" fill="#3C3C3B"/>
+    <ellipse cx="80" cy="42" rx="34" ry="28" fill="#3C3C3B"/>
+    <!-- Far left person -->
+    <circle cx="-150" cy="-4" r="20" fill="#3C3C3B"/>
+    <ellipse cx="-150" cy="42" rx="30" ry="24" fill="#3C3C3B"/>
+    <!-- Far right person -->
+    <circle cx="150" cy="-4" r="20" fill="#3C3C3B"/>
+    <ellipse cx="150" cy="42" rx="30" ry="24" fill="#3C3C3B"/>
+  </g>
+  <!-- Decorative diamonds -->
+  <g transform="translate(800,340)" opacity="0.12">
+    <rect x="-30" y="-30" width="60" height="60" rx="3" fill="none" stroke="#3C3C3B" stroke-width="1" transform="rotate(45)"/>
+    <circle cx="0" cy="0" r="4" fill="#3C3C3B"/>
+  </g>
+  <text x="800" y="400" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-size="16" fill="#3C3C3B" opacity="0.25" letter-spacing="0.15em">MEET THE TEAM</text>
+</svg>

@@ -327,6 +327,54 @@ const teamMembers = [
     qualifications: ['Level 4 Laser & IPL', 'Advanced Skin Care'],
     order: 2,
   },
+  {
+    _id: 'team-member-3',
+    _type: 'teamMember',
+    name: '[PENDING] Team Member',
+    role: 'Laser Technician',
+    bio: [
+      {
+        _key: 'tm3b1',
+        _type: 'block',
+        style: 'normal',
+        children: [
+          {
+            _key: 'tm3b1c',
+            _type: 'span',
+            text: 'Skilled laser technician with a keen eye for detail and a passion for helping clients achieve their skin goals. Trained in the latest laser technologies and treatment protocols.',
+            marks: [],
+          },
+        ],
+        markDefs: [],
+      },
+    ],
+    qualifications: ['Level 4 Laser & IPL', 'VTCT Certified'],
+    order: 3,
+  },
+  {
+    _id: 'team-member-4',
+    _type: 'teamMember',
+    name: '[PENDING] Team Member',
+    role: 'Skin Care Specialist',
+    bio: [
+      {
+        _key: 'tm4b1',
+        _type: 'block',
+        style: 'normal',
+        children: [
+          {
+            _key: 'tm4b1c',
+            _type: 'span',
+            text: 'Dedicated skin care specialist offering expert consultations and bespoke treatment plans. Focused on achieving natural, lasting results through advanced skin care techniques.',
+            marks: [],
+          },
+        ],
+        markDefs: [],
+      },
+    ],
+    qualifications: ['Advanced Skin Care', 'Chemical Peel Specialist', 'Dermalogica Certified'],
+    order: 4,
+  },
 ];
 
 const testimonials = [
