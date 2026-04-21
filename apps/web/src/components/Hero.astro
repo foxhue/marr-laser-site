@@ -15,7 +15,7 @@ const { heading, tagline, image, ctaText, ctaUrl } = Astro.props;
 const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
 ---
 
-<section class="hero" role="banner">
+<section class="hero" aria-label="Hero">
   <div class="hero-inner">
     <div class="hero-content">
       <div class="hero-content-inner">
@@ -38,7 +38,7 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
           decoding="async"
         />
       ) : (
-        <img src="/placeholders/hero.svg" alt="" class="hero-image" loading="eager" decoding="async" aria-hidden="true" />
+        <img src="/images/hero.jpg" alt="" class="hero-image" loading="eager" decoding="async" fetchpriority="high" width="1600" height="1600" />
       )}
     </div>
   </div>
@@ -123,12 +123,6 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
     height: 100%;
     object-fit: cover;
     display: block;
-  }
-
-  .hero-media-placeholder {
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-secondary);
   }
 
   /* Desktop: side-by-side split layout */

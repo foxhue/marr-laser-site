@@ -1,6 +1,15 @@
 ---
 const instagramUrl = 'https://www.instagram.com/marrlaserandskin';
 const handle = '@marrlaserandskin';
+
+const photos = [
+  { src: '/images/instagram/facial-treatment.jpg', alt: 'Professional facial treatment' },
+  { src: '/images/instagram/skin-portrait.jpg', alt: 'Radiant skin close-up' },
+  { src: '/images/instagram/skincare-products.jpg', alt: 'Luxury skincare products' },
+  { src: '/images/instagram/clinic-reception.jpg', alt: 'MARR clinic reception' },
+  { src: '/images/instagram/laser-treatment.jpg', alt: 'Laser treatment session' },
+  { src: '/images/instagram/treatment-bed.jpg', alt: 'Relaxing treatment experience' },
+];
 ---
 
 <section class="instagram-section" aria-labelledby="instagram-heading">
@@ -8,16 +17,12 @@ const handle = '@marrlaserandskin';
     <h2 id="instagram-heading" class="section-heading">Follow Us on Instagram</h2>
     <p class="section-handle">{handle}</p>
 
-    <!-- Placeholder grid — replace with Elfsight/SnapWidget embed when ready -->
-    <div class="instagram-grid" aria-label="Instagram photo placeholders">
-      {Array.from({ length: 6 }).map(() => (
-        <div class="instagram-placeholder" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="instagram-icon">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-            <circle cx="12" cy="12" r="5" />
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-          </svg>
-        </div>
+    <!-- Replace with Elfsight/SnapWidget embed when ready -->
+    <div class="instagram-grid">
+      {photos.map((photo) => (
+        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class="instagram-item" aria-label={`${photo.alt} - View on Instagram (opens in new tab)`}>
+          <img src={photo.src} alt="" class="instagram-photo" loading="lazy" decoding="async" width="400" height="400" />
+        </a>
       ))}
     </div>
 
@@ -59,20 +64,34 @@ const handle = '@marrlaserandskin';
     margin-inline: auto;
   }
 
-  .instagram-placeholder {
+  .instagram-item {
+    display: block;
     aspect-ratio: 1;
-    background-color: var(--color-accent);
     border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-secondary-dark);
+    overflow: hidden;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   }
 
-  .instagram-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    opacity: 0.5;
+  .instagram-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .instagram-item:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .instagram-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-base);
+  }
+
+  .instagram-item:hover .instagram-photo {
+    transform: scale(1.05);
   }
 
   .instagram-cta {
@@ -112,6 +131,13 @@ const handle = '@marrlaserandskin';
 
     .section-heading {
       font-size: var(--font-size-4xl);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .instagram-item,
+    .instagram-photo {
+      transition: none;
     }
   }
 </style>

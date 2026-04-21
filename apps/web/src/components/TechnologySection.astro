@@ -2,29 +2,29 @@
 interface Machine {
   name: string;
   description: string;
-  icon: string;
+  image: string;
 }
 
 const machines: Machine[] = [
   {
     name: 'Cynosure Elite+',
     description: 'Dual wavelength laser system combining Alexandrite 755nm and Nd:YAG 1064nm for safe, effective treatment across all skin types.',
-    icon: '◎',
+    image: '/images/tech/cynosure.jpg',
   },
   {
     name: 'Excelight IPL',
     description: 'Advanced IPL photo-rejuvenation system for pigmentation correction, vascular lesions, and overall skin renewal.',
-    icon: '◈',
+    image: '/images/tech/ipl.jpg',
   },
   {
     name: 'CO₂ Fractional Laser',
     description: 'Fractional CO₂ resurfacing for scar revision, skin tightening, and deep textural improvement with minimal downtime.',
-    icon: '◇',
+    image: '/images/tech/co2.jpg',
   },
   {
     name: 'Focus Dual',
     description: 'Combines HIFU ultrasound with RF microneedling for non-surgical skin lifting, tightening, and collagen remodelling.',
-    icon: '◆',
+    image: '/images/tech/focus-dual.jpg',
   },
 ];
 ---
@@ -38,7 +38,9 @@ const machines: Machine[] = [
     <div class="tech-grid">
       {machines.map((machine) => (
         <div class="tech-card">
-          <span class="tech-icon" aria-hidden="true">{machine.icon}</span>
+          <div class="tech-image-wrap">
+            <img src={machine.image} alt={machine.name} class="tech-image" loading="lazy" decoding="async" width="400" height="400" />
+          </div>
           <h3 class="tech-name">{machine.name}</h3>
           <p class="tech-desc">{machine.description}</p>
         </div>
@@ -93,11 +95,23 @@ const machines: Machine[] = [
     transform: translateY(-2px);
   }
 
-  .tech-icon {
-    display: block;
-    font-size: var(--font-size-3xl);
-    color: var(--color-secondary-dark);
+  .tech-image-wrap {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
     margin-bottom: var(--space-4);
+  }
+
+  .tech-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+  }
+
+  .tech-card:hover .tech-image {
+    transform: scale(1.05);
   }
 
   .tech-name {
@@ -128,6 +142,13 @@ const machines: Machine[] = [
   @media (min-width: 1024px) {
     .tech-grid {
       grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tech-card,
+    .tech-image {
+      transition: none;
     }
   }
 </style>
