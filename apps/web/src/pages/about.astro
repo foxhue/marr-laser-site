@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
-import Hero from '@components/Hero.astro';
+import ImageCarousel from '@components/ImageCarousel.astro';
 import PortableText from '@components/PortableText.astro';
-import TeamSection from '@components/TeamSection.astro';
+import TeamTeaser from '@components/TeamTeaser.astro';
 import { sanityClient } from '@lib/sanity';
 import { pageBySlugQuery, teamMembersQuery } from '@lib/queries';
 import type { Page, TeamMember } from '@foxhue/shared';
@@ -15,20 +15,24 @@ const teamMembers: TeamMember[] = await sanityClient.fetch(teamMembersQuery);
   title={page?.seo?.title ?? page?.title ?? 'About'}
   description={page?.seo?.description ?? 'Learn more about our team and story.'}
 >
-  {page?.hero ? (
-    <Hero
-      heading={page.hero.heading}
-      tagline={page.hero.tagline}
-      image={page.hero.image}
-      cta={page.hero.cta}
-    />
-  ) : (
-    <section class="page-header">
-      <div class="container">
-        <h1>{page?.title ?? 'About Us'}</h1>
+  <section class="hero" aria-labelledby="about-hero-heading">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-content-inner">
+          <h1 id="about-hero-heading" class="hero-heading">{page?.hero?.heading ?? 'About Us'}</h1>
+          {page?.hero?.tagline && <p class="hero-tagline">{page.hero.tagline}</p>}
+          {page?.hero?.cta?.text && page?.hero?.cta?.url && (
+            <a href={page.hero.cta.url} class="hero-cta">
+              {page.hero.cta.text}
+            </a>
+          )}
+        </div>
       </div>
-    </section>
-  )}
+      <div class="hero-media">
+        <ImageCarousel />
+      </div>
+    </div>
+  </section>
 
   {page?.body && (
     <section class="about-content" aria-label="About page content">
@@ -41,33 +45,108 @@ const teamMembers: TeamMember[] = await sanityClient.fetch(teamMembersQuery);
   )}
 
   {teamMembers?.length > 0 && (
-    <section class="team-section" aria-labelledby="team-heading">
-      <div class="container">
-        <h2 id="team-heading">Meet the Team</h2>
-        <TeamSection members={teamMembers} />
-      </div>
-    </section>
+    <TeamTeaser members={teamMembers} />
   )}
 </BaseLayout>
 
 <style>
-  .page-header {
-    padding-block: var(--space-20);
-    background-color: var(--color-neutral-50);
-    text-align: center;
+  .hero {
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-height: 70vh;
+  }
+
+  .hero-content {
+    background-color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12) var(--space-6);
+  }
+
+  .hero-content-inner {
+    max-width: 32rem;
+  }
+
+  .hero-heading {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-4xl);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.01em;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    line-height: 1.7;
+    color: var(--color-neutral-600);
+    margin-bottom: var(--space-8);
+  }
+
+  .hero-cta {
+    display: inline-block;
+    padding: var(--space-3) var(--space-8);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .hero-cta:hover {
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+  }
+
+  .hero-cta:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .hero-media {
+    position: relative;
+    overflow: hidden;
+    min-height: 300px;
   }
 
   .about-content {
     padding-block: var(--space-16);
   }
 
-  .team-section {
-    padding-block: var(--space-20);
-    background-color: var(--color-neutral-50);
+  @media (min-width: 768px) {
+    .hero-inner {
+      grid-template-columns: 1fr 1fr;
+      min-height: 75vh;
+    }
+
+    .hero-content {
+      padding: var(--space-16) var(--space-12);
+    }
+
+    .hero-heading {
+      font-size: var(--font-size-5xl);
+    }
+
+    .hero-tagline {
+      font-size: var(--font-size-lg);
+    }
   }
 
-  .team-section h2 {
-    text-align: center;
-    margin-bottom: var(--space-12);
+  @media (min-width: 1024px) {
+    .hero-content {
+      padding: var(--space-20) var(--space-16);
+    }
   }
 </style>

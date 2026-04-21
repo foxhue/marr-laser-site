@@ -679,6 +679,137 @@ const pages = [
 ];
 
 // ---------------------------------------------------------------------------
+// Blog Posts
+// ---------------------------------------------------------------------------
+
+const blogPosts = [
+  {
+    _id: 'blog-laser-hair-removal-prep',
+    _type: 'blogPost',
+    title: '5 Things to Know Before Your First Laser Hair Removal Session',
+    slug: { _type: 'slug', current: '5-things-to-know-before-laser-hair-removal' },
+    publishedAt: '2026-04-15T09:00:00Z',
+    excerpt:
+      'Thinking about laser hair removal? Here are five essential things to know before your first session at Marr Laser & Skin Clinic.',
+    categories: ['Laser'],
+    body: [
+      heading('blr1', 'What to Expect'),
+      paragraph(
+        'blr2',
+        'Laser hair removal is one of the most popular treatments we offer at Marr Laser & Skin Clinic. Using our Motus AY — the world\'s first FDA-approved pain-free Alexandrite laser — we can safely treat all skin types year-round. But before you book your first session, there are a few things worth knowing to get the best results.'
+      ),
+      heading('blr3', '1. Shave, Don\'t Wax'),
+      paragraph(
+        'blr4',
+        'Shave the treatment area 24 hours before your appointment. Avoid waxing, plucking, or using depilatory creams for at least four weeks beforehand. The laser targets the hair follicle beneath the skin, so the root needs to be intact for the treatment to work effectively.'
+      ),
+      heading('blr5', '2. Multiple Sessions Are Needed'),
+      paragraph(
+        'blr6',
+        'Hair grows in cycles, and the laser can only target follicles in the active growth phase. Most clients need six to eight sessions spaced four to six weeks apart to achieve lasting results. Patience pays off — each session reduces regrowth significantly.'
+      ),
+      heading('blr7', '3. A Patch Test Comes First'),
+      paragraph(
+        'blr8',
+        'We always begin with a patch test to ensure the laser settings are compatible with your skin type. While adverse reactions are rare with the Motus AY, safety is our priority. The patch test also lets you experience the sensation before committing to a full session.'
+      ),
+      heading('blr9', '4. It Really Is Pain-Free'),
+      paragraph(
+        'blr10',
+        'Unlike older laser systems, the Motus AY uses a gradual heating technique that most clients describe as comfortable or even relaxing. There is no need for numbing cream, and you can return to your normal activities immediately afterwards.'
+      ),
+      heading('blr11', '5. Aftercare Matters'),
+      paragraph(
+        'blr12',
+        'After your session, keep the treated area out of direct sunlight and apply SPF 30 or higher. Avoid hot baths, saunas, and vigorous exercise for 24 hours. Following these simple steps helps your skin recover quickly and ensures the best possible outcome.'
+      ),
+    ],
+    seo: {
+      _type: 'seo',
+      title: '5 Things to Know Before Laser Hair Removal | Marr Laser & Skin Clinic',
+      description:
+        'Preparing for laser hair removal? Learn five essential tips before your first session at Marr Laser & Skin Clinic in Paisley.',
+    },
+  },
+  {
+    _id: 'blog-understanding-hifu',
+    _type: 'blogPost',
+    title: 'Understanding HIFU: The Non-Surgical Facelift',
+    slug: { _type: 'slug', current: 'understanding-hifu-non-surgical-facelift' },
+    publishedAt: '2026-04-08T09:00:00Z',
+    excerpt:
+      'HIFU is transforming the way we think about skin tightening and lifting. Learn how this non-surgical treatment works and what results you can expect.',
+    categories: ['Skin Treatments'],
+    body: [
+      heading('bh1', 'What Is HIFU?'),
+      paragraph(
+        'bh2',
+        'High Intensity Focused Ultrasound — HIFU — is a non-invasive treatment that uses focused ultrasound energy to target the deep structural layers of the skin. At Marr Laser & Skin Clinic, we use the Focus Dual HIFU system, one of the few devices capable of reaching the superficial musculoaponeurotic system (SMAS). This is the same tissue layer addressed during surgical facelifts, but without a single incision.'
+      ),
+      heading('bh3', 'How Does It Work?'),
+      paragraph(
+        'bh4',
+        'The device delivers precise bursts of ultrasound energy to targeted depths beneath the skin. This creates controlled thermal coagulation points that trigger the body\'s natural healing response. Over the following weeks and months, your body produces new collagen and elastin, resulting in gradual tightening and lifting of the treated areas.'
+      ),
+      heading('bh5', 'What Can HIFU Treat?'),
+      paragraph(
+        'bh6',
+        'HIFU is particularly effective for sagging skin along the jawline and neck, fine lines around the eyes and mouth, loss of definition in the cheeks and brow area, and overall skin laxity. Many clients notice an immediate subtle lift, with continued improvement over two to three months as new collagen forms.'
+      ),
+      heading('bh7', 'Is It Right for You?'),
+      paragraph(
+        'bh8',
+        'HIFU is ideal for clients who want visible lifting and tightening without surgery or downtime. The treatment typically takes 30 to 60 minutes depending on the area, and most people return to their daily routine immediately. We recommend a consultation to assess your skin and discuss whether HIFU is the right option for your goals.'
+      ),
+    ],
+    seo: {
+      _type: 'seo',
+      title: 'Understanding HIFU: Non-Surgical Facelift | Marr Laser & Skin Clinic',
+      description:
+        'Learn how HIFU (High Intensity Focused Ultrasound) provides a non-surgical facelift. Discover the science and results at Marr Laser & Skin Clinic, Paisley.',
+    },
+  },
+  {
+    _id: 'blog-medical-grade-technology',
+    _type: 'blogPost',
+    title: 'Why Medical-Grade Technology Matters for Your Skin',
+    slug: { _type: 'slug', current: 'why-medical-grade-technology-matters' },
+    publishedAt: '2026-04-01T09:00:00Z',
+    excerpt:
+      'Not all laser and skin treatment devices are created equal. Here\'s why we invest in medical-grade technology and what it means for your results.',
+    categories: ['Technology'],
+    body: [
+      heading('bt1', 'The Difference Between Salon and Medical-Grade'),
+      paragraph(
+        'bt2',
+        'Walk into many high-street beauty salons and you will find IPL machines and laser devices marketed as professional-grade. While these can produce some results, there is a significant difference between consumer-level equipment and the medical-grade systems we use at Marr Laser & Skin Clinic. Medical-grade devices undergo rigorous clinical testing, carry FDA or CE medical clearance, and deliver substantially higher energy levels with precision targeting.'
+      ),
+      heading('bt3', 'Our Technology Investment'),
+      paragraph(
+        'bt4',
+        'We have invested in a carefully selected range of award-winning technology. The Motus AY from DEKA is the world\'s first pain-free Alexandrite laser approved for all skin types. The Cynosure Elite+ combines Alexandrite and Nd:YAG wavelengths for versatile treatment options. The Focus Dual provides both HIFU and RF microneedling in a single platform. And our Lynton Excelight delivers medical-grade IPL for a broad spectrum of skin conditions.'
+      ),
+      heading('bt5', 'What This Means for You'),
+      paragraph(
+        'bt6',
+        'Medical-grade technology translates directly into better outcomes. Treatments are more effective per session, meaning fewer visits overall. The precision of these systems reduces the risk of side effects and allows us to tailor settings precisely to your skin type and concern. It also means we can treat conditions that lower-powered devices simply cannot address.'
+      ),
+      heading('bt7', 'Trained Hands Behind the Technology'),
+      paragraph(
+        'bt8',
+        'Advanced equipment is only as good as the people operating it. Every member of our team is fully trained and certified on each device we use. We attend regular manufacturer training sessions and stay current with the latest techniques and protocols. When you visit Marr Laser & Skin Clinic, you are in experienced, qualified hands.'
+      ),
+    ],
+    seo: {
+      _type: 'seo',
+      title: 'Why Medical-Grade Technology Matters | Marr Laser & Skin Clinic',
+      description:
+        'Discover why medical-grade laser and skin technology delivers better results. Learn about the advanced equipment at Marr Laser & Skin Clinic, Paisley.',
+    },
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Seed function
 // ---------------------------------------------------------------------------
 
@@ -692,6 +823,7 @@ async function seed() {
     ...testimonials,
     ...faqs,
     ...pages,
+    ...blogPosts,
   ];
 
   const transaction = client.transaction();
@@ -709,6 +841,7 @@ async function seed() {
     console.log(`  - ${testimonials.length} testimonials`);
     console.log(`  - ${faqs.length} FAQs`);
     console.log(`  - ${pages.length} pages`);
+    console.log(`  - ${blogPosts.length} blog posts`);
     console.log(`\nTransaction ID: ${result.transactionId}`);
   } catch (err) {
     console.error('Failed to seed content:', err.message);
