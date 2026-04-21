@@ -21,6 +21,15 @@ const service: Service = await sanityClient.fetch(serviceBySlugQuery, { slug });
 if (!service) {
   return Astro.redirect('/404');
 }
+
+const serviceFallbackHeroes: Record<string, string> = {
+  'laser-treatments': '/images/services/laser-hero.jpg',
+  'skin-treatments': '/images/services/skin-hero.jpg',
+  'aesthetic-treatments': '/images/services/aesthetic-hero.jpg',
+  'pmu-treatments': '/images/services/pmu-hero.jpg',
+  'caci-treatments': '/images/services/caci-hero.jpg',
+};
+const fallbackHero = serviceFallbackHeroes[slug as string] || '/placeholders/service-hero.svg';
 ---
 
 <BaseLayout
@@ -37,7 +46,7 @@ if (!service) {
           height={600}
         />
       ) : (
-        <img src="/placeholders/service-hero.svg" alt={service.title} width={1200} height={600} loading="eager" decoding="async" />
+        <img src={fallbackHero} alt={service.title} width={1200} height={600} loading="eager" decoding="async" />
       )}
     </div>
 

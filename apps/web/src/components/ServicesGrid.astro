@@ -8,6 +8,14 @@ interface Props {
 }
 
 const { services, heading = 'Our Services' } = Astro.props;
+
+const serviceFallbackCards: Record<string, string> = {
+  'laser-treatments': '/images/services/laser-card.jpg',
+  'skin-treatments': '/images/services/skin-card.jpg',
+  'aesthetic-treatments': '/images/services/aesthetic-card.jpg',
+  'pmu-treatments': '/images/services/pmu-card.jpg',
+  'caci-treatments': '/images/services/caci-card.jpg',
+};
 ---
 
 <section class="services-section" aria-labelledby="services-heading">
@@ -32,7 +40,7 @@ const { services, heading = 'Our Services' } = Astro.props;
                     class="service-image"
                   />
                 ) : (
-                  <img src="/placeholders/service.svg" alt={service.title} width={600} height={400} class="service-image" loading="lazy" decoding="async" />
+                  <img src={serviceFallbackCards[service.slug.current] || '/placeholders/service.svg'} alt={service.title} width={600} height={400} class="service-image" loading="lazy" decoding="async" />
                 )}
               </div>
               <div class="service-body">
