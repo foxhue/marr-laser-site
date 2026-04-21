@@ -43,386 +43,412 @@ const client = createClient({
 });
 
 // ---------------------------------------------------------------------------
+// Portable Text helpers
+// ---------------------------------------------------------------------------
+
+function heading(key, text) {
+  return {
+    _key: key,
+    _type: 'block',
+    style: 'h2',
+    children: [{ _key: `${key}c`, _type: 'span', text, marks: [] }],
+    markDefs: [],
+  };
+}
+
+function paragraph(key, text) {
+  return {
+    _key: key,
+    _type: 'block',
+    style: 'normal',
+    children: [{ _key: `${key}c`, _type: 'span', text, marks: [] }],
+    markDefs: [],
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Content definitions
 // ---------------------------------------------------------------------------
 
 const siteSettings = {
   _id: 'siteSettings',
   _type: 'siteSettings',
-  siteName: 'MARR Laser & Skin Clinic',
-  tagline: 'Advanced laser hair removal and skin treatments in Newry, Co. Down. Professional results in a comfortable, modern clinic.',
-  contactEmail: 'hello@marrlaser.com',
-  contactPhone: '+44 28 3026 0000',
-  address: 'Hill Street, Newry, Co. Down, BT34 1AR',
+  siteName: 'Marr Laser & Skin Clinic',
+  tagline:
+    'Our wonderful team at Marr Laser and Skin Clinic are highly trained and have all the advanced technology and techniques to support every avenue in laser, skin, aesthetics & even more.',
+  contactEmail: 'hello@marrlaserandskin.clinic',
+  contactPhone: '01418402222',
+  address: '18 Neilston Road, Paisley, Renfrewshire, PA2 6LN',
   openingHours: [
-    { _key: 'mon', _type: 'openingHours', day: 'Monday', open: '09:00', close: '18:00', closed: false },
-    { _key: 'tue', _type: 'openingHours', day: 'Tuesday', open: '09:00', close: '18:00', closed: false },
-    { _key: 'wed', _type: 'openingHours', day: 'Wednesday', open: '09:00', close: '20:00', closed: false },
-    { _key: 'thu', _type: 'openingHours', day: 'Thursday', open: '09:00', close: '20:00', closed: false },
-    { _key: 'fri', _type: 'openingHours', day: 'Friday', open: '09:00', close: '18:00', closed: false },
-    { _key: 'sat', _type: 'openingHours', day: 'Saturday', open: '09:00', close: '16:00', closed: false },
     { _key: 'sun', _type: 'openingHours', day: 'Sunday', open: '', close: '', closed: true },
+    { _key: 'mon', _type: 'openingHours', day: 'Monday', open: '', close: '', closed: true },
+    { _key: 'tue', _type: 'openingHours', day: 'Tuesday', open: '09:30', close: '18:00', closed: false },
+    { _key: 'wed', _type: 'openingHours', day: 'Wednesday', open: '09:30', close: '18:00', closed: false },
+    { _key: 'thu', _type: 'openingHours', day: 'Thursday', open: '09:30', close: '19:00', closed: false },
+    { _key: 'fri', _type: 'openingHours', day: 'Friday', open: '09:30', close: '18:00', closed: false },
+    { _key: 'sat', _type: 'openingHours', day: 'Saturday', open: '09:00', close: '16:00', closed: false },
   ],
   socialLinks: [
-    { _key: 'fb', _type: 'socialLink', platform: 'facebook', url: 'https://facebook.com/marrlaser' },
-    { _key: 'ig', _type: 'socialLink', platform: 'instagram', url: 'https://instagram.com/marrlaser' },
+    { _key: 'fb', _type: 'socialLink', platform: 'facebook', url: 'https://www.facebook.com/MarrBeauty' },
+    { _key: 'ig', _type: 'socialLink', platform: 'instagram', url: 'https://www.instagram.com/marrlaserandskin' },
   ],
   defaultSeo: {
     _type: 'seo',
-    title: 'MARR Laser & Skin Clinic | Newry, Co. Down',
-    description: 'Professional laser hair removal and skin treatments in Newry, Co. Down. Medical-grade technology, qualified practitioners, free consultations.',
+    title: 'Marr Laser & Skin Clinic | Paisley, Renfrewshire',
+    description:
+      'Multi-award winning laser, skin and aesthetic clinic in Paisley. Medical-grade technology, highly trained team, book a consultation today.',
   },
 };
 
+// ---------------------------------------------------------------------------
+// Services
+// ---------------------------------------------------------------------------
+
 const services = [
+  // 1. Laser Treatments
   {
-    _id: 'service-laser-hair-removal',
+    _id: 'service-laser-treatments',
     _type: 'service',
-    title: 'Laser Hair Removal',
-    slug: { _type: 'slug', current: 'laser-hair-removal' },
-    excerpt: 'Permanent hair reduction using medical-grade laser technology. Safe and effective for all skin types with long-lasting results.',
-    price: 'From £50',
+    title: 'Laser Treatments',
+    slug: { _type: 'slug', current: 'laser-treatments' },
+    excerpt:
+      'Marr Laser & Skin Clinic are delighted to be one of only a few clinics in Scotland to offer the latest ground breaking technology from DEKA Lasers \u2014 The Motus AY.',
+    price: 'From \u00a319',
     duration: '15-60 min',
     featured: true,
     body: [
-      {
-        _key: 'lhr1',
-        _type: 'block',
-        style: 'h2',
-        children: [{ _key: 'lhr1c', _type: 'span', text: 'How Laser Hair Removal Works', marks: [] }],
-        markDefs: [],
-      },
-      {
-        _key: 'lhr2',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'lhr2c',
-            _type: 'span',
-            text: 'Our medical-grade laser targets the melanin in hair follicles, delivering precise energy that damages the follicle and prevents future hair growth. The surrounding skin is left unharmed thanks to our advanced cooling system.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
-      {
-        _key: 'lhr3',
-        _type: 'block',
-        style: 'h2',
-        children: [{ _key: 'lhr3c', _type: 'span', text: 'Treatment Areas', marks: [] }],
-        markDefs: [],
-      },
-      {
-        _key: 'lhr4',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'lhr4c',
-            _type: 'span',
-            text: 'We offer laser hair removal for all areas of the body including face, underarms, bikini line, legs, arms, back, and chest. Treatment plans are tailored to your individual needs and skin type.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
-      {
-        _key: 'lhr5',
-        _type: 'block',
-        style: 'h2',
-        children: [{ _key: 'lhr5c', _type: 'span', text: 'What to Expect', marks: [] }],
-        markDefs: [],
-      },
-      {
-        _key: 'lhr6',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'lhr6c',
-            _type: 'span',
-            text: 'Most clients require 6-8 sessions spaced 4-6 weeks apart for optimal results. Each session is quick and comfortable, with minimal downtime. You may experience mild redness immediately after treatment, which typically subsides within a few hours.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      heading('lt1', 'Laser Hair Removal'),
+      paragraph(
+        'lt2',
+        'Alexandrite is universally considered the gold standard when it comes to laser hair removal. The Motus AY is the world\u2019s first FDA approved pain free Alexandrite for use on ALL skin types differentiating it from any other Alexandrite Laser technology on the market.'
+      ),
+      paragraph(
+        'lt3',
+        'The Motus overcomes these restrictions, providing the advantages of \u2018pain-free\u2019 laser hair removal but with the clinical efficacy and results associated with the alexandrite laser.'
+      ),
+      heading('lt4', 'Pigmented Lesions'),
+      paragraph(
+        'lt5',
+        'Pigmented lesions are areas of the skin that have an abnormal accumulation of pigment, which can result in discoloration or dark spots. These lesions can be caused by various factors, including sun exposure, genetics, aging, hormonal changes, inflammation, or certain medical conditions. We offer removal using our Motus AY and Excelight IPL machines.'
+      ),
+      heading('lt6', 'Thread Vein Removal'),
+      paragraph(
+        'lt7',
+        'Thread veins, also known as spider veins or telangiectasia, are small, dilated blood vessels near the surface of the skin that appear as thin, red, or purple lines. Treatment options include laser therapy and intense pulsed light (IPL) therapy. These treatments work by causing the affected blood vessels to collapse and gradually fade from view.'
+      ),
+      heading('lt8', 'Fungal Nail Treatment'),
+      paragraph(
+        'lt9',
+        'Fungal nail infections, also known as onychomycosis, occur when fungi invade one or more of the nails. The Motus AY Laser heats up the nail throughout its depth causing the weakening and destruction of the fungus without the use of harmful chemicals or oral medication. It is completely safe and will require 4 treatments 1 week apart.'
+      ),
+      heading('lt10', 'Skin Rejuvenation (Moveo SR)'),
+      paragraph(
+        'lt11',
+        'The Skin Rejuvenation Treatment boosts collagen production and plumps the skin to reduce the appearance of fine lines and wrinkles, giving the skin a radiant glow. The treatment also helps to lift and tighten the skin and freshen a dull and tired complexion.'
+      ),
     ],
     seo: {
       _type: 'seo',
-      title: 'Laser Hair Removal Newry | MARR Laser & Skin Clinic',
-      description: 'Professional laser hair removal in Newry, Co. Down. Medical-grade technology for permanent hair reduction. Free consultation available.',
+      title: 'Laser Treatments Paisley | Marr Laser & Skin Clinic',
+      description:
+        'Advanced laser treatments in Paisley including pain-free hair removal, pigmentation removal, thread vein treatment, and skin rejuvenation using the Motus AY.',
     },
   },
+
+  // 2. Skin Treatments
   {
     _id: 'service-skin-treatments',
     _type: 'service',
     title: 'Skin Treatments',
     slug: { _type: 'slug', current: 'skin-treatments' },
-    excerpt: 'Advanced skin rejuvenation including chemical peels, microneedling, and LED therapy. Tailored treatments for your skin concerns.',
-    price: 'From £75',
+    excerpt:
+      'Advanced skin rejuvenation including HIFU, RF Microneedling, IllumiFacial, chemical peels, and LED phototherapy. Tailored treatments for every skin concern.',
+    price: 'From \u00a340',
+    duration: '30-90 min',
+    featured: true,
+    body: [
+      heading('st1', 'HIFU (High Intensity Focused Ultrasound)'),
+      paragraph(
+        'st2',
+        'Give skin back its snap. HIFU uses Focused Ultrasound to target the deep structural layers of the skin with heat, without damaging the skin\u2019s surface. Focus Dual HIFU is one of the few treatments that can reach the superficial musculoaponeurotic system (SMAS) \u2014 which was previously accessible only via surgery. The result is a natural lift with virtually no downtime.'
+      ),
+      heading('st3', 'RF Microneedling'),
+      paragraph(
+        'st4',
+        'Focus Dual uses a combination of radiofrequency and microneedling technology to create a controlled trauma which triggers the body\u2019s healing response of collagen and elastin production. With Focus Dual you receive two treatments in one, meaning that you will achieve a stronger treatment and more effective results than when compared to having microneedling and radiofrequency treatments individually.'
+      ),
+      heading('st5', 'IllumiFacial'),
+      paragraph(
+        'st6',
+        'Together we can rejuvenate, enhance, and illuminate your skin\u2019s natural beauty. This quick and simple rejuvenating treatment dramatically improves skin tone and appearance, helping your skin feel and look its best as if lit from within. The treatment comprises of 4 stages: Cleanse, Tri-Fruit Acid Peel, Lynton IPL and Hydrate & Protect.'
+      ),
+      heading('st7', 'BioRePeel'),
+      paragraph(
+        'st8',
+        'BioRePeel is a biphasic medical-grade chemical peel that combines various active ingredients to promote exfoliation, skin renewal, and rejuvenation. It is a 35% TCA Peel \u2014 among the most effective chemical peels available. For optimal results, we recommend a course of six sessions, spaced two weeks apart.'
+      ),
+      heading('st9', 'Dermalux LED Phototherapy'),
+      paragraph(
+        'st10',
+        'Dermalux LED Phototherapy is a non-invasive facial treatment that uses narrow band, non-thermal LED light energy to trigger your body\u2019s natural cell processes to accelerate rejuvenation and repair of the skin. It uses three clinically proven wavelengths: red for rejuvenation, infrared for inflammation, and blue for acne-prone skin.'
+      ),
+    ],
+    seo: {
+      _type: 'seo',
+      title: 'Skin Treatments Paisley | Marr Laser & Skin Clinic',
+      description:
+        'Advanced skin treatments in Paisley including HIFU, RF Microneedling, IllumiFacial, BioRePeel, and LED phototherapy.',
+    },
+  },
+
+  // 3. Aesthetic Treatments
+  {
+    _id: 'service-aesthetic-treatments',
+    _type: 'service',
+    title: 'Aesthetic Treatments',
+    slug: { _type: 'slug', current: 'aesthetic-treatments' },
+    excerpt:
+      'Dermal fillers can plump thin lips, enhance shallow contours, soften facial creases, remove wrinkles and improve the appearance of scars.',
+    price: 'From \u00a3139',
     duration: '30-60 min',
     featured: true,
     body: [
-      {
-        _key: 'st1',
-        _type: 'block',
-        style: 'h2',
-        children: [{ _key: 'st1c', _type: 'span', text: 'Our Skin Treatments', marks: [] }],
-        markDefs: [],
-      },
-      {
-        _key: 'st2',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'st2c',
-            _type: 'span',
-            text: 'We offer a range of advanced skin treatments designed to address various concerns including ageing, pigmentation, acne scarring, and uneven skin tone. Each treatment plan is customised to your unique skin type and goals.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
-      {
-        _key: 'st3',
-        _type: 'block',
-        style: 'h2',
-        children: [{ _key: 'st3c', _type: 'span', text: 'Available Treatments', marks: [] }],
-        markDefs: [],
-      },
-      {
-        _key: 'st4',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'st4c',
-            _type: 'span',
-            text: 'Chemical peels for skin renewal, microneedling for collagen stimulation, LED light therapy for healing and rejuvenation, and advanced facials tailored to your skin\'s needs. All treatments use premium, medical-grade products.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      heading('at1', 'Anti-Ageing Treatments'),
+      paragraph(
+        'at2',
+        'Anti-Ageing Treatments are used to treat dynamic wrinkles by temporarily paralysing the muscles causing the skin to crease. The effects can usually be seen within 3-4 days post procedure with the complete result in 2 weeks. Results last between 3-6 months depending on each client.'
+      ),
+      heading('at3', 'Lip Enhancement'),
+      paragraph(
+        'at4',
+        'Dermal fillers are made of Hyaluronic acid, a natural component within the skin. They can be used to restore lost facial volume, smooth wrinkles, sculpt the face and enhance the lips. We aim to create natural looking results using premium products and advanced techniques.'
+      ),
+      heading('at5', 'Tear Trough Filler'),
+      paragraph(
+        'at6',
+        'Tear trough filler involves administering dermal fillers into the area beneath the lower eyelid and above the cheek. Tear trough fillers aim to restore volume, smooth out wrinkles, and reduce the appearance of under-eye bags or dark circles.'
+      ),
+      heading('at7', 'Facial Contouring'),
+      paragraph(
+        'at8',
+        'We offer cheek fillers to restore volume and create a youthful contoured appearance, jawline fillers for a more defined and chiseled look, and chin fillers to improve overall facial balance and profile.'
+      ),
+      heading('at9', 'Profhilo'),
+      paragraph(
+        'at10',
+        'Profhilo is a unique hyaluronic acid-based product used for skin rejuvenation and hydration. Unlike traditional dermal fillers, Profhilo focuses on improving overall skin quality and addressing skin laxity, stimulating collagen and elastin production, and providing hydration from within.'
+      ),
     ],
     seo: {
       _type: 'seo',
-      title: 'Skin Treatments Newry | MARR Laser & Skin Clinic',
-      description: 'Advanced skin treatments in Newry including chemical peels, microneedling, and LED therapy. Personalised plans for your skin goals.',
+      title: 'Aesthetic Treatments Paisley | Marr Laser & Skin Clinic',
+      description:
+        'Professional aesthetic treatments in Paisley including anti-ageing, lip enhancement, dermal fillers, facial contouring, and Profhilo.',
     },
   },
+
+  // 4. PMU Treatments
   {
-    _id: 'service-chemical-peels',
+    _id: 'service-pmu-treatments',
     _type: 'service',
-    title: 'Chemical Peels',
-    slug: { _type: 'slug', current: 'chemical-peels' },
-    excerpt: 'Professional chemical peels to reveal brighter, smoother skin. Addresses pigmentation, fine lines, and uneven texture.',
-    price: 'From £80',
-    duration: '45 min',
+    title: 'PMU Treatments',
+    slug: { _type: 'slug', current: 'pmu-treatments' },
+    excerpt:
+      'Our Permanent Make Up is carried out by Jennifer Graham. Jen has a natural flair for brow treatments and has the added advantage that she is trained in tattooing and microblading.',
+    price: 'From \u00a3300',
+    duration: '90-120 min',
     featured: false,
     body: [
-      {
-        _key: 'cp1',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'cp1c',
-            _type: 'span',
-            text: 'Our professional chemical peels use carefully selected acids to remove damaged outer layers of skin, revealing the fresher, healthier skin beneath. We offer superficial, medium, and deep peels depending on your concerns and skin type.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      heading('pm1', 'Barely There Brows'),
+      paragraph(
+        'pm2',
+        'This technique also known as the \u2018powdered brow\u2019 is great for nervous first time clients or those looking for a natural and subtle result. Barely there brows are completed in two sessions six weeks apart. The treatment takes approximately 90 minutes including consultation and numbing.'
+      ),
+      heading('pm3', 'Microblading'),
+      paragraph(
+        'pm4',
+        'Microblading is a semi-permanent tattoo technique where a handheld tool is used to create fine, hair-like strokes on the skin. This can give the appearance of fuller, more defined brows. The results typically last for 1-2 years. Microbladed brows are completed in 2 sessions, 6 weeks apart.'
+      ),
+      heading('pm5', 'Ombre Brows'),
+      paragraph(
+        'pm6',
+        'Ombre brows, also known as powder brows, is a semi-permanent makeup technique designed to create a soft, gradient look that mimics the appearance of naturally filled-in eyebrows. A different type of shading technique, creating a more subtle colour at the bulb of the brow and a bold defined tail.'
+      ),
+      heading('pm7', 'Combination Brows'),
+      paragraph(
+        'pm8',
+        'Combination brows, also known as hybrid brows, combine the natural-looking hair strokes of microblading with the shading technique of ombre brows. This method creates fuller, more defined eyebrows with a realistic appearance. Completed in two sessions six weeks apart.'
+      ),
     ],
     seo: {
       _type: 'seo',
-      title: 'Chemical Peels Newry | MARR Laser & Skin Clinic',
-      description: 'Professional chemical peels in Newry. Reveal brighter, smoother skin with our customised peel treatments.',
+      title: 'Permanent Makeup Paisley | Marr Laser & Skin Clinic',
+      description:
+        'Semi-permanent makeup in Paisley including microblading, ombre brows, and combination brows by specialist Jennifer Graham.',
     },
   },
+
+  // 5. CACI Treatments
   {
-    _id: 'service-microneedling',
+    _id: 'service-caci-treatments',
     _type: 'service',
-    title: 'Microneedling',
-    slug: { _type: 'slug', current: 'microneedling' },
-    excerpt: 'Collagen-boosting microneedling treatment for improved skin texture, reduced scarring, and a more youthful appearance.',
-    price: 'From £120',
-    duration: '60 min',
+    title: 'CACI Treatments',
+    slug: { _type: 'slug', current: 'caci-treatments' },
+    excerpt:
+      'Tailored treatment solutions for men and women of all ages and skin types. Described by the media as the non-surgical face lift.',
+    price: 'From \u00a328',
+    duration: '15-80 min',
     featured: false,
     body: [
-      {
-        _key: 'mn1',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'mn1c',
-            _type: 'span',
-            text: 'Microneedling creates tiny controlled micro-injuries in the skin, triggering the body\'s natural healing response and boosting collagen production. This results in firmer, smoother skin with reduced appearance of scars, wrinkles, and enlarged pores.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'ca1',
+        'CACI International has paved the way in anti-ageing, skin rejuvenation and problematic skin solutions for over three decades. Described by the media as \u2018the non-surgical face lift\u2019, CACI has become the go-to red-carpet treatment for numerous celebrities.'
+      ),
+      heading('ca2', 'Signature Non-Surgical Facial (60 min \u2014 \u00a350)'),
+      paragraph(
+        'ca3',
+        'This non-invasive facial uses microcurrent impulses to lift, tone and reduce the appearance of fine lines and wrinkles. It also firms your face and gives your skin a more youthful, fresh appearance and glow.'
+      ),
+      heading('ca4', 'CACI Microdermabrasion (45 min \u2014 \u00a350)'),
+      paragraph(
+        'ca5',
+        'This treatment leaves the complexion looking smooth and radiantly healthy. A combination of red and blue LED light therapy, deep cleansing and skin exfoliation techniques are used to effectively brighten and even the skin tone.'
+      ),
+      heading('ca6', 'Ultimate Non-Surgical Facial (80 min \u2014 \u00a370)'),
+      paragraph(
+        'ca7',
+        'The Ultimate procedure incorporates muscle lifting and toning, microdermabrasion, LED light therapy, plumping of fine lines and wrinkles and a hydrating gel mask to rejuvenate and brighten the skin.'
+      ),
+      heading('ca8', 'CACI Jowl Lift (15 min \u2014 \u00a328)'),
+      paragraph(
+        'ca9',
+        'This treatment lifts and firms the muscles and redefines facial contours to give a firmer, more toned appearance. Ideal for women and men wanting to improve the appearance of sagging jowls.'
+      ),
+      heading('ca10', 'CACI Eye Revive (30 min \u2014 \u00a330)'),
+      paragraph(
+        'ca11',
+        'Lift and firm muscles around the eye area. This treatment uses serum filled microcurrent rollers together with the soothing Eye Revive Mask to reduce puffiness and dark circles, and soften the appearance of fine lines and wrinkles around the eyes.'
+      ),
     ],
     seo: {
       _type: 'seo',
-      title: 'Microneedling Newry | MARR Laser & Skin Clinic',
-      description: 'Professional microneedling in Newry for collagen boosting and skin rejuvenation. Reduce scarring and improve skin texture.',
+      title: 'CACI Treatments Paisley | Marr Laser & Skin Clinic',
+      description:
+        'CACI non-surgical face lift treatments in Paisley. Microcurrent facials, jowl lift, eye revive, and microdermabrasion.',
     },
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Team Members
+// ---------------------------------------------------------------------------
 
 const teamMembers = [
   {
     _id: 'team-member-1',
     _type: 'teamMember',
-    name: '[PENDING] Practice Owner',
-    role: 'Clinic Director & Lead Practitioner',
+    name: 'Emma',
+    role: 'Director & Owner',
     bio: [
-      {
-        _key: 'tm1b1',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'tm1b1c',
-            _type: 'span',
-            text: 'Qualified laser and skin specialist with extensive experience in advanced aesthetic treatments. Passionate about delivering safe, effective results for every client.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'tm1b1',
+        "Hi, I'm Emma, the owner of Marr Laser and Skin Clinic. My passion for the industry stems from being a teenager with extremely problematic skin which impacted me greatly. This has evolved into a lifelong journey, following this passion and opening Marr Laser and Skin Clinic. I have taken the step to invest in medical grade technology from aesthetic award winning Lynton and continue to invest in the team. Whether you are looking for a one off treatment or a long term course for a dramatic result, we have you covered. Why not visit us and see for yourself?"
+      ),
     ],
-    qualifications: ['Level 4 Laser & IPL', 'Skin Rejuvenation Specialist', 'VTCT Certified'],
+    qualifications: ['Medical-Grade Laser Specialist', 'Lynton Certified', 'Business Owner'],
     order: 1,
   },
   {
     _id: 'team-member-2',
     _type: 'teamMember',
-    name: '[PENDING] Team Member',
-    role: 'Aesthetic Practitioner',
+    name: 'Jennifer Graham',
+    role: 'PMU Specialist',
     bio: [
-      {
-        _key: 'tm2b1',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'tm2b1c',
-            _type: 'span',
-            text: 'Experienced aesthetic practitioner specialising in laser treatments and skin care. Committed to providing personalised care in a warm, welcoming environment.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'tm2b1',
+        'Jen has a natural flair for brow treatments and has the added advantage that she is trained in tattooing and microblading. This gives her a unique ability to carry out the ultimate bespoke brow.'
+      ),
     ],
-    qualifications: ['Level 4 Laser & IPL', 'Advanced Skin Care'],
+    qualifications: ['Semi-Permanent Makeup', 'Microblading', 'Tattooing'],
     order: 2,
   },
   {
     _id: 'team-member-3',
     _type: 'teamMember',
-    name: '[PENDING] Team Member',
-    role: 'Laser Technician',
+    name: 'Fraser',
+    role: 'Aesthetic Practitioner',
     bio: [
-      {
-        _key: 'tm3b1',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'tm3b1c',
-            _type: 'span',
-            text: 'Skilled laser technician with a keen eye for detail and a passion for helping clients achieve their skin goals. Trained in the latest laser technologies and treatment protocols.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'tm3b1',
+        'Experienced aesthetic practitioner specialising in advanced injectable treatments and skin care. Committed to providing personalised care and natural-looking results.'
+      ),
     ],
-    qualifications: ['Level 4 Laser & IPL', 'VTCT Certified'],
+    qualifications: ['Aesthetic Practitioner', 'Injectable Treatments'],
     order: 3,
   },
   {
     _id: 'team-member-4',
     _type: 'teamMember',
-    name: '[PENDING] Team Member',
-    role: 'Skin Care Specialist',
+    name: 'Katie',
+    role: 'Beauty Therapist',
     bio: [
-      {
-        _key: 'tm4b1',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'tm4b1c',
-            _type: 'span',
-            text: 'Dedicated skin care specialist offering expert consultations and bespoke treatment plans. Focused on achieving natural, lasting results through advanced skin care techniques.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'tm4b1',
+        'Skilled beauty therapist with expertise across a wide range of treatments. Dedicated to ensuring every client feels comfortable and leaves looking and feeling their best.'
+      ),
     ],
-    qualifications: ['Advanced Skin Care', 'Chemical Peel Specialist', 'Dermalogica Certified'],
+    qualifications: ['Beauty Therapy', 'Skin Care Specialist'],
     order: 4,
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Testimonials
+// ---------------------------------------------------------------------------
 
 const testimonials = [
   {
     _id: 'testimonial-1',
     _type: 'testimonial',
-    quote: 'Absolutely amazing results! The team made me feel so comfortable and the laser hair removal has been life-changing. Would highly recommend MARR to anyone.',
-    author: '[PENDING] Client Name',
+    quote:
+      'Absolutely amazing results! The team made me feel so comfortable and the laser hair removal has been life-changing. Would highly recommend Marr Laser to anyone.',
+    author: 'Verified Client',
     rating: 5,
-    service: { _type: 'reference', _ref: 'service-laser-hair-removal' },
+    service: { _type: 'reference', _ref: 'service-laser-treatments' },
   },
   {
     _id: 'testimonial-2',
     _type: 'testimonial',
-    quote: 'I had a course of chemical peels and my skin has never looked better. The staff are knowledgeable, friendly, and the clinic is beautiful. Five stars!',
-    author: '[PENDING] Client Name',
+    quote:
+      'I had a course of skin treatments and my skin has never looked better. The staff are knowledgeable, friendly, and the clinic is beautiful. Five stars!',
+    author: 'Verified Client',
     rating: 5,
     service: { _type: 'reference', _ref: 'service-skin-treatments' },
   },
   {
     _id: 'testimonial-3',
     _type: 'testimonial',
-    quote: 'From the free consultation to the final treatment, the whole experience was professional and welcoming. The results speak for themselves.',
-    author: '[PENDING] Client Name',
+    quote:
+      'From the consultation to the final treatment, the whole experience was professional and welcoming. The results speak for themselves.',
+    author: 'Verified Client',
     rating: 5,
   },
 ];
+
+// ---------------------------------------------------------------------------
+// FAQs
+// ---------------------------------------------------------------------------
 
 const faqs = [
   {
     _id: 'faq-1',
     _type: 'faq',
-    question: 'Is laser hair removal painful?',
+    question: 'How many treatments will I need?',
     answer: [
-      {
-        _key: 'f1a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f1ac',
-            _type: 'span',
-            text: 'Most clients describe the sensation as a mild snap, similar to a rubber band. Our laser has a built-in cooling system that minimises discomfort. We adjust settings to your comfort level throughout the treatment.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f1a',
+        "The laser targets actively growing follicles; since not all follicles grow simultaneously, multiple sessions are necessary. Most people need 6 treatments spaced 4-6 weeks apart, though up to 8 treatments might be needed."
+      ),
     ],
     category: 'Laser Hair Removal',
     order: 1,
@@ -430,22 +456,12 @@ const faqs = [
   {
     _id: 'faq-2',
     _type: 'faq',
-    question: 'How many laser sessions will I need?',
+    question: 'Is it pain free?',
     answer: [
-      {
-        _key: 'f2a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f2ac',
-            _type: 'span',
-            text: 'Most clients require 6-8 sessions for optimal results, spaced 4-6 weeks apart. This is because hair grows in cycles, and the laser is most effective during the active growth phase. We\'ll create a personalised treatment plan at your consultation.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f2a',
+        'Yes, the Motus AY laser is often described as pain-free or significantly less painful compared to traditional laser hair removal systems. The device uses advanced technology, including the Moveo handpiece, which allows for a gradual heating process that is more comfortable.'
+      ),
     ],
     category: 'Laser Hair Removal',
     order: 2,
@@ -453,22 +469,12 @@ const faqs = [
   {
     _id: 'faq-3',
     _type: 'faq',
-    question: 'Is laser hair removal safe for all skin types?',
+    question: 'Can the Motus AY be used on all skin types?',
     answer: [
-      {
-        _key: 'f3a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f3ac',
-            _type: 'span',
-            text: 'Yes, our medical-grade laser is suitable for all skin types (Fitzpatrick I-VI). During your consultation, we assess your skin type and adjust the laser settings accordingly to ensure safe and effective treatment.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f3a',
+        'Yes, the Motus AY is suitable for all skin types, including darker and tanned skin. This is the first system in the world that uses the Alexandrite laser to safely treat darker skin types from Fitzpatrick 4-6.'
+      ),
     ],
     category: 'Laser Hair Removal',
     order: 3,
@@ -476,68 +482,38 @@ const faqs = [
   {
     _id: 'faq-4',
     _type: 'faq',
-    question: 'What skin treatments do you offer?',
+    question: 'Is a test patch necessary?',
     answer: [
-      {
-        _key: 'f4a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f4ac',
-            _type: 'span',
-            text: 'We offer chemical peels, microneedling, LED light therapy, and advanced facials. Each treatment is tailored to address your specific skin concerns, whether that\'s ageing, pigmentation, acne scarring, or general skin health.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f4a',
+        'Yes, a test patch is essential. While adverse reactions are rare, we always begin with a test patch to ensure the laser settings are compatible with your specific skin type.'
+      ),
     ],
-    category: 'Skin Treatments',
+    category: 'Laser Hair Removal',
     order: 4,
   },
   {
     _id: 'faq-5',
     _type: 'faq',
-    question: 'Do you offer free consultations?',
+    question: 'Can you undergo treatment year-round?',
     answer: [
-      {
-        _key: 'f5a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f5ac',
-            _type: 'span',
-            text: 'Yes! We offer a free initial consultation for all new clients. During this appointment, we\'ll assess your needs, discuss your goals, and recommend a personalised treatment plan. There\'s no obligation to proceed.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f5a',
+        'You can undergo the treatment year-round, even if you have a tan in the summer. The Motus AY laser is the first system worldwide approved for treating tanned skin.'
+      ),
     ],
-    category: 'General',
+    category: 'Laser Hair Removal',
     order: 5,
   },
   {
     _id: 'faq-6',
     _type: 'faq',
-    question: 'What should I do before my laser treatment?',
+    question: 'Preparing for your treatment',
     answer: [
-      {
-        _key: 'f6a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f6ac',
-            _type: 'span',
-            text: 'Avoid sun exposure and tanning for 2 weeks before treatment. Shave the treatment area 24 hours before your appointment. Avoid waxing, plucking, or using hair removal creams for 4 weeks prior. We\'ll provide full pre-treatment instructions at your consultation.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f6a',
+        'Shave the area to be treated 24 hours before your appointment. Avoid waxing, plucking, or using depilatory creams for at least four weeks before the treatment, as these methods remove the hair root that the laser targets.'
+      ),
     ],
     category: 'Laser Hair Removal',
     order: 6,
@@ -545,96 +521,125 @@ const faqs = [
   {
     _id: 'faq-7',
     _type: 'faq',
-    question: 'How long do results last?',
+    question: 'What is eyebrow tattooing?',
     answer: [
-      {
-        _key: 'f7a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f7ac',
-            _type: 'span',
-            text: 'Laser hair removal provides permanent hair reduction. After completing your course of treatments, most clients see 80-90% reduction in hair growth. Occasional maintenance sessions may be needed once or twice a year.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f7a',
+        'Eyebrow tattooing is a semi-permanent cosmetic procedure that uses pigment to fill in or shape the eyebrows. It can create the appearance of fuller, more defined brows and is often done using techniques like microblading or powder brows.'
+      ),
     ],
-    category: 'Laser Hair Removal',
+    category: 'Eyebrow Tattooing',
     order: 7,
   },
   {
     _id: 'faq-8',
     _type: 'faq',
-    question: 'What are your opening hours?',
+    question: 'What are the different techniques?',
     answer: [
-      {
-        _key: 'f8a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f8ac',
-            _type: 'span',
-            text: 'We\'re open Monday-Friday 9am-6pm (late appointments until 8pm on Wednesdays and Thursdays), Saturday 9am-4pm. Closed Sundays. Contact us to book your appointment.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f8a',
+        'Three methods: Microblading involves manually creating fine, hair-like strokes. Powder Brows use a machine to create a soft, powdered effect. Combo Brows combine microblading and powder brows to achieve a natural yet defined look.'
+      ),
     ],
-    category: 'General',
+    category: 'Eyebrow Tattooing',
     order: 8,
   },
   {
     _id: 'faq-9',
     _type: 'faq',
-    question: 'Where are you located?',
+    question: 'How long does eyebrow tattooing last?',
     answer: [
-      {
-        _key: 'f9a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f9ac',
-            _type: 'span',
-            text: 'We\'re located on Hill Street in Newry, Co. Down (BT34 1AR). The clinic is easily accessible with nearby parking available. We serve clients from Newry, Warrenpoint, Kilkeel, Banbridge, and the wider South Down area.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f9a',
+        'Eyebrow tattoos are semi-permanent and generally last between 1-3 years, depending on factors like skin type, lifestyle, and aftercare.'
+      ),
     ],
-    category: 'General',
+    category: 'Eyebrow Tattooing',
     order: 9,
   },
   {
     _id: 'faq-10',
     _type: 'faq',
-    question: 'What payment methods do you accept?',
+    question: 'Is it painful?',
     answer: [
-      {
-        _key: 'f10a',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'f10ac',
-            _type: 'span',
-            text: 'We accept all major credit and debit cards, cash, and bank transfer. We also offer treatment packages with payment plans for courses of treatments. Ask at reception for details.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      paragraph(
+        'f10a',
+        'Most clients experience minimal discomfort during the procedure. A topical anesthetic is applied to numb the area, making the process more comfortable.'
+      ),
     ],
-    category: 'General',
+    category: 'Eyebrow Tattooing',
     order: 10,
   },
+  {
+    _id: 'faq-11',
+    _type: 'faq',
+    question: 'What is the Excelight medical-grade IPL machine?',
+    answer: [
+      paragraph(
+        'f11a',
+        'The Excelight is a powerful and compact device, designed to provide safe and effective hair removal and skin rejuvenation treatments. It uses multiple wavelengths of light to treat a broad spectrum of skin conditions.'
+      ),
+    ],
+    category: 'Excelight IPL',
+    order: 11,
+  },
+  {
+    _id: 'faq-12',
+    _type: 'faq',
+    question: 'What conditions can the Excelight IPL machine treat?',
+    answer: [
+      paragraph(
+        'f12a',
+        'The device is capable of treating acne, rosacea, vascular lesions, pigmentation, sun damage, and permanent hair reduction.'
+      ),
+    ],
+    category: 'Excelight IPL',
+    order: 12,
+  },
+  {
+    _id: 'faq-13',
+    _type: 'faq',
+    question: 'What are your opening hours?',
+    answer: [
+      paragraph(
+        'f13a',
+        "We're open Tuesday-Friday 9:30am-6pm (late appointments until 7pm on Thursdays), Saturday 9am-4pm. Closed Sundays and Mondays."
+      ),
+    ],
+    category: 'General',
+    order: 13,
+  },
+  {
+    _id: 'faq-14',
+    _type: 'faq',
+    question: 'Where are you located?',
+    answer: [
+      paragraph(
+        'f14a',
+        "We're located at 18 Neilston Road, Paisley, Renfrewshire, PA2 6LN."
+      ),
+    ],
+    category: 'General',
+    order: 14,
+  },
+  {
+    _id: 'faq-15',
+    _type: 'faq',
+    question: 'Do you offer consultations?',
+    answer: [
+      paragraph(
+        'f15a',
+        "Yes, we offer consultations for all treatments. Laser/IPL consultations are \u00a310, skin/aesthetic consultations are \u00a320, and semi-permanent makeup consultations are free."
+      ),
+    ],
+    category: 'General',
+    order: 15,
+  },
 ];
+
+// ---------------------------------------------------------------------------
+// Pages
+// ---------------------------------------------------------------------------
 
 const pages = [
   {
@@ -644,78 +649,31 @@ const pages = [
     slug: { _type: 'slug', current: 'about' },
     hero: {
       _type: 'hero',
-      heading: 'About MARR Laser & Skin Clinic',
-      tagline: 'Your trusted clinic for advanced laser and skin treatments in Newry, Co. Down.',
+      heading: 'About Marr Laser & Skin Clinic',
+      tagline: 'Experience the best laser and skincare treatments in Paisley.',
     },
     body: [
-      {
-        _key: 'ab1',
-        _type: 'block',
-        style: 'h2',
-        children: [{ _key: 'ab1c', _type: 'span', text: 'Our Story', marks: [] }],
-        markDefs: [],
-      },
-      {
-        _key: 'ab2',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'ab2c',
-            _type: 'span',
-            text: 'MARR Laser & Skin Clinic was founded with a simple mission: to bring professional-grade laser and skin treatments to the Newry community. We believe everyone deserves access to safe, effective aesthetic treatments delivered by qualified practitioners in a warm, welcoming environment.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
-      {
-        _key: 'ab3',
-        _type: 'block',
-        style: 'h2',
-        children: [{ _key: 'ab3c', _type: 'span', text: 'Our Approach', marks: [] }],
-        markDefs: [],
-      },
-      {
-        _key: 'ab4',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'ab4c',
-            _type: 'span',
-            text: 'We take a personalised approach to every client. During your free consultation, we listen to your goals, assess your needs, and create a treatment plan tailored specifically to you. We use only medical-grade equipment and premium products to ensure the best possible results.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
-      {
-        _key: 'ab5',
-        _type: 'block',
-        style: 'h2',
-        children: [{ _key: 'ab5c', _type: 'span', text: 'Our Commitment', marks: [] }],
-        markDefs: [],
-      },
-      {
-        _key: 'ab6',
-        _type: 'block',
-        style: 'normal',
-        children: [
-          {
-            _key: 'ab6c',
-            _type: 'span',
-            text: 'Safety is our top priority. All our practitioners hold recognised qualifications and undergo continuous professional development. Our clinic meets all health and safety standards, and we maintain full insurance for your peace of mind.',
-            marks: [],
-          },
-        ],
-        markDefs: [],
-      },
+      heading('ab1', 'Our Story'),
+      paragraph(
+        'ab2',
+        "Hi, I'm Emma, the owner of Marr Laser and Skin Clinic. My passion for the industry stems from being a teenager with extremely problematic skin which impacted me greatly. This has evolved into a lifelong journey, following this passion and opening Marr Laser and Skin Clinic. I have taken the step to invest in medical grade technology from aesthetic award winning Lynton and continue to invest in the team. Whether you are looking for a one off treatment or a long term course for a dramatic result, we have you covered. Why not visit us and see for yourself?"
+      ),
+      heading('ab3', 'Our Approach'),
+      paragraph(
+        'ab4',
+        'We take a personalised approach to every client. During your consultation, we listen to your goals, assess your needs, and create a treatment plan tailored specifically to you. We use only medical-grade equipment from aesthetic award winning Lynton and premium products to ensure the best possible results.'
+      ),
+      heading('ab5', 'Our Technology'),
+      paragraph(
+        'ab6',
+        'We have invested in the latest medical-grade technology including the Cynosure Elite+, the Motus AY from DEKA Lasers, the Excelight IPL system, the Focus Dual combining HIFU and RF microneedling, and CO2 fractional laser for skin resurfacing. This means we can offer the widest range of safe, effective treatments.'
+      ),
     ],
     seo: {
       _type: 'seo',
-      title: 'About Us | MARR Laser & Skin Clinic, Newry',
-      description: 'Learn about MARR Laser & Skin Clinic in Newry. Qualified practitioners, medical-grade technology, and personalised care for laser and skin treatments.',
+      title: 'About Us | Marr Laser & Skin Clinic, Paisley',
+      description:
+        'Learn about Marr Laser & Skin Clinic in Paisley. Multi-award winning clinic with medical-grade technology and a passionate, highly trained team.',
     },
   },
 ];
@@ -725,7 +683,7 @@ const pages = [
 // ---------------------------------------------------------------------------
 
 async function seed() {
-  console.log('Seeding MARR Laser & Skin Clinic content...\n');
+  console.log('Seeding Marr Laser & Skin Clinic content...\n');
 
   const allDocuments = [
     siteSettings,
@@ -744,7 +702,7 @@ async function seed() {
 
   try {
     const result = await transaction.commit();
-    console.log(`✓ Seeded ${allDocuments.length} documents`);
+    console.log(`\u2713 Seeded ${allDocuments.length} documents`);
     console.log(`  - 1 siteSettings`);
     console.log(`  - ${services.length} services`);
     console.log(`  - ${teamMembers.length} team members`);

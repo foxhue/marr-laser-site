@@ -1,6 +1,6 @@
 # MARR Laser & Skin Clinic — Production Site
 
-Astro + Sanity CMS production website for MARR Laser & Skin Clinic, Newry.
+Astro + Sanity CMS production website for MARR Laser & Skin Clinic, Paisley.
 
 ## Design Direction
 - **Design C: "Warm Boutique"** — elegant, approachable, warm
