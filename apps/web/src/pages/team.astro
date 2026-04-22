@@ -13,13 +13,12 @@ const teamMembers: TeamMember[] = await sanityClient.fetch(teamMembersQuery);
   title="Our Team"
   description="Meet the qualified team at Marr Laser & Skin Clinic, Paisley. Experienced practitioners dedicated to your care."
 >
-  <section class="team-hero">
-    <img src="/images/team/team-hero.jpg" alt="" class="team-hero-bg" loading="eager" decoding="async" fetchpriority="high" width="1600" height="900" />
-    <div class="team-hero-overlay"></div>
-    <div class="container team-hero-content">
-      <h1 class="team-title">Our Team</h1>
-      <p class="team-subtitle">
-        Meet the qualified professionals behind MARR Laser & Skin Clinic. Every member of our team is dedicated to delivering safe, effective treatments with personalised care.
+  <section class="team-intro">
+    <div class="container team-intro-inner">
+      <p class="eyebrow">The Practitioners</p>
+      <h1 class="team-intro-title">Meet Our Team</h1>
+      <p class="team-intro-lead">
+        Every member of our team is dedicated to delivering safe, effective treatments with personalised care. Get to know the qualified professionals behind MARR Laser & Skin Clinic.
       </p>
     </div>
   </section>
@@ -30,55 +29,29 @@ const teamMembers: TeamMember[] = await sanityClient.fetch(teamMembersQuery);
 </BaseLayout>
 
 <style>
-  .team-hero {
-    position: relative;
-    overflow: hidden;
-    padding-block: var(--space-20);
+  .team-intro {
+    padding-block: var(--space-20) var(--space-12);
     text-align: center;
-    min-height: 340px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
-  .team-hero-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
+  .team-intro-inner {
+    max-width: 40rem;
+    margin-inline: auto;
   }
 
-  .team-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(236, 229, 224, 0.75) 0%,
-      rgba(236, 229, 224, 0.6) 100%
-    );
-    z-index: 1;
-  }
-
-  .team-hero-content {
-    position: relative;
-    z-index: 2;
-  }
-
-  .team-title {
+  .team-intro-title {
     font-family: var(--font-heading);
     font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-heading-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--color-primary);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
   }
 
-  .team-subtitle {
+  .team-intro-lead {
     font-size: var(--font-size-lg);
     color: var(--color-neutral-600);
-    max-width: 40rem;
-    margin-inline: auto;
     line-height: 1.7;
   }
 </style>

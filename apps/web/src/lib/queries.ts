@@ -115,6 +115,8 @@ export const teamMembersQuery = groq`
     role,
     photo,
     bio,
+    quote,
+    specialisms,
     qualifications,
     order
   }

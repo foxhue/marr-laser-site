@@ -377,6 +377,8 @@ const teamMembers = [
         "Hi, I'm Emma, the owner of Marr Laser and Skin Clinic. My passion for the industry stems from being a teenager with extremely problematic skin which impacted me greatly. This has evolved into a lifelong journey, following this passion and opening Marr Laser and Skin Clinic. I have taken the step to invest in medical grade technology from aesthetic award winning Lynton and continue to invest in the team. Whether you are looking for a one off treatment or a long term course for a dramatic result, we have you covered. Why not visit us and see for yourself?"
       ),
     ],
+    quote: 'Your skin tells a story — we are here to help you write the next chapter.',
+    specialisms: ['Laser Hair Removal', 'Skin Rejuvenation', 'HIFU', 'RF Microneedling', 'LED Phototherapy'],
     qualifications: ['Medical-Grade Laser Specialist', 'Lynton Certified', 'Business Owner'],
     order: 1,
   },
@@ -391,6 +393,8 @@ const teamMembers = [
         'Jen has a natural flair for brow treatments and has the added advantage that she is trained in tattooing and microblading. This gives her a unique ability to carry out the ultimate bespoke brow.'
       ),
     ],
+    quote: 'Great brows frame the face — I create brows that are uniquely yours.',
+    specialisms: ['Microblading', 'Ombre Brows', 'Combination Brows', 'Barely There Brows'],
     qualifications: ['Semi-Permanent Makeup', 'Microblading', 'Tattooing'],
     order: 2,
   },
@@ -405,6 +409,8 @@ const teamMembers = [
         'Experienced aesthetic practitioner specialising in advanced injectable treatments and skin care. Committed to providing personalised care and natural-looking results.'
       ),
     ],
+    quote: 'Subtle enhancements that let your confidence shine through.',
+    specialisms: ['Anti-Ageing Treatments', 'Dermal Fillers', 'Lip Enhancement', 'Profhilo'],
     qualifications: ['Aesthetic Practitioner', 'Injectable Treatments'],
     order: 3,
   },
@@ -419,6 +425,8 @@ const teamMembers = [
         'Skilled beauty therapist with expertise across a wide range of treatments. Dedicated to ensuring every client feels comfortable and leaves looking and feeling their best.'
       ),
     ],
+    quote: 'Everyone deserves to feel pampered — self-care is not a luxury.',
+    specialisms: ['CACI Facials', 'BioRePeel', 'IllumiFacial', 'Dermalux LED'],
     qualifications: ['Beauty Therapy', 'Skin Care Specialist'],
     order: 4,
   },

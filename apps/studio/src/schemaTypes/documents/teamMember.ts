@@ -28,6 +28,19 @@ export default defineType({
       type: 'portableText',
     }),
     defineField({
+      name: 'quote',
+      title: 'Quote',
+      type: 'string',
+      description: 'A personal quote displayed as a blockquote on the team page.',
+    }),
+    defineField({
+      name: 'specialisms',
+      title: 'Specialisms',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Treatment specialisms shown as tag pills (distinct from qualifications).',
+    }),
+    defineField({
       name: 'qualifications',
       title: 'Qualifications',
       type: 'array',

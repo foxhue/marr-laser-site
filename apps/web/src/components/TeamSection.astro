@@ -2,13 +2,13 @@
 import type { TeamMember, SanityBlock } from '@foxhue/shared';
 import SanityImage from '@components/SanityImage.astro';
 import PortableText from '@components/PortableText.astro';
+import { BOOKING_LINK } from '@lib/constants';
 
 interface Props {
   members: TeamMember[];
-  heading?: string;
 }
 
-const { members, heading = 'Our Team' } = Astro.props;
+const { members } = Astro.props;
 
 const teamFallbackPhotos: Record<string, string> = {
   'Emma': '/images/team/emma.jpg',
@@ -18,264 +18,540 @@ const teamFallbackPhotos: Record<string, string> = {
 };
 
 /**
- * Extract the first sentence from portable text blocks for a truncated bio.
+ * Extract the first paragraph from portable text blocks for a bio excerpt.
  */
-function extractFirstSentence(bio: SanityBlock[] | undefined): string {
+function extractFirstParagraph(bio: SanityBlock[] | undefined): string {
   if (!bio || bio.length === 0) return '';
   const firstBlock = bio.find((b) => b._type === 'block');
   if (!firstBlock) return '';
-  const fullText = firstBlock.children.map((c) => c.text).join('');
-  const match = fullText.match(/^[^.!?]+[.!?]/);
-  return match ? match[0] : fullText;
+  return (firstBlock.children ?? []).map((c) => c.text ?? '').join('');
 }
 
 function hasExpandableContent(member: TeamMember): boolean {
-  return !!(member.bio && member.bio.length > 0) || !!(member.qualifications && member.qualifications.length > 0);
+  return !!(member.bio && member.bio.length > 0) || !!(member.qualifications && member.qualifications.length > 0) || !!(member.specialisms && member.specialisms.length > 0);
+}
+
+function getFirstName(name: string): string {
+  return name.split(' ')[0];
+}
+
+function padIndex(i: number): string {
+  return String(i + 1).padStart(2, '0');
 }
 ---
 
 <section class="team-section" aria-labelledby="team-heading">
-  <div class="container">
-    <h2 id="team-heading" class="section-heading">{heading}</h2>
-    {members.length > 0 ? (
-      <ul class="team-grid" role="list">
-        {members.map((member) => {
-          const snippet = extractFirstSentence(member.bio);
-          const expandable = hasExpandableContent(member);
-          return (
-            <li class="team-card">
-              {expandable ? (
-                <details class="team-details">
-                  <summary class="team-summary">
-                    <div class="team-photo-wrap">
-                      {member.photo ? (
-                        <SanityImage
-                          source={member.photo.image}
-                          alt={member.photo.alt || member.name}
-                          width={300}
-                          height={300}
-                          class="team-photo"
-                        />
-                      ) : (
-                        <img src={teamFallbackPhotos[member.name] || '/placeholders/team.svg'} alt={member.name} width={300} height={300} class="team-photo" loading="lazy" decoding="async" />
-                      )}
-                    </div>
-                    <h3 class="team-name">{member.name}</h3>
-                    {member.role && <p class="team-role">{member.role}</p>}
-                    {snippet && <p class="team-bio">{snippet}</p>}
-                    <span class="team-expand-hint">
-                      <span class="team-expand-label">View Profile</span>
-                      <span class="team-collapse-label">Close</span>
-                    </span>
-                  </summary>
-                  <div class="team-expanded">
-                    {member.bio && member.bio.length > 0 && (
-                      <div class="team-full-bio">
-                        <PortableText value={member.bio} />
-                      </div>
-                    )}
-                    {member.qualifications && member.qualifications.length > 0 && (
-                      <div class="team-qualifications-wrap">
-                        <p class="team-qualifications-label">Qualifications</p>
-                        <ul class="team-qualifications" role="list">
-                          {member.qualifications.map((q) => (
-                            <li>{q}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </details>
-              ) : (
-                <>
-                  <div class="team-photo-wrap">
-                    {member.photo ? (
-                      <SanityImage
-                        source={member.photo.image}
-                        alt={member.photo.alt || member.name}
-                        width={300}
-                        height={300}
-                        class="team-photo"
-                      />
-                    ) : (
-                      <img src={teamFallbackPhotos[member.name] || '/placeholders/team.svg'} alt={member.name} width={300} height={300} class="team-photo" loading="lazy" decoding="async" />
-                    )}
-                  </div>
-                  <h3 class="team-name">{member.name}</h3>
-                  {member.role && <p class="team-role">{member.role}</p>}
-                  {snippet && <p class="team-bio">{snippet}</p>}
-                </>
+  <h2 id="team-heading" class="sr-only">Our Team</h2>
+
+  {members.length > 0 ? (
+    <div class="team-rows">
+      {members.map((member, i) => {
+        const snippet = extractFirstParagraph(member.bio);
+        const expandable = hasExpandableContent(member);
+        const isReversed = i % 2 === 1;
+        return (
+          <article class={`team-row${isReversed ? ' team-row--reversed' : ''}`}>
+            {/* Photo column */}
+            <div class="team-row__photo">
+              <div class="team-row__photo-frame">
+                {member.photo ? (
+                  <SanityImage
+                    source={member.photo.image}
+                    alt={member.photo.alt || member.name}
+                    width={600}
+                    height={750}
+                    class="team-row__img"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    fetchpriority={i === 0 ? 'high' : undefined}
+                  />
+                ) : (
+                  <img
+                    src={teamFallbackPhotos[member.name] || '/placeholders/team.svg'}
+                    alt={member.name}
+                    width={600}
+                    height={750}
+                    class="team-row__img"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding={i === 0 ? 'sync' : 'async'}
+                    fetchpriority={i === 0 ? 'high' : undefined}
+                  />
+                )}
+                <span class="team-row__number" aria-hidden="true">{padIndex(i)}</span>
+              </div>
+            </div>
+
+            {/* Content column */}
+            <div class="team-row__content">
+              <p class="eyebrow">Team &middot; {member.role || 'Practitioner'}</p>
+              <h3 class="team-row__name">{member.name}</h3>
+              {member.role && <p class="team-row__role">{member.role}</p>}
+
+              {member.quote && (
+                <blockquote class="team-row__quote">
+                  <span class="team-row__quote-mark" aria-hidden="true">&ldquo;</span>
+                  {member.quote}
+                </blockquote>
               )}
-            </li>
-          );
-        })}
-      </ul>
-    ) : (
+
+              {snippet && <p class="team-row__bio">{snippet}</p>}
+
+              {member.specialisms && member.specialisms.length > 0 && (
+                <ul class="team-row__tags" role="list" aria-label={`${member.name}'s specialisms`}>
+                  {member.specialisms.map((s) => (
+                    <li class="team-row__tag">{s}</li>
+                  ))}
+                </ul>
+              )}
+
+              {expandable && (
+                <button
+                  type="button"
+                  class="team-row__cta"
+                  data-drawer-trigger={member._id}
+                  aria-label={`Read full profile for ${member.name}`}
+                >
+                  Read full profile <span aria-hidden="true">&rarr;</span>
+                </button>
+              )}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  ) : (
+    <div class="container">
       <p class="team-empty">Team information coming soon.</p>
-    )}
+    </div>
+  )}
+
+  {/* Slide-in Drawer */}
+  <div class="drawer-overlay" id="team-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+    <div class="drawer-backdrop" data-drawer-close></div>
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <h2 class="drawer-title" id="drawer-title">Profile</h2>
+        <button type="button" class="drawer-close" data-drawer-close aria-label="Close profile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        {members.map((member) => (
+          <div class="drawer-content" data-drawer-content={member._id} hidden>
+            {/* Drawer hero photo */}
+            <div class="drawer-hero">
+              {member.photo ? (
+                <SanityImage
+                  source={member.photo.image}
+                  alt={member.photo.alt || member.name}
+                  width={640}
+                  height={400}
+                  class="drawer-hero__img"
+                  loading="lazy"
+                />
+              ) : (
+                <img
+                  src={teamFallbackPhotos[member.name] || '/placeholders/team.svg'}
+                  alt={member.name}
+                  width={640}
+                  height={400}
+                  class="drawer-hero__img"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </div>
+
+            <div class="drawer-inner">
+              <h3 class="drawer-name">{member.name}</h3>
+              {member.role && <p class="drawer-role">{member.role}</p>}
+
+              {member.quote && (
+                <blockquote class="drawer-quote">
+                  <span class="drawer-quote__mark" aria-hidden="true">&ldquo;</span>
+                  {member.quote}
+                </blockquote>
+              )}
+
+              {member.bio && member.bio.length > 0 && (
+                <div class="drawer-section">
+                  <p class="drawer-section__label">Biography</p>
+                  <div class="drawer-bio">
+                    <PortableText value={member.bio} />
+                  </div>
+                </div>
+              )}
+
+              {member.specialisms && member.specialisms.length > 0 && (
+                <div class="drawer-section">
+                  <p class="drawer-section__label">Specialisms</p>
+                  <ul class="drawer-tags" role="list">
+                    {member.specialisms.map((s) => (
+                      <li class="drawer-tag">{s}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {member.qualifications && member.qualifications.length > 0 && (
+                <div class="drawer-section">
+                  <p class="drawer-section__label">Qualifications</p>
+                  <ul class="drawer-tags" role="list">
+                    {member.qualifications.map((q) => (
+                      <li class="drawer-tag">{q}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <a
+                href={BOOKING_LINK}
+                class="drawer-book"
+                data-booking
+              >
+                Book with {getFirstName(member.name)}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
+  /* -----------------------------------------------------------
+     Alternating Rows
+  ----------------------------------------------------------- */
   .team-section {
-    padding-block: var(--space-16);
+    padding-block: var(--space-4) var(--space-16);
   }
 
-  .section-heading {
+  .team-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  .team-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    max-width: var(--max-width);
+    margin-inline: auto;
+    padding-inline: var(--space-6);
+    align-items: center;
+  }
+
+  .team-empty {
+    text-align: center;
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Photo column */
+  .team-row__photo {
+    order: 0;
+  }
+
+  .team-row__photo-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .team-row__photo-frame :global(img),
+  .team-row__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.92);
+    transition: transform var(--transition-slow);
+    will-change: transform;
+  }
+
+  .team-row__photo-frame:hover :global(img),
+  .team-row__photo-frame:hover .team-row__img {
+    filter: saturate(1);
+    transform: scale(1.02);
+  }
+
+  .team-row__number {
+    position: absolute;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-heading-light);
+    color: var(--color-white);
+    line-height: 1;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Content column */
+  .team-row__content {
+    order: 1;
+  }
+
+  .team-row__name {
     font-family: var(--font-heading);
     font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-heading-light);
-    color: var(--color-neutral-900);
-    text-align: center;
-    margin-bottom: var(--space-12);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
   }
 
-  .team-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-10);
+  .team-row__role {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    font-style: italic;
+    font-weight: var(--font-weight-heading-regular);
+    color: var(--color-neutral-500);
+    margin-bottom: var(--space-6);
   }
 
-  .team-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  .team-row__quote {
+    position: relative;
+    padding-left: var(--space-6);
+    border-left: 2px solid var(--color-secondary);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    font-style: italic;
+    font-weight: var(--font-weight-heading-regular);
+    color: var(--color-neutral-600);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
   }
 
-  /* Details/Summary expand pattern */
-  .team-details {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .team-row__quote-mark {
+    position: absolute;
+    top: -0.2em;
+    left: var(--space-2);
+    font-size: var(--font-size-3xl);
+    color: var(--color-secondary);
+    line-height: 1;
   }
 
-  .team-summary {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    list-style: none;
-    text-align: center;
-    width: 100%;
-  }
-
-  .team-summary::-webkit-details-marker,
-  .team-summary::marker {
-    display: none;
-    content: '';
-  }
-
-  .team-photo-wrap {
-    width: 10rem;
-    height: 10rem;
-    border-radius: var(--radius-full);
+  .team-row__bio {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.7;
+    margin-bottom: var(--space-6);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    margin-bottom: var(--space-4);
+  }
+
+  .team-row__tags {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .team-row__tag {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-600);
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--color-accent);
+    border-radius: var(--radius-full);
+  }
+
+  .team-row__cta {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-secondary-dark, var(--color-secondary));
+    background: none;
+    border: none;
+    border-bottom: 1px solid currentColor;
+    cursor: pointer;
+    padding: 0;
+    transition: color var(--transition-fast);
+  }
+
+  .team-row__cta:hover {
+    color: var(--color-primary);
+  }
+
+  .team-row__cta:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  /* Desktop: 2-column grid */
+  @media (min-width: 768px) {
+    .team-row {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+    }
+
+    /* Reversed rows swap column order */
+    .team-row--reversed .team-row__photo {
+      order: 1;
+    }
+
+    .team-row--reversed .team-row__content {
+      order: 0;
+    }
+  }
+
+  /* -----------------------------------------------------------
+     Slide-in Drawer
+  ----------------------------------------------------------- */
+  .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .drawer-overlay[hidden] {
+    display: none;
+  }
+
+  .drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(30, 30, 30, 0.5);
+    animation: drawerFadeIn 250ms ease;
+  }
+
+  .drawer-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 95vh;
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -4px 40px rgba(0, 0, 0, 0.15);
+    animation: drawerSlideUp 300ms ease;
+    overflow: hidden;
+  }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--color-accent);
     flex-shrink: 0;
   }
 
-  .team-photo-wrap :global(img) {
+  .drawer-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-heading-regular);
+    color: var(--color-primary);
+  }
+
+  .drawer-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: none;
+    background: none;
+    color: var(--color-neutral-500);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .drawer-close:hover {
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+  }
+
+  .drawer-close:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Drawer content blocks */
+  .drawer-hero {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .drawer-hero :global(img),
+  .drawer-hero__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .team-photo-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-primary-light);
-    color: var(--color-white);
-    font-family: var(--font-heading);
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-heading-light);
+  .drawer-inner {
+    padding: var(--space-6);
   }
 
-  .team-name {
+  .drawer-name {
     font-family: var(--font-heading);
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-heading-regular);
-    color: var(--color-neutral-900);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-heading-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
     margin-bottom: var(--space-1);
   }
 
-  .team-role {
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    color: var(--color-primary);
-    margin-bottom: var(--space-3);
+  .drawer-role {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-base);
+    font-style: italic;
+    font-weight: var(--font-weight-heading-regular);
+    color: var(--color-neutral-500);
+    margin-bottom: var(--space-6);
   }
 
-  .team-bio {
+  .drawer-quote {
+    position: relative;
+    padding-left: var(--space-6);
+    border-left: 2px solid var(--color-secondary);
+    font-family: var(--font-heading);
     font-size: var(--font-size-base);
+    font-style: italic;
+    font-weight: var(--font-weight-heading-regular);
     color: var(--color-neutral-600);
     line-height: 1.6;
-    max-width: 24rem;
+    margin-bottom: var(--space-6);
   }
 
-  /* Expand hint */
-  .team-expand-hint {
-    display: inline-block;
-    margin-top: var(--space-3);
-    font-family: var(--font-heading);
-    font-size: 0.6875rem;
-    font-weight: var(--font-weight-heading-regular);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-secondary-dark, var(--color-secondary));
-    border-bottom: 1px solid currentColor;
-    transition: color var(--transition-fast);
+  .drawer-quote__mark {
+    position: absolute;
+    top: -0.2em;
+    left: var(--space-2);
+    font-size: var(--font-size-2xl);
+    color: var(--color-secondary);
+    line-height: 1;
   }
 
-  .team-expand-hint:hover {
-    color: var(--color-primary);
+  .drawer-section {
+    margin-bottom: var(--space-6);
   }
 
-  .team-collapse-label {
-    display: none;
-  }
-
-  .team-details[open] .team-expand-label {
-    display: none;
-  }
-
-  .team-details[open] .team-collapse-label {
-    display: inline;
-  }
-
-  /* Expanded content */
-  .team-expanded {
-    width: 100%;
-    max-width: 32rem;
-    margin-top: var(--space-6);
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--color-accent);
-    text-align: left;
-  }
-
-  .team-full-bio {
-    font-size: var(--font-size-base);
-    color: var(--color-neutral-600);
-    line-height: 1.7;
-  }
-
-  .team-full-bio :global(p) {
-    margin-bottom: var(--space-4);
-  }
-
-  .team-full-bio :global(p:last-child) {
-    margin-bottom: 0;
-  }
-
-  .team-qualifications-wrap {
-    margin-top: var(--space-6);
-  }
-
-  .team-qualifications-label {
+  .drawer-section__label {
     font-family: var(--font-heading);
     font-size: 0.6875rem;
     font-weight: var(--font-weight-heading-regular);
@@ -285,7 +561,21 @@ function hasExpandableContent(member: TeamMember): boolean {
     margin-bottom: var(--space-3);
   }
 
-  .team-qualifications {
+  .drawer-bio {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.7;
+  }
+
+  .drawer-bio :global(p) {
+    margin-bottom: var(--space-4);
+  }
+
+  .drawer-bio :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .drawer-tags {
     list-style: none;
     padding: 0;
     display: flex;
@@ -293,7 +583,7 @@ function hasExpandableContent(member: TeamMember): boolean {
     gap: var(--space-2);
   }
 
-  .team-qualifications li {
+  .drawer-tag {
     font-size: var(--font-size-sm);
     color: var(--color-neutral-600);
     padding: var(--space-1) var(--space-3);
@@ -301,29 +591,176 @@ function hasExpandableContent(member: TeamMember): boolean {
     border-radius: var(--radius-full);
   }
 
-  .team-empty {
-    text-align: center;
-    color: var(--color-neutral-500);
-    font-size: var(--font-size-lg);
+  .drawer-book {
+    display: inline-block;
+    margin-top: var(--space-2);
+    padding: var(--space-3) var(--space-8);
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: var(--color-white);
+    background-color: var(--color-secondary);
+    border-radius: var(--radius-full);
+    transition: background-color var(--transition-fast);
   }
 
-  /* Tablet: 2 columns */
+  .drawer-book:hover {
+    background-color: var(--color-secondary-dark);
+  }
+
+  .drawer-book:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  /* Screen-reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Animations */
+  @keyframes drawerFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes drawerSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  @keyframes drawerSlideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
+  /* Desktop — side drawer from right */
   @media (min-width: 768px) {
-    .team-grid {
-      grid-template-columns: repeat(2, 1fr);
+    .drawer-overlay {
+      align-items: stretch;
+      justify-content: flex-end;
+    }
+
+    .drawer-panel {
+      max-width: 640px;
+      max-height: none;
+      height: 100%;
+      border-radius: 0;
+      animation: drawerSlideIn 300ms ease;
     }
   }
 
-  /* Desktop: 3-4 columns depending on count */
-  @media (min-width: 1024px) {
-    .team-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (min-width: 1200px) {
-    .team-grid {
-      grid-template-columns: repeat(4, 1fr);
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .drawer-backdrop,
+    .drawer-panel,
+    .team-row__photo-frame :global(img),
+    .team-row__photo-frame .team-row__img {
+      animation: none;
+      transition: none;
     }
   }
 </style>
+
+<script>
+  const overlay = document.getElementById('team-drawer');
+  if (!overlay) throw new Error('team-drawer element not found');
+  const drawerTitle = document.getElementById('drawer-title');
+  let isOpen = false;
+  let previousFocus: HTMLElement | null = null;
+
+  function openDrawer(memberId: string) {
+    if (isOpen) return;
+    isOpen = true;
+    previousFocus = document.activeElement as HTMLElement;
+
+    // Hide all content blocks, show the target
+    overlay.querySelectorAll('[data-drawer-content]').forEach((el) => {
+      (el as HTMLElement).hidden = true;
+    });
+    const target = overlay.querySelector(`[data-drawer-content="${CSS.escape(memberId)}"]`) as HTMLElement;
+    if (target) {
+      target.hidden = false;
+      // Update drawer title for accessibility
+      const name = target.querySelector('.drawer-name');
+      if (name && drawerTitle) {
+        drawerTitle.textContent = name.textContent || 'Profile';
+      }
+    }
+
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+
+    // Scroll drawer body to top
+    const body = overlay.querySelector('.drawer-body') as HTMLElement;
+    if (body) body.scrollTop = 0;
+
+    // Focus the close button
+    requestAnimationFrame(() => {
+      const closeBtn = overlay.querySelector('.drawer-close') as HTMLElement;
+      closeBtn?.focus();
+    });
+  }
+
+  function closeDrawer() {
+    if (!isOpen) return;
+    isOpen = false;
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+
+    if (previousFocus && previousFocus.focus) {
+      previousFocus.focus();
+      previousFocus = null;
+    }
+  }
+
+  // Focus trap — scoped to visible drawer content only
+  function trapFocus(e: KeyboardEvent) {
+    if (e.key !== 'Tab' || !isOpen) return;
+    const focusable = overlay.querySelectorAll(
+      '.drawer-close, .drawer-content:not([hidden]) button, .drawer-content:not([hidden]) [href], .drawer-content:not([hidden]) [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable.length) return;
+    const first = focusable[0] as HTMLElement;
+    const last = focusable[focusable.length - 1] as HTMLElement;
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  // Close buttons + backdrop
+  document.querySelectorAll('[data-drawer-close]').forEach((el) => {
+    el.addEventListener('click', closeDrawer);
+  });
+
+  // Escape key + focus trap
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) closeDrawer();
+    trapFocus(e);
+  });
+
+  // Trigger buttons
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest('[data-drawer-trigger]') as HTMLElement;
+    if (trigger) {
+      e.preventDefault();
+      const memberId = trigger.getAttribute('data-drawer-trigger');
+      if (memberId) openDrawer(memberId);
+    }
+  });
+</script>

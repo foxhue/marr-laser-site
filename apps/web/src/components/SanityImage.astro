@@ -8,9 +8,11 @@ interface Props {
   width?: number;
   height?: number;
   class?: string;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
 }
 
-const { source, alt, width, height, class: className } = Astro.props;
+const { source, alt, width, height, class: className, loading = 'lazy', fetchpriority } = Astro.props;
 
 const src = source ? sanityImageUrl(source, width, height) : null;
 ---
@@ -21,8 +23,9 @@ const src = source ? sanityImageUrl(source, width, height) : null;
     alt={alt}
     width={width}
     height={height}
-    loading="lazy"
-    decoding="async"
+    loading={loading}
+    decoding={loading === 'eager' ? 'sync' : 'async'}
+    fetchpriority={fetchpriority}
     class={className}
   />
 )}

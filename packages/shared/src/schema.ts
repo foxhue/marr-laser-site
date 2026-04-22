@@ -92,6 +92,8 @@ export interface TeamMember {
   role?: string;
   photo?: Figure;
   bio?: SanityBlock[];
+  quote?: string;
+  specialisms?: string[];
   qualifications?: string[];
   order?: number;
 }
