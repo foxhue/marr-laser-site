@@ -4,16 +4,16 @@
  * Provides a persistent floating "Book Now" button and intercepts
  * all [data-booking] links to open the overlay instead of navigating away.
  */
-import { BOOKING_URL } from '@lib/constants';
+import { BOOKING_URL, BOOKING_LINK } from '@lib/constants';
 
 const bookingUrl = BOOKING_URL;
 ---
 
-<!-- Floating Book Now button -->
-<button
-  type="button"
+<!-- Floating Book Now button (anchor for progressive enhancement — works without JS) -->
+<a
+  href={BOOKING_LINK}
   class="booking-fab"
-  data-booking-trigger
+  data-booking
   aria-label="Book Now"
 >
   <svg class="booking-fab-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -23,14 +23,14 @@ const bookingUrl = BOOKING_URL;
     <line x1="3" y1="10" x2="21" y2="10"></line>
   </svg>
   <span class="booking-fab-label">Book Now</span>
-</button>
+</a>
 
 <!-- Overlay -->
-<div class="booking-overlay" id="booking-overlay" role="dialog" aria-modal="true" aria-label="Book an appointment" hidden>
+<div class="booking-overlay" id="booking-overlay" role="dialog" aria-modal="true" aria-labelledby="booking-dialog-title" hidden>
   <div class="booking-backdrop" data-booking-close></div>
   <div class="booking-panel">
     <div class="booking-panel-header">
-      <span class="booking-panel-title">Book an Appointment</span>
+      <h2 class="booking-panel-title" id="booking-dialog-title">Book an Appointment</h2>
       <button type="button" class="booking-close" data-booking-close aria-label="Close booking">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -75,6 +75,7 @@ const bookingUrl = BOOKING_URL;
     border: none;
     border-radius: var(--radius-full);
     cursor: pointer;
+    text-decoration: none;
     box-shadow: 0 4px 20px rgba(60, 60, 59, 0.3);
     transition: background-color var(--transition-fast), transform var(--transition-fast);
     will-change: transform;
@@ -351,11 +352,6 @@ const bookingUrl = BOOKING_URL;
       first.focus();
     }
   }
-
-  // Floating button
-  document.querySelectorAll('[data-booking-trigger]').forEach((btn) => {
-    btn.addEventListener('click', openBooking);
-  });
 
   // Close buttons + backdrop
   document.querySelectorAll('[data-booking-close]').forEach((el) => {
