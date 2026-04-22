@@ -305,14 +305,22 @@ const currentPath = Astro.url.pathname;
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Desktop layout */
+  /* Desktop layout — single row: logo left, nav center, book right */
   @media (min-width: 768px) {
     .header-inner {
       display: grid;
-      grid-template-columns: 1fr;
-      justify-items: center;
-      gap: var(--space-2);
-      padding-block: var(--space-3);
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 0;
+      padding-block: var(--space-4);
+    }
+
+    .header-top {
+      grid-column: 1;
+    }
+
+    .logo-image {
+      height: 3rem;
     }
 
     .nav-toggle {
@@ -324,11 +332,10 @@ const currentPath = Astro.url.pathname;
     }
 
     .main-nav {
-      grid-row: 2;
+      grid-column: 2;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
       background: none;
       border: none;
     }
@@ -376,16 +383,14 @@ const currentPath = Astro.url.pathname;
       transform: rotate(180deg);
     }
 
-    /* Desktop: Book Now sits on the same row as nav, pinned right */
+    /* Desktop: Book Now pinned to far right */
     .mobile-book-now {
       display: none;
     }
 
     .desktop-book-now {
+      grid-column: 3;
       display: inline-block;
-      grid-row: 2;
-      justify-self: end;
-      align-self: center;
     }
   }
 </style>
