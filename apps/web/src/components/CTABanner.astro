@@ -1,4 +1,6 @@
 ---
+import { BOOKING_LINK } from '@lib/constants';
+
 interface Props {
   heading: string;
   text?: string;
@@ -11,7 +13,7 @@ const {
   heading = 'Ready to Start Your Treatment Journey?',
   text = 'Book a free consultation to discuss your goals with our expert team.',
   buttonText = 'Book a Consultation',
-  buttonUrl = 'https://phorest.com/book/salons/marrbeauty',
+  buttonUrl = BOOKING_LINK,
   style = 'primary',
 } = Astro.props;
 ---
@@ -20,7 +22,7 @@ const {
   <div class="container cta-inner">
     <h2 class="cta-heading">{heading}</h2>
     {text && <p class="cta-text">{text}</p>}
-    <a href={buttonUrl} class="cta-button">
+    <a href={buttonUrl} class="cta-button" {...(buttonUrl.includes('phorest') && { 'data-booking': '' })}>
       {buttonText}
     </a>
   </div>

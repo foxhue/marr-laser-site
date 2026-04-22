@@ -1,6 +1,7 @@
 ---
 import type { SanityImage } from '@foxhue/shared';
 import { sanityImageUrl } from '@lib/image';
+import { BOOKING_LINK } from '@lib/constants';
 
 interface Props {
   siteName: string;
@@ -28,7 +29,7 @@ const navItems = [
   { label: 'Contact', href: '/contact' },
 ];
 
-const bookingUrl = 'https://phorest.com/book/salons/marrbeauty';
+const bookingUrl = BOOKING_LINK;
 const currentPath = Astro.url.pathname;
 ---
 
@@ -88,13 +89,13 @@ const currentPath = Astro.url.pathname;
           </li>
         ))}
       </ul>
-      <a href={bookingUrl} target="_blank" rel="noopener" class="book-now-btn mobile-book-now">
-        Book Now<span class="sr-only"> (opens in new tab)</span>
+      <a href={bookingUrl} data-booking class="book-now-btn mobile-book-now">
+        Book Now
       </a>
     </nav>
 
-    <a href={bookingUrl} target="_blank" rel="noopener" class="book-now-btn desktop-book-now">
-      Book Now<span class="sr-only"> (opens in new tab)</span>
+    <a href={bookingUrl} data-booking class="book-now-btn desktop-book-now">
+      Book Now
     </a>
   </div>
 </header>
