@@ -184,19 +184,21 @@ const isProd = import.meta.env.PROD;
   .form-submit {
     display: inline-block;
     padding: var(--space-3) var(--space-8);
-    font-family: var(--font-body);
-    font-size: var(--font-size-base);
-    font-weight: 600;
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--color-white);
-    background-color: var(--color-primary);
+    background-color: var(--color-secondary);
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-full);
     cursor: pointer;
     transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
   }
 
   .form-submit:hover {
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-secondary-dark);
     box-shadow: var(--shadow-md);
   }
 
