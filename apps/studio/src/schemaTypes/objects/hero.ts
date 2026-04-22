@@ -6,6 +6,13 @@ export default defineType({
   type: 'object',
   fields: [
     defineField({
+      name: 'eyebrow',
+      title: 'Eyebrow Label',
+      type: 'string',
+      description: 'Small serif label above the heading (e.g. "Advanced Skin Care"). Max 40 chars.',
+      validation: (rule) => rule.max(40),
+    }),
+    defineField({
       name: 'heading',
       title: 'Heading',
       type: 'string',

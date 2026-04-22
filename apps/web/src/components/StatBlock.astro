@@ -1,0 +1,56 @@
+---
+interface Props {
+  value: string;
+  label: string;
+  caption?: string;
+}
+const { value, label, caption } = Astro.props;
+---
+
+<div class="stat-block">
+  <div class="stat-block__value">{value}</div>
+  <div class="stat-block__label">{label}</div>
+  {caption && <p class="stat-block__caption">{caption}</p>}
+</div>
+
+<style>
+  .stat-block {
+    padding-block: var(--space-6);
+    border-top: 1px solid rgba(60, 60, 59, 0.12);
+  }
+
+  .stat-block__value {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-light);
+    font-size: var(--font-size-5xl);
+    line-height: 1;
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
+  }
+
+  .stat-block__label {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-regular);
+    font-size: 0.6875rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    margin-bottom: var(--space-2);
+  }
+
+  .stat-block__caption {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-body-light);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    color: var(--color-neutral-600);
+    max-width: 28ch;
+  }
+
+  @media (min-width: 768px) {
+    .stat-block__value {
+      font-size: 4rem;
+    }
+  }
+</style>

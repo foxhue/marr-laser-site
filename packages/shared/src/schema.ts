@@ -34,6 +34,7 @@ export interface OpeningHours {
 }
 
 export interface Hero {
+  eyebrow?: string;
   heading: string;
   tagline?: string;
   image?: Figure;
@@ -48,7 +49,7 @@ export interface CTA {
   text?: string;
   buttonText?: string;
   buttonUrl?: string;
-  style?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'outline' | 'ghost';
 }
 
 export interface SiteSettings {
