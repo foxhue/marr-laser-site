@@ -1,6 +1,7 @@
 ---
 import type { TeamMember, SanityBlock } from '@foxhue/shared';
 import SanityImage from '@components/SanityImage.astro';
+import PortableText from '@components/PortableText.astro';
 
 interface Props {
   members: TeamMember[];
@@ -27,6 +28,10 @@ function extractFirstSentence(bio: SanityBlock[] | undefined): string {
   const match = fullText.match(/^[^.!?]+[.!?]/);
   return match ? match[0] : fullText;
 }
+
+function hasExpandableContent(member: TeamMember): boolean {
+  return !!(member.bio && member.bio.length > 0) || !!(member.qualifications && member.qualifications.length > 0);
+}
 ---
 
 <section class="team-section" aria-labelledby="team-heading">
@@ -36,24 +41,71 @@ function extractFirstSentence(bio: SanityBlock[] | undefined): string {
       <ul class="team-grid" role="list">
         {members.map((member) => {
           const snippet = extractFirstSentence(member.bio);
+          const expandable = hasExpandableContent(member);
           return (
             <li class="team-card">
-              <div class="team-photo-wrap">
-                {member.photo ? (
-                  <SanityImage
-                    source={member.photo.image}
-                    alt={member.photo.alt || member.name}
-                    width={300}
-                    height={300}
-                    class="team-photo"
-                  />
-                ) : (
-                  <img src={teamFallbackPhotos[member.name] || '/placeholders/team.svg'} alt={member.name} width={300} height={300} class="team-photo" loading="lazy" decoding="async" />
-                )}
-              </div>
-              <h3 class="team-name">{member.name}</h3>
-              {member.role && <p class="team-role">{member.role}</p>}
-              {snippet && <p class="team-bio">{snippet}</p>}
+              {expandable ? (
+                <details class="team-details">
+                  <summary class="team-summary">
+                    <div class="team-photo-wrap">
+                      {member.photo ? (
+                        <SanityImage
+                          source={member.photo.image}
+                          alt={member.photo.alt || member.name}
+                          width={300}
+                          height={300}
+                          class="team-photo"
+                        />
+                      ) : (
+                        <img src={teamFallbackPhotos[member.name] || '/placeholders/team.svg'} alt={member.name} width={300} height={300} class="team-photo" loading="lazy" decoding="async" />
+                      )}
+                    </div>
+                    <h3 class="team-name">{member.name}</h3>
+                    {member.role && <p class="team-role">{member.role}</p>}
+                    {snippet && <p class="team-bio">{snippet}</p>}
+                    <span class="team-expand-hint">
+                      <span class="team-expand-label">View Profile</span>
+                      <span class="team-collapse-label">Close</span>
+                    </span>
+                  </summary>
+                  <div class="team-expanded">
+                    {member.bio && member.bio.length > 0 && (
+                      <div class="team-full-bio">
+                        <PortableText value={member.bio} />
+                      </div>
+                    )}
+                    {member.qualifications && member.qualifications.length > 0 && (
+                      <div class="team-qualifications-wrap">
+                        <p class="team-qualifications-label">Qualifications</p>
+                        <ul class="team-qualifications" role="list">
+                          {member.qualifications.map((q) => (
+                            <li>{q}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </details>
+              ) : (
+                <>
+                  <div class="team-photo-wrap">
+                    {member.photo ? (
+                      <SanityImage
+                        source={member.photo.image}
+                        alt={member.photo.alt || member.name}
+                        width={300}
+                        height={300}
+                        class="team-photo"
+                      />
+                    ) : (
+                      <img src={teamFallbackPhotos[member.name] || '/placeholders/team.svg'} alt={member.name} width={300} height={300} class="team-photo" loading="lazy" decoding="async" />
+                    )}
+                  </div>
+                  <h3 class="team-name">{member.name}</h3>
+                  {member.role && <p class="team-role">{member.role}</p>}
+                  {snippet && <p class="team-bio">{snippet}</p>}
+                </>
+              )}
             </li>
           );
         })}
@@ -89,6 +141,30 @@ function extractFirstSentence(bio: SanityBlock[] | undefined): string {
     flex-direction: column;
     align-items: center;
     text-align: center;
+  }
+
+  /* Details/Summary expand pattern */
+  .team-details {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .team-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+    text-align: center;
+    width: 100%;
+  }
+
+  .team-summary::-webkit-details-marker,
+  .team-summary::marker {
+    display: none;
+    content: '';
   }
 
   .team-photo-wrap {
@@ -139,6 +215,90 @@ function extractFirstSentence(bio: SanityBlock[] | undefined): string {
     color: var(--color-neutral-600);
     line-height: 1.6;
     max-width: 24rem;
+  }
+
+  /* Expand hint */
+  .team-expand-hint {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-secondary-dark, var(--color-secondary));
+    border-bottom: 1px solid currentColor;
+    transition: color var(--transition-fast);
+  }
+
+  .team-expand-hint:hover {
+    color: var(--color-primary);
+  }
+
+  .team-collapse-label {
+    display: none;
+  }
+
+  .team-details[open] .team-expand-label {
+    display: none;
+  }
+
+  .team-details[open] .team-collapse-label {
+    display: inline;
+  }
+
+  /* Expanded content */
+  .team-expanded {
+    width: 100%;
+    max-width: 32rem;
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-accent);
+    text-align: left;
+  }
+
+  .team-full-bio {
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-600);
+    line-height: 1.7;
+  }
+
+  .team-full-bio :global(p) {
+    margin-bottom: var(--space-4);
+  }
+
+  .team-full-bio :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .team-qualifications-wrap {
+    margin-top: var(--space-6);
+  }
+
+  .team-qualifications-label {
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .team-qualifications {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .team-qualifications li {
+    font-size: var(--font-size-sm);
+    color: var(--color-neutral-600);
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--color-accent);
+    border-radius: var(--radius-full);
   }
 
   .team-empty {
