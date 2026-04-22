@@ -229,19 +229,20 @@ const currentPath = Astro.url.pathname;
   .dropdown-link {
     display: block;
     padding: var(--space-2) var(--space-4) var(--space-2) var(--space-8);
-    font-family: var(--font-body);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-body-light);
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
     color: var(--color-neutral-700);
     text-decoration: none;
-    letter-spacing: var(--body-letter-spacing);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     border-radius: var(--radius-full);
     transition: color var(--transition-fast), background-color var(--transition-fast);
   }
 
   .dropdown-link:hover {
-    color: var(--color-primary);
-    background-color: var(--color-accent);
+    color: var(--color-white);
+    background-color: var(--color-secondary);
   }
 
   .dropdown-link--active {
