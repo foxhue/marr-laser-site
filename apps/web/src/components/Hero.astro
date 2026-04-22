@@ -28,7 +28,7 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
         <div class="hero-cta-group">
           {ctaText && ctaUrl && (
             <a href={ctaUrl} class="hero-cta hero-cta--primary"
-               {...(ctaUrl.includes('phorest') && { 'data-booking': '' })}>
+               {...(ctaUrl?.includes('phorest') && { 'data-booking': '' })}>
               {ctaText}
             </a>
           )}
@@ -44,13 +44,13 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
       {bgImageUrl ? (
         <img
           src={bgImageUrl}
-          alt=""
+          alt={heading}
           class="hero-image"
           loading="eager"
           decoding="async"
         />
       ) : (
-        <img src="/images/hero.jpg" alt="" class="hero-image" loading="eager" decoding="async" fetchpriority="high" width="1600" height="1600" />
+        <img src="/images/hero.jpg" alt="MARR Laser & Skin Clinic" class="hero-image" loading="eager" decoding="async" fetchpriority="high" width="1600" height="1600" />
       )}
     </div>
   </div>

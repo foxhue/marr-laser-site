@@ -20,8 +20,8 @@ const { title, description, ogImage } = Astro.props;
 const settings: SiteSettings = await sanityClient.fetch(siteSettingsQuery);
 
 const siteTitle = title
-  ? `${title} | ${settings?.siteName ?? 'Foxhue'}`
-  : settings?.siteName ?? 'Foxhue';
+  ? `${title} | ${settings?.siteName ?? 'MARR Laser & Skin Clinic'}`
+  : settings?.siteName ?? 'MARR Laser & Skin Clinic';
 
 const siteDescription =
   description ?? settings?.defaultSeo?.description ?? '';
@@ -99,7 +99,7 @@ const jsonLd = settings
 
   <body>
     <Header
-      siteName={settings?.siteName ?? 'Foxhue'}
+      siteName={settings?.siteName ?? 'MARR Laser & Skin Clinic'}
       logo={settings?.logo}
     />
 
@@ -108,7 +108,7 @@ const jsonLd = settings
     </main>
 
     <Footer
-      siteName={settings?.siteName ?? 'Foxhue'}
+      siteName={settings?.siteName ?? 'MARR Laser & Skin Clinic'}
       contactEmail={settings?.contactEmail}
       contactPhone={settings?.contactPhone}
       address={settings?.address}
