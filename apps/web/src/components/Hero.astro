@@ -22,7 +22,7 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
         <h1 class="hero-heading">{heading}</h1>
         {tagline && <p class="hero-tagline">{tagline}</p>}
         {ctaText && ctaUrl && (
-          <a href={ctaUrl} class="hero-cta">
+          <a href={ctaUrl} class="hero-cta" {...(ctaUrl.includes('phorest') && { 'data-booking': '' })}>
             {ctaText}
           </a>
         )}
