@@ -34,11 +34,42 @@
       "heading": "'Cormorant Garamond', serif",
       "body": "'Noto Sans', sans-serif"
     },
+    "fontWeights": {
+      "headingLight": 300,
+      "headingRegular": 400,
+      "bodyLight": 300,
+      "bodyMedium": 500
+    },
+    "headingStyle": {
+      "textTransform": "uppercase",
+      "letterSpacing": "0.1em",
+      "note": "Cangste is the brand-book display face. Cormorant Garamond 300 is the licensed fallback until Cangste webfont is available."
+    },
+    "eyebrow": {
+      "fontFamily": "'Cormorant Garamond', serif",
+      "fontWeight": 400,
+      "fontSize": "0.6875rem",
+      "letterSpacing": "0.15em",
+      "textTransform": "uppercase",
+      "color": "#C6BCB3"
+    },
+    "buttonLabel": {
+      "fontFamily": "'Cormorant Garamond', serif",
+      "fontWeight": 400,
+      "fontSize": "0.6875rem",
+      "letterSpacing": "0.1em",
+      "textTransform": "uppercase"
+    },
     "borderRadius": {
       "sm": "2px",
       "md": "4px",
       "lg": "8px",
       "full": "9999px"
+    },
+    "shadows": {
+      "card": "0 2px 12px rgba(60, 60, 59, 0.06)",
+      "cardHover": "0 4px 20px rgba(60, 60, 59, 0.10)",
+      "testimonial": "0 4px 24px rgba(60, 60, 59, 0.08)"
     }
   },
   "pages": [

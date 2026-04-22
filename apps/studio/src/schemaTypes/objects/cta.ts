@@ -32,14 +32,14 @@ export default defineType({
         }),
     }),
     defineField({
-      name: 'style',
+      name: 'variant',
       title: 'Button Style',
       type: 'string',
       options: {
         list: [
-          { title: 'Primary', value: 'primary' },
-          { title: 'Secondary', value: 'secondary' },
-          { title: 'Outline', value: 'outline' },
+          { title: 'Primary (taupe)', value: 'primary' },
+          { title: 'Outline (charcoal)', value: 'outline' },
+          { title: 'Ghost (text-only)', value: 'ghost' },
         ],
         layout: 'radio',
       },

@@ -1,0 +1,59 @@
+---
+interface Props {
+  number: number;
+  title: string;
+  body: string;
+}
+const { number, title, body } = Astro.props;
+const padded = String(number).padStart(2, '0');
+---
+
+<div class="timeline-step">
+  <div class="timeline-step__number">{padded}</div>
+  <div class="timeline-step__content">
+    <h3 class="timeline-step__title">{title}</h3>
+    <p class="timeline-step__body">{body}</p>
+  </div>
+</div>
+
+<style>
+  .timeline-step {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: var(--space-6);
+    padding-block: var(--space-8);
+    border-top: 1px solid rgba(60, 60, 59, 0.12);
+  }
+
+  .timeline-step:last-child {
+    border-bottom: 1px solid rgba(60, 60, 59, 0.12);
+  }
+
+  .timeline-step__number {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-light);
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--color-secondary);
+  }
+
+  .timeline-step__title {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-regular);
+    font-size: var(--font-size-xl);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-3);
+    color: var(--color-primary);
+  }
+
+  .timeline-step__body {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-body-light);
+    font-size: var(--font-size-base);
+    line-height: 1.7;
+    color: var(--color-neutral-700);
+    max-width: 56ch;
+    letter-spacing: var(--body-letter-spacing);
+  }
+</style>

@@ -46,7 +46,7 @@ const currentPath = Astro.url.pathname;
             height="60"
           />
         ) : (
-          <img src="/placeholders/logo.svg" alt={siteName} class="logo-image" width="200" height="60" />
+          <img src="/logos/marr-wordmark-dark.svg" alt={siteName} class="logo-image" width="180" height="48" />
         )}
       </a>
     </div>
@@ -105,10 +105,8 @@ const currentPath = Astro.url.pathname;
     position: sticky;
     top: 0;
     z-index: 100;
-    background-color: rgba(255, 255, 255, 0.97);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--color-accent);
+    background-color: var(--color-neutral-100);
+    border-bottom: 1px solid rgba(60, 60, 59, 0.1);
   }
 
   .header-inner {
@@ -193,26 +191,26 @@ const currentPath = Astro.url.pathname;
     align-items: center;
     gap: var(--space-1);
     padding: var(--space-3) var(--space-4);
-    font-family: var(--font-body);
-    font-size: var(--font-size-sm);
-    font-weight: 400;
-    color: var(--color-neutral-600);
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
+    color: var(--color-neutral-800);
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
+    background-color: transparent;
     border-radius: var(--radius-full);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    transition: background-color var(--transition-base), color var(--transition-base);
   }
 
   .nav-link:hover {
-    color: var(--color-primary);
-    background-color: var(--color-accent);
+    background-color: var(--color-secondary);
+    color: var(--color-white);
   }
 
   .nav-link--active {
-    color: var(--color-primary);
-    background-color: var(--color-accent);
-    font-weight: 500;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
   }
 
   /* Dropdown arrow */
@@ -233,10 +231,10 @@ const currentPath = Astro.url.pathname;
     padding: var(--space-2) var(--space-4) var(--space-2) var(--space-8);
     font-family: var(--font-body);
     font-size: var(--font-size-sm);
-    font-weight: 400;
-    color: var(--color-neutral-600);
+    font-weight: var(--font-weight-body-light);
+    color: var(--color-neutral-700);
     text-decoration: none;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--body-letter-spacing);
     border-radius: var(--radius-full);
     transition: color var(--transition-fast), background-color var(--transition-fast);
   }
@@ -255,22 +253,22 @@ const currentPath = Astro.url.pathname;
   .book-now-btn {
     display: inline-block;
     padding: var(--space-2) var(--space-6);
-    font-family: var(--font-body);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
     color: var(--color-white);
-    background-color: var(--color-primary);
+    background-color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    border-radius: var(--radius-full);
+    letter-spacing: 0.1em;
+    border-radius: var(--radius-lg);
     transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
     white-space: nowrap;
   }
 
   .book-now-btn:hover {
-    background-color: var(--color-primary-dark);
-    box-shadow: var(--shadow-md);
+    background-color: var(--color-secondary-dark);
   }
 
   .book-now-btn:focus-visible {
@@ -353,9 +351,9 @@ const currentPath = Astro.url.pathname;
       transform: translateX(-50%);
       min-width: 14rem;
       background-color: var(--color-white);
-      border: 1px solid var(--color-accent);
+      border: 1px solid rgba(60, 60, 59, 0.1);
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-card);
       padding: var(--space-2) 0;
       opacity: 0;
       visibility: hidden;

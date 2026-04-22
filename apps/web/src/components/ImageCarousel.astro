@@ -24,7 +24,7 @@ const images = [
       alt=""
       class="carousel-image"
       style={`animation-delay: ${i * 6}s`}
-      loading="eager"
+      loading={i === 0 ? 'eager' : 'lazy'}
       decoding="async"
       fetchpriority={i === 0 ? 'high' : 'low'}
       width="1600"

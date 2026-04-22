@@ -6,166 +6,133 @@ interface Props {
   heading?: string;
 }
 
-const { testimonials, heading = 'What Our Clients Say' } = Astro.props;
-
-/**
- * Render a star rating as a string of filled and empty star characters.
- * Returns 5 characters total. Accessible text is provided via aria-label.
- */
-function renderStars(rating: number | undefined): string {
-  if (!rating) return '';
-  const filled = Math.round(Math.min(Math.max(rating, 0), 5));
-  return '\u2605'.repeat(filled) + '\u2606'.repeat(5 - filled);
-}
+const { testimonials, heading = 'In Their Own Words' } = Astro.props;
 ---
 
-<section class="testimonials-section" aria-labelledby="testimonials-heading">
+<section class="testimonials" aria-labelledby="testimonials-heading">
   <div class="container">
-    <h2 id="testimonials-heading" class="section-heading">{heading}</h2>
+    <div class="testimonials__head">
+      <span class="eyebrow">Patient Stories</span>
+      <h2 id="testimonials-heading" class="testimonials__heading">{heading}</h2>
+    </div>
     {testimonials.length > 0 ? (
-      <div class="testimonials-scroll" role="list">
-        {testimonials.map((t) => {
-          const stars = renderStars(t.rating);
-          return (
-            <blockquote class="testimonial-card" role="listitem">
-              <div class="testimonial-quote-mark" aria-hidden="true">&ldquo;</div>
-              <p class="testimonial-text">{t.quote}</p>
-              <footer class="testimonial-footer">
-                {stars && (
-                  <div
-                    class="testimonial-stars"
-                    role="img"
-                    aria-label={`Rating: ${t.rating} out of 5 stars`}
-                  >
-                    {stars}
-                  </div>
-                )}
-                <cite class="testimonial-author">{t.author}</cite>
-                {t.service?.title && (
-                  <span class="testimonial-service">{t.service.title}</span>
-                )}
-              </footer>
-            </blockquote>
-          );
-        })}
+      <div class="testimonials__grid" role="list">
+        {testimonials.map((t) => (
+          <article class="testimonial" role="listitem">
+            <div class="testimonial__quote-mark" aria-hidden="true">&ldquo;</div>
+            <p class="testimonial__body">{t.quote}</p>
+            <footer class="testimonial__attr">
+              <div class="testimonial__name">{t.author}</div>
+              {t.service?.title && (
+                <div class="testimonial__context">{t.service.title}</div>
+              )}
+            </footer>
+          </article>
+        ))}
       </div>
     ) : (
-      <p class="testimonials-empty">No testimonials yet.</p>
+      <p class="testimonials__empty">No testimonials yet.</p>
     )}
   </div>
 </section>
 
 <style>
-  .testimonials-section {
-    padding-block: var(--space-16);
-    background-color: var(--color-neutral-50);
+  .testimonials {
+    background-color: var(--color-secondary);
+    padding-block: var(--space-20);
   }
 
-  .section-heading {
+  .testimonials__head {
+    text-align: center;
+    max-width: 48ch;
+    margin: 0 auto var(--space-12);
+  }
+
+  .testimonials__head .eyebrow {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .testimonials__heading {
     font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-light);
     font-size: var(--font-size-3xl);
-    font-weight: 700;
-    color: var(--color-neutral-900);
-    text-align: center;
-    margin-bottom: var(--space-12);
-  }
-
-  /* Mobile: horizontal scroll */
-  .testimonials-scroll {
-    display: flex;
-    gap: var(--space-6);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding: var(--space-4);
-    padding-bottom: var(--space-4);
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Hide scrollbar for cleaner look while keeping functionality */
-  .testimonials-scroll::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .testimonials-scroll::-webkit-scrollbar-track {
-    background: var(--color-neutral-200);
-    border-radius: var(--radius-full);
-  }
-
-  .testimonials-scroll::-webkit-scrollbar-thumb {
-    background: var(--color-neutral-400);
-    border-radius: var(--radius-full);
-  }
-
-  .testimonial-card {
-    flex: 0 0 85%;
-    scroll-snap-align: start;
-    background-color: var(--color-white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-8);
-    border-left: 4px solid var(--color-primary);
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .testimonial-quote-mark {
-    font-size: 3rem;
-    line-height: 1;
-    color: var(--color-primary-light);
-    font-family: Georgia, serif;
-  }
-
-  .testimonial-text {
-    font-size: var(--font-size-base);
-    line-height: 1.7;
-    color: var(--color-neutral-700);
-    flex: 1;
-  }
-
-  .testimonial-footer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    margin-top: auto;
-  }
-
-  .testimonial-stars {
-    font-size: var(--font-size-lg);
-    color: var(--color-secondary);
+    text-transform: uppercase;
     letter-spacing: 0.1em;
+    color: var(--color-white);
   }
 
-  .testimonial-author {
-    font-style: normal;
-    font-weight: 600;
-    color: var(--color-neutral-900);
-    font-size: var(--font-size-base);
+  .testimonials__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
   }
 
-  .testimonial-service {
+  .testimonial {
+    position: relative;
+    background-color: var(--color-white);
+    padding: var(--space-10) var(--space-8) var(--space-8);
+    border-radius: var(--radius-md);
+  }
+
+  .testimonial__quote-mark {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-6);
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-light);
+    font-size: 4.5rem;
+    line-height: 1;
+    color: var(--color-secondary);
+    user-select: none;
+  }
+
+  .testimonial__body {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-light);
+    font-style: italic;
+    font-size: var(--font-size-lg);
+    line-height: 1.55;
+    color: var(--color-primary);
+    margin-bottom: var(--space-6);
+  }
+
+  .testimonial__attr {
+    border-top: 1px solid rgba(60, 60, 59, 0.12);
+    padding-top: var(--space-4);
+  }
+
+  .testimonial__name {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-regular);
+    font-size: 0.6875rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
+  }
+
+  .testimonial__context {
+    font-family: var(--font-body);
+    font-style: italic;
     font-size: var(--font-size-sm);
-    color: var(--color-neutral-500);
+    color: var(--color-neutral-600);
   }
 
-  .testimonials-empty {
+  .testimonials__empty {
     text-align: center;
-    color: var(--color-neutral-500);
+    color: rgba(255, 255, 255, 0.7);
     font-size: var(--font-size-lg);
   }
 
-  /* Tablet: 2-column grid */
   @media (min-width: 768px) {
-    .testimonials-scroll {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      overflow-x: visible;
-      scroll-snap-type: none;
-      padding-bottom: 0;
+    .testimonials__grid {
+      grid-template-columns: 1fr 1fr;
     }
+  }
 
-    .testimonial-card {
-      flex: none;
+  @media (min-width: 1024px) {
+    .testimonials__grid {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 </style>
