@@ -38,8 +38,10 @@ const socialIcons: Record<string, string> = {
     <div class="footer-grid">
       <!-- Brand column -->
       <div class="footer-col footer-brand">
-        <p class="footer-logo">{siteName}</p>
-        <p class="footer-tagline">Advanced Laser & Skin Treatments in Paisley, Renfrewshire</p>
+        <a href="/" class="footer-logo-link" aria-label={`${siteName} - Home`}>
+          <img src="/logos/marr-wordmark-light.svg" alt={siteName} class="footer-logo" width="220" height="52" />
+        </a>
+        <p class="footer-blurb">Advanced laser technology and expert skin treatments, tailored to you.</p>
         {socialLinks && socialLinks.length > 0 && (
           <ul class="social-links" role="list" aria-label="Social media links">
             {socialLinks.map((link) => (
@@ -61,7 +63,7 @@ const socialIcons: Record<string, string> = {
 
       <!-- Quick links column -->
       <div class="footer-col">
-        <h2 class="footer-heading">Quick Links</h2>
+        <h4 class="eyebrow">Quick Links</h4>
         <ul class="footer-links" role="list">
           {quickLinks.map((link) => (
             <li>
@@ -73,7 +75,7 @@ const socialIcons: Record<string, string> = {
 
       <!-- Contact column -->
       <div class="footer-col">
-        <h2 class="footer-heading">Contact</h2>
+        <h4 class="eyebrow">Contact</h4>
         <address class="footer-contact">
           {contactEmail && (
             <p>
@@ -104,34 +106,45 @@ const socialIcons: Record<string, string> = {
 
 <style>
   .site-footer {
-    background-color: var(--color-neutral-900);
-    color: var(--color-neutral-300);
-    padding-block: var(--space-16) var(--space-8);
+    background-color: var(--color-primary);
+    color: var(--color-neutral-100);
+    padding: var(--space-20) var(--space-8);
     margin-top: var(--space-24);
   }
 
   .footer-grid {
     display: grid;
-    gap: var(--space-8);
+    gap: var(--space-12);
+  }
+
+  @media (max-width: 767px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   @media (min-width: 768px) {
     .footer-grid {
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: 1.5fr 1fr 1fr;
     }
   }
 
   /* Brand */
-  .footer-logo {
-    font-family: var(--font-heading);
-    font-size: var(--font-size-xl);
-    font-weight: 700;
-    color: var(--color-white);
-    margin-bottom: var(--space-2);
+  .footer-logo-link {
+    text-decoration: none;
+    display: inline-block;
   }
 
-  .footer-tagline {
-    color: var(--color-neutral-400);
+  .footer-logo {
+    height: 3rem;
+    width: auto;
+    margin-bottom: var(--space-4);
+  }
+
+  .footer-blurb {
+    font-size: var(--font-size-sm);
+    color: rgba(249, 249, 248, 0.5);
+    line-height: 1.6;
     margin-bottom: var(--space-4);
   }
 
@@ -147,8 +160,8 @@ const socialIcons: Record<string, string> = {
     justify-content: center;
     width: 2.5rem;
     height: 2.5rem;
-    color: var(--color-neutral-400);
-    background-color: var(--color-neutral-800);
+    color: rgba(249, 249, 248, 0.5);
+    background-color: rgba(249, 249, 248, 0.1);
     border-radius: var(--radius-full);
     text-decoration: none;
     transition: color var(--transition-fast), background-color var(--transition-fast);
@@ -156,28 +169,24 @@ const socialIcons: Record<string, string> = {
 
   .social-link:hover {
     color: var(--color-white);
-    background-color: var(--color-primary);
+    background-color: var(--color-secondary);
   }
 
   /* Headings */
-  .footer-heading {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--color-white);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: var(--space-4);
+  .site-footer .eyebrow {
+    color: var(--color-secondary);
+    margin-bottom: var(--space-5);
   }
 
   /* Links */
   .footer-links {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .footer-link {
-    color: var(--color-neutral-400);
+    color: rgba(249, 249, 248, 0.7);
     text-decoration: none;
     transition: color var(--transition-fast);
   }
@@ -191,11 +200,11 @@ const socialIcons: Record<string, string> = {
     font-style: normal;
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .footer-address {
-    color: var(--color-neutral-400);
+    color: rgba(249, 249, 248, 0.7);
     line-height: 1.5;
   }
 
@@ -203,8 +212,8 @@ const socialIcons: Record<string, string> = {
   .footer-bottom {
     margin-top: var(--space-12);
     padding-top: var(--space-6);
-    border-top: 1px solid var(--color-neutral-800);
-    font-size: var(--font-size-sm);
-    color: var(--color-neutral-500);
+    border-top: 1px solid var(--color-secondary);
+    font-size: var(--font-size-xs);
+    color: rgba(249, 249, 248, 0.4);
   }
 </style>

@@ -8,9 +8,12 @@ interface Props {
   image?: SanityImageType;
   ctaText?: string;
   ctaUrl?: string;
+  eyebrow?: string;
+  secondaryCtaText?: string;
+  secondaryCtaUrl?: string;
 }
 
-const { heading, tagline, image, ctaText, ctaUrl } = Astro.props;
+const { heading, tagline, image, ctaText, ctaUrl, eyebrow, secondaryCtaText, secondaryCtaUrl } = Astro.props;
 
 const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
 ---
@@ -19,13 +22,22 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
   <div class="hero-inner">
     <div class="hero-content">
       <div class="hero-content-inner">
+        {eyebrow && <span class="eyebrow">{eyebrow}</span>}
         <h1 class="hero-heading">{heading}</h1>
         {tagline && <p class="hero-tagline">{tagline}</p>}
-        {ctaText && ctaUrl && (
-          <a href={ctaUrl} class="hero-cta" {...(ctaUrl.includes('phorest') && { 'data-booking': '' })}>
-            {ctaText}
-          </a>
-        )}
+        <div class="hero-cta-group">
+          {ctaText && ctaUrl && (
+            <a href={ctaUrl} class="hero-cta hero-cta--primary"
+               {...(ctaUrl.includes('phorest') && { 'data-booking': '' })}>
+              {ctaText}
+            </a>
+          )}
+          {secondaryCtaText && secondaryCtaUrl && (
+            <a href={secondaryCtaUrl} class="hero-cta hero-cta--outline">
+              {secondaryCtaText}
+            </a>
+          )}
+        </div>
       </div>
     </div>
     <div class="hero-media">
@@ -71,43 +83,69 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
   .hero-heading {
     font-family: var(--font-heading);
     font-size: var(--font-size-4xl);
-    font-weight: 400;
+    font-weight: var(--font-weight-heading-light);
     line-height: 1.15;
     color: var(--color-primary);
-    margin-bottom: var(--space-4);
-    letter-spacing: -0.01em;
+    margin-bottom: var(--space-5);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
   .hero-tagline {
     font-family: var(--font-body);
     font-size: var(--font-size-base);
-    line-height: 1.7;
+    font-weight: var(--font-weight-body-light);
+    line-height: 1.65;
     color: var(--color-neutral-600);
     margin-bottom: var(--space-8);
+    letter-spacing: var(--body-letter-spacing);
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
   }
 
   .hero-cta {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: var(--space-3) var(--space-8);
-    font-family: var(--font-body);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    letter-spacing: 0.06em;
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-regular);
+    font-size: 0.6875rem;
     text-transform: uppercase;
-    color: var(--color-white);
-    background-color: var(--color-primary);
-    border-radius: var(--radius-full);
+    letter-spacing: 0.1em;
+    border-radius: var(--radius-lg);
     text-decoration: none;
-    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    border: 1px solid transparent;
+    transition: background-color var(--transition-base), color var(--transition-base);
   }
 
-  .hero-cta:hover {
-    background-color: var(--color-primary-dark);
-    box-shadow: var(--shadow-md);
+  .hero-cta--primary {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border-color: var(--color-secondary);
+  }
+
+  .hero-cta--primary:hover {
+    background-color: var(--color-secondary-dark);
+  }
+
+  .hero-cta--outline {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .hero-cta--outline:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
   }
 
   .hero-cta:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--color-secondary);
     outline-offset: 2px;
   }
 

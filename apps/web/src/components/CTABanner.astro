@@ -2,130 +2,89 @@
 import { BOOKING_LINK } from '@lib/constants';
 
 interface Props {
-  heading: string;
-  text?: string;
-  buttonText?: string;
-  buttonUrl?: string;
-  style?: 'primary' | 'secondary';
+  eyebrow?: string;
+  heading?: string;
+  body?: string;
+  ctaText?: string;
+  ctaUrl?: string;
 }
 
 const {
+  eyebrow,
   heading = 'Ready to Start Your Treatment Journey?',
-  text = 'Book a free consultation to discuss your goals with our expert team.',
-  buttonText = 'Book a Consultation',
-  buttonUrl = BOOKING_LINK,
-  style = 'primary',
+  body = 'Book a free consultation to discuss your goals with our expert team.',
+  ctaText = 'Book a Consultation',
+  ctaUrl = BOOKING_LINK,
 } = Astro.props;
 ---
 
-<section class:list={['cta-banner', `cta-banner--${style}`]}>
-  <div class="container cta-inner">
-    <h2 class="cta-heading">{heading}</h2>
-    {text && <p class="cta-text">{text}</p>}
-    <a href={buttonUrl} class="cta-button" {...(buttonUrl.includes('phorest') && { 'data-booking': '' })}>
-      {buttonText}
+<section class="cta-banner">
+  <div class="container cta-banner__inner">
+    {eyebrow && <span class="eyebrow cta-banner__eyebrow">{eyebrow}</span>}
+    <h2 class="cta-banner__heading">{heading}</h2>
+    {body && <p class="cta-banner__body">{body}</p>}
+    <a href={ctaUrl} class="cta-banner__btn" {...(ctaUrl.includes('phorest') && { 'data-booking': '' })}>
+      {ctaText}
     </a>
   </div>
 </section>
 
 <style>
   .cta-banner {
-    padding-block: var(--space-16);
-  }
-
-  .cta-inner {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    padding-block: var(--space-20);
     text-align: center;
+  }
+  .cta-banner__inner {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-4);
   }
-
-  .cta-heading {
+  .cta-banner__eyebrow {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .cta-banner__heading {
     font-family: var(--font-heading);
-    font-size: var(--font-size-3xl);
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  .cta-text {
-    font-size: var(--font-size-lg);
-    line-height: 1.6;
-    max-width: 36rem;
-  }
-
-  .cta-button {
-    display: inline-block;
-    margin-top: var(--space-4);
-    padding: var(--space-3) var(--space-10);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    text-decoration: none;
-    letter-spacing: 0.04em;
+    font-weight: var(--font-weight-heading-light);
+    font-size: var(--font-size-4xl);
+    line-height: 1.15;
     text-transform: uppercase;
-    border-radius: var(--radius-full);
-    transition: background-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast);
-  }
-
-  .cta-button:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-
-  /* Primary style: colored background, white text */
-  .cta-banner--primary {
-    background-color: var(--color-primary);
-  }
-
-  .cta-banner--primary .cta-heading {
+    letter-spacing: 0.1em;
     color: var(--color-white);
+    margin-bottom: var(--space-5);
+    max-width: 32ch;
+    margin-inline: auto;
   }
-
-  .cta-banner--primary .cta-text {
-    color: color-mix(in srgb, var(--color-white) 85%, transparent);
+  .cta-banner__body {
+    max-width: 52ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-8);
+    font-size: var(--font-size-lg);
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.85);
   }
-
-  .cta-banner--primary .cta-button {
-    color: var(--color-primary);
+  .cta-banner__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-8);
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-regular);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     background-color: var(--color-white);
+    color: var(--color-primary);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: background-color var(--transition-base);
   }
-
-  .cta-banner--primary .cta-button:hover {
-    background-color: var(--color-neutral-100);
-    box-shadow: var(--shadow-md);
+  .cta-banner__btn:hover {
+    background-color: var(--color-accent);
   }
-
-  /* Secondary style: neutral background, dark text */
-  .cta-banner--secondary {
-    background-color: var(--color-neutral-100);
-  }
-
-  .cta-banner--secondary .cta-heading {
-    color: var(--color-neutral-900);
-  }
-
-  .cta-banner--secondary .cta-text {
-    color: var(--color-neutral-600);
-  }
-
-  .cta-banner--secondary .cta-button {
-    color: var(--color-white);
-    background-color: var(--color-primary);
-  }
-
-  .cta-banner--secondary .cta-button:hover {
-    background-color: var(--color-primary-dark);
-    box-shadow: var(--shadow-md);
-  }
-
-  /* Responsive */
-  @media (min-width: 768px) {
-    .cta-banner {
-      padding-block: var(--space-20);
-    }
-
-    .cta-heading {
-      font-size: var(--font-size-4xl);
-    }
+  .cta-banner__btn:focus-visible {
+    outline: 2px solid var(--color-white);
+    outline-offset: 2px;
   }
 </style>

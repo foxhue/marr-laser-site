@@ -24,10 +24,13 @@ const testimonials: Testimonial[] = await sanityClient.fetch(testimonialsQuery);
 
 <BaseLayout>
   <Hero
+    eyebrow="Advanced Skin Care"
     heading={settings?.siteName ?? 'MARR Laser & Skin Clinic'}
     tagline={settings?.tagline ?? 'Our wonderful team are highly trained and have all the advanced technology and techniques to support every avenue in laser, skin, aesthetics & even more.'}
-    ctaText="Book a Consultation"
+    ctaText="Book Consultation"
     ctaUrl={BOOKING_LINK}
+    secondaryCtaText="View Treatments"
+    secondaryCtaUrl="/services"
   />
 
   <PathwayCards />
