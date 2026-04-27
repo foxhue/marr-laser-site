@@ -1,8 +1,7 @@
 ---
 /**
- * CSS-only crossfade carousel for showcasing clinic images.
- * 5 images, ~5s visible each, ~1s crossfade = 30s total cycle.
- * Respects prefers-reduced-motion by pausing on first image.
+ * Scroll-snap carousel for showcasing clinic images.
+ * User swipes or uses prev/next buttons to navigate.
  */
 interface Props {
   class?: string;
@@ -17,21 +16,93 @@ const images = [
 ];
 ---
 
-<div class:list={['carousel', Astro.props.class]} aria-hidden="true">
-  {images.map((img, i) => (
-    <img
-      src={img.src}
-      alt=""
-      class="carousel-image"
-      style={`animation-delay: ${i * 6}s`}
-      loading={i === 0 ? 'eager' : 'lazy'}
-      decoding="async"
-      fetchpriority={i === 0 ? 'high' : 'low'}
-      width="1600"
-      height="900"
-    />
-  ))}
+<div class:list={['carousel', Astro.props.class]} aria-label="Clinic photos">
+  <div class="carousel-track">
+    {images.map((img, i) => (
+      <img
+        src={img.src}
+        alt={img.alt}
+        class="carousel-image"
+        loading={i === 0 ? 'eager' : 'lazy'}
+        decoding="async"
+        fetchpriority={i === 0 ? 'high' : 'low'}
+        width="1600"
+        height="900"
+      />
+    ))}
+  </div>
+  <button class="carousel-btn carousel-btn--prev" type="button" aria-label="Previous image">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <button class="carousel-btn carousel-btn--next" type="button" aria-label="Next image">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="carousel-dots">
+    {images.map((_, i) => (
+      <button
+        class:list={['carousel-dot', { 'carousel-dot--active': i === 0 }]}
+        type="button"
+        aria-label={`Go to image ${i + 1}`}
+      />
+    ))}
+  </div>
 </div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.carousel').forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>('.carousel-track');
+    const prev = carousel.querySelector<HTMLButtonElement>('.carousel-btn--prev');
+    const next = carousel.querySelector<HTMLButtonElement>('.carousel-btn--next');
+    const dots = carousel.querySelectorAll<HTMLButtonElement>('.carousel-dot');
+    if (!track || !prev || !next) return;
+
+    const scrollTo = (index: number) => {
+      const images = track.querySelectorAll('.carousel-image');
+      if (images[index]) {
+        images[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+      }
+    };
+
+    const getIndex = () => {
+      const scrollLeft = track.scrollLeft;
+      const width = track.clientWidth;
+      return Math.round(scrollLeft / width);
+    };
+
+    const updateDots = () => {
+      const idx = getIndex();
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('carousel-dot--active', i === idx);
+      });
+    };
+
+    prev.addEventListener('click', () => {
+      const idx = getIndex();
+      const total = track.querySelectorAll('.carousel-image').length;
+      scrollTo(idx === 0 ? total - 1 : idx - 1);
+    });
+
+    next.addEventListener('click', () => {
+      const idx = getIndex();
+      const total = track.querySelectorAll('.carousel-image').length;
+      scrollTo(idx >= total - 1 ? 0 : idx + 1);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => scrollTo(i));
+    });
+
+    track.addEventListener('scrollend', updateDots);
+    track.addEventListener('scroll', () => {
+      clearTimeout((track as any)._scrollTimer);
+      (track as any)._scrollTimer = setTimeout(updateDots, 100);
+    });
+  });
+</script>
 
 <style>
   .carousel {
@@ -41,32 +112,112 @@ const images = [
     overflow: hidden;
   }
 
+  .carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
   .carousel-image {
-    position: absolute;
-    inset: 0;
+    flex: 0 0 100%;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0;
-    animation: crossfade 30s infinite;
-    will-change: opacity;
+    scroll-snap-align: start;
   }
 
-  @keyframes crossfade {
-    0%, 3.33% { opacity: 1; }   /* visible immediately, stay for fade-in window */
-    20% { opacity: 1; }         /* visible for ~5s */
-    23.33% { opacity: 0; }      /* fade out over 1s */
-    100% { opacity: 0; }
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    border: 0;
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--color-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-base), opacity var(--transition-base);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .carousel:hover .carousel-btn {
+    opacity: 1;
+  }
+
+  .carousel-btn:hover {
+    background: var(--color-white);
+  }
+
+  .carousel-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    opacity: 1;
+  }
+
+  .carousel-btn--prev {
+    left: var(--space-3);
+  }
+
+  .carousel-btn--next {
+    right: var(--space-3);
+  }
+
+  .carousel-dots {
+    position: absolute;
+    bottom: var(--space-3);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--space-2);
+    z-index: 1;
+  }
+
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    border: 0;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background-color var(--transition-base);
+  }
+
+  .carousel-dot--active {
+    background: var(--color-white);
+  }
+
+  .carousel-dot:hover {
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .carousel-dot:focus-visible {
+    outline: 2px solid var(--color-white);
+    outline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .carousel-image {
-      animation: none;
-      opacity: 0;
+    .carousel-track {
+      scroll-behavior: auto;
     }
 
-    .carousel-image:first-child {
-      opacity: 1;
+    .carousel-btn,
+    .carousel-dot {
+      transition: none;
     }
   }
 </style>
