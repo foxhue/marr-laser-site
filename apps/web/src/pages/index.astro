@@ -9,6 +9,7 @@ import ServicesGrid from '@components/ServicesGrid.astro';
 import Testimonials from '@components/Testimonials.astro';
 import InstagramFeed from '@components/InstagramFeed.astro';
 import CTABanner from '@components/CTABanner.astro';
+import VideoShowcase from '@components/VideoShowcase.astro';
 import { sanityClient } from '@lib/sanity';
 import {
   siteSettingsQuery,
@@ -42,6 +43,14 @@ const testimonials: Testimonial[] = await sanityClient.fetch(testimonialsQuery);
   {services?.length > 0 && (
     <ServicesGrid services={services} heading="Featured Treatments" />
   )}
+
+  <VideoShowcase
+    videos={[
+      { id: 'dQw4w9WgXcQ', title: 'Welcome to MARR Laser & Skin Clinic' },
+      { id: 'dQw4w9WgXcQ', title: 'Laser Hair Removal Treatment Demo' },
+      { id: 'dQw4w9WgXcQ', title: 'Client Transformation Stories' },
+    ]}
+  />
 
   {testimonials?.length > 0 && (
     <Testimonials testimonials={testimonials} />

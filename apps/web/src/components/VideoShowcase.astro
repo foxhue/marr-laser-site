@@ -1,0 +1,212 @@
+---
+interface Video {
+  id: string;
+  title: string;
+}
+
+interface Props {
+  heading?: string;
+  eyebrow?: string;
+  videos?: Video[];
+}
+
+const YOUTUBE_ID_RE = /^[a-zA-Z0-9_-]{11}$/;
+
+const {
+  heading = 'See MARR in Action',
+  eyebrow = 'Video',
+  videos = [],
+} = Astro.props;
+
+const safeVideos = videos.filter((v) => YOUTUBE_ID_RE.test(v.id));
+---
+
+<section class="video-showcase" aria-labelledby="video-showcase-heading">
+  <div class="container">
+    <div class="video-showcase__head">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 id="video-showcase-heading" class="video-showcase__heading">{heading}</h2>
+    </div>
+    {safeVideos.length > 0 ? (
+      <div class="video-showcase__grid">
+        {safeVideos.map((video) => (
+          <div class="video-card" data-video-id={video.id}>
+            <button
+              class="video-card__thumb"
+              type="button"
+              aria-label={`Play video: ${video.title}`}
+            >
+              <img
+                src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
+                alt={video.title}
+                class="video-card__img"
+                loading="lazy"
+                decoding="async"
+                width="480"
+                height="360"
+              />
+              <span class="video-card__play" aria-hidden="true">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                  <circle cx="24" cy="24" r="24" fill="rgba(60,60,59,0.7)" />
+                  <polygon points="19,15 35,24 19,33" fill="#fff" />
+                </svg>
+              </span>
+            </button>
+            <p class="video-card__title">{video.title}</p>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p class="video-showcase__empty">Videos coming soon.</p>
+    )}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.video-card').forEach((card) => {
+    const btn = card.querySelector<HTMLButtonElement>('.video-card__thumb');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const id = card.dataset.videoId;
+      if (!id) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+      iframe.allow = 'autoplay; encrypted-media; fullscreen';
+      iframe.allowFullscreen = true;
+      iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation';
+      iframe.classList.add('video-card__iframe');
+      iframe.title = card.querySelector('.video-card__title')?.textContent ?? 'Video';
+      btn.replaceWith(iframe);
+    }, { once: true });
+  });
+</script>
+
+<style>
+  .video-showcase {
+    padding-block: var(--space-20);
+    background-color: var(--color-neutral-50);
+  }
+
+  .video-showcase__head {
+    text-align: center;
+    max-width: 48ch;
+    margin: 0 auto var(--space-12);
+  }
+
+  .video-showcase__heading {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-light);
+    font-size: var(--font-size-3xl);
+    text-transform: var(--heading-text-transform);
+    letter-spacing: var(--heading-letter-spacing);
+    color: var(--color-primary);
+  }
+
+  .video-showcase__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .video-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .video-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .video-card__thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    background: var(--color-primary);
+    aspect-ratio: 16 / 9;
+  }
+
+  .video-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity var(--transition-base);
+  }
+
+  .video-card__thumb:hover .video-card__img {
+    opacity: 0.85;
+  }
+
+  .video-card__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-base);
+  }
+
+  .video-card__thumb:hover .video-card__play {
+    transform: scale(1.1);
+  }
+
+  .video-card__thumb:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .video-card__iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    display: block;
+  }
+
+  .video-card__title {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading-regular);
+    font-size: var(--font-size-base);
+    color: var(--color-primary);
+    margin: 0;
+    padding: var(--space-4) var(--space-4) var(--space-5);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .video-showcase__empty {
+    text-align: center;
+    color: var(--color-neutral-600);
+    font-size: var(--font-size-lg);
+  }
+
+  @media (min-width: 768px) {
+    .video-showcase__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .video-showcase__heading {
+      font-size: var(--font-size-4xl);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .video-showcase__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video-card,
+    .video-card__img,
+    .video-card__play {
+      transition: none;
+    }
+  }
+</style>
