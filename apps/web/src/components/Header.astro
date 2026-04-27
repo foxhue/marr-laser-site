@@ -6,9 +6,10 @@ import { BOOKING_LINK } from '@lib/constants';
 interface Props {
   siteName: string;
   logo?: SanityImage;
+  transparentHeader?: boolean;
 }
 
-const { siteName, logo } = Astro.props;
+const { siteName, logo, transparentHeader = false } = Astro.props;
 
 const treatmentCategories = [
   { label: 'Laser Treatments', href: '/services/laser-treatments' },
@@ -19,7 +20,6 @@ const treatmentCategories = [
 ];
 
 const navItems = [
-  { label: 'Home', href: '/' },
   { label: 'Treatments', href: '/services', children: treatmentCategories },
   { label: 'Pricing', href: '/pricing' },
   { label: 'About', href: '/about' },
@@ -33,24 +33,11 @@ const bookingUrl = BOOKING_LINK;
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="site-header">
+<header
+  class:list={['site-header', { 'site-header--transparent': transparentHeader }]}
+  {...(transparentHeader && { 'data-transparent-header': '' })}
+>
   <div class="header-inner container">
-    <div class="header-top">
-      <a href="/" class="logo-link" aria-label={`${siteName} - Home`}>
-        {logo ? (
-          <img
-            src={sanityImageUrl(logo, 200, 60)}
-            alt={siteName}
-            class="logo-image"
-            width="200"
-            height="60"
-          />
-        ) : (
-          <img src="/logos/marr-wordmark-dark.svg" alt={siteName} class="logo-image" width="180" height="48" />
-        )}
-      </a>
-    </div>
-
     <input type="checkbox" id="nav-toggle" class="nav-checkbox sr-only" aria-hidden="true" />
     <label for="nav-toggle" class="nav-toggle" aria-label="Toggle navigation menu">
       <span class="hamburger-line"></span>
@@ -97,6 +84,37 @@ const currentPath = Astro.url.pathname;
     <a href={bookingUrl} data-booking class="book-now-btn desktop-book-now">
       Book Now
     </a>
+
+    <a href="/" class="logo-link" aria-label={`${siteName} - Home`}>
+      {logo ? (
+        <>
+          <img
+            src={sanityImageUrl(logo, 180, 48)}
+            alt={siteName}
+            class="logo-image logo-image--dark"
+            width="180"
+            height="48"
+          />
+          {transparentHeader && (
+            <img
+              src="/logos/marr-wordmark-light.svg"
+              alt=""
+              class="logo-image logo-image--light"
+              width="180"
+              height="48"
+              aria-hidden="true"
+            />
+          )}
+        </>
+      ) : (
+        <>
+          <img src="/logos/marr-wordmark-dark.svg" alt={siteName} class="logo-image logo-image--dark" width="180" height="48" />
+          {transparentHeader && (
+            <img src="/logos/marr-wordmark-light.svg" alt="" class="logo-image logo-image--light" width="180" height="48" aria-hidden="true" />
+          )}
+        </>
+      )}
+    </a>
   </div>
 </header>
 
@@ -107,6 +125,7 @@ const currentPath = Astro.url.pathname;
     z-index: 100;
     background-color: var(--color-neutral-100);
     border-bottom: 1px solid rgba(60, 60, 59, 0.1);
+    transition: background-color 300ms ease, border-color 300ms ease;
   }
 
   .header-inner {
@@ -117,20 +136,24 @@ const currentPath = Astro.url.pathname;
     min-height: 4.5rem;
   }
 
-  /* Logo */
-  .header-top {
-    flex-shrink: 0;
-  }
-
+  /* Logo — always far right */
   .logo-link {
     text-decoration: none;
     display: flex;
     align-items: center;
+    order: 3;
+    flex-shrink: 0;
+    margin-left: auto;
   }
 
   .logo-image {
     height: 2.5rem;
     width: auto;
+  }
+
+  /* Light logo hidden by default */
+  .logo-image--light {
+    display: none;
   }
 
   /* Checkbox (visually hidden, drives menu state) */
@@ -150,7 +173,7 @@ const currentPath = Astro.url.pathname;
     cursor: pointer;
     border-radius: var(--radius-sm);
     transition: background-color var(--transition-fast);
-    order: 1;
+    order: 0;
   }
 
   .nav-toggle:hover {
@@ -163,7 +186,7 @@ const currentPath = Astro.url.pathname;
     height: 1.5px;
     background-color: var(--color-neutral-700);
     border-radius: 1px;
-    transition: transform var(--transition-base), opacity var(--transition-base);
+    transition: transform var(--transition-base), opacity var(--transition-base), background-color 300ms ease;
     transform-origin: center;
   }
 
@@ -173,7 +196,7 @@ const currentPath = Astro.url.pathname;
     flex-basis: 100%;
     background-color: var(--color-white);
     border-top: 1px solid var(--color-accent);
-    order: 2;
+    order: 4;
   }
 
   .nav-list {
@@ -191,16 +214,16 @@ const currentPath = Astro.url.pathname;
     align-items: center;
     gap: var(--space-1);
     padding: var(--space-3) var(--space-4);
-    font-family: var(--font-heading);
+    font-family: var(--font-body);
     font-size: 0.6875rem;
-    font-weight: var(--font-weight-heading-regular);
+    font-weight: var(--font-weight-body-medium);
     color: var(--color-neutral-800);
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     background-color: transparent;
     border-radius: var(--radius-full);
-    transition: background-color var(--transition-base), color var(--transition-base);
+    transition: background-color var(--transition-base), color 300ms ease;
   }
 
   .nav-link:hover {
@@ -229,9 +252,9 @@ const currentPath = Astro.url.pathname;
   .dropdown-link {
     display: block;
     padding: var(--space-2) var(--space-4) var(--space-2) var(--space-8);
-    font-family: var(--font-heading);
+    font-family: var(--font-body);
     font-size: 0.6875rem;
-    font-weight: var(--font-weight-heading-regular);
+    font-weight: var(--font-weight-body-medium);
     color: var(--color-neutral-700);
     text-decoration: none;
     text-transform: uppercase;
@@ -250,7 +273,7 @@ const currentPath = Astro.url.pathname;
     font-weight: 500;
   }
 
-  /* Book Now button */
+  /* Book Now button — matches FAB style */
   .book-now-btn {
     display: inline-block;
     padding: var(--space-2) var(--space-6);
@@ -258,18 +281,20 @@ const currentPath = Astro.url.pathname;
     font-size: 0.6875rem;
     font-weight: var(--font-weight-heading-regular);
     color: var(--color-white);
-    background-color: var(--color-secondary);
-    border: 1px solid var(--color-secondary);
+    background-color: var(--color-primary);
+    border: none;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-full);
+    box-shadow: 0 4px 20px rgba(60, 60, 59, 0.3);
     transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
     white-space: nowrap;
   }
 
   .book-now-btn:hover {
-    background-color: var(--color-secondary-dark);
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 6px 28px rgba(60, 60, 59, 0.4);
   }
 
   .book-now-btn:focus-visible {
@@ -286,6 +311,7 @@ const currentPath = Astro.url.pathname;
 
   .desktop-book-now {
     display: none;
+    order: 2;
   }
 
   /* Checkbox hack: show nav when checked */
@@ -306,15 +332,110 @@ const currentPath = Astro.url.pathname;
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Desktop layout — logo centered, nav + book now on one row below */
+  /* ─── Transparent header mode ─── */
+  .site-header--transparent {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .site-header--transparent .nav-link {
+    color: var(--color-white);
+  }
+
+  .site-header--transparent .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-white);
+  }
+
+  .site-header--transparent .nav-link--active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-white);
+  }
+
+  .site-header--transparent .dropdown-arrow {
+    color: var(--color-white);
+  }
+
+  .site-header--transparent .hamburger-line {
+    background-color: var(--color-white);
+  }
+
+  .site-header--transparent .logo-image--dark {
+    display: none;
+  }
+
+  .site-header--transparent .logo-image--light {
+    display: block;
+  }
+
+  /* Scrolled state — solid background */
+  .site-header--scrolled {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--color-neutral-100);
+    border-bottom-color: rgba(60, 60, 59, 0.1);
+  }
+
+  .site-header--scrolled .nav-link {
+    color: var(--color-neutral-800);
+  }
+
+  .site-header--scrolled .nav-link:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+  }
+
+  .site-header--scrolled .nav-link--active {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+  }
+
+  .site-header--scrolled .dropdown-arrow {
+    color: inherit;
+  }
+
+  .site-header--scrolled .hamburger-line {
+    background-color: var(--color-neutral-700);
+  }
+
+  .site-header--scrolled .logo-image--dark {
+    display: block;
+  }
+
+  .site-header--scrolled .logo-image--light {
+    display: none;
+  }
+
+  /* Mobile nav panel always has solid bg even in transparent mode */
+  .site-header--transparent .main-nav {
+    background-color: var(--color-white);
+  }
+
+  .site-header--transparent .main-nav .nav-link {
+    color: var(--color-neutral-800);
+  }
+
+  .site-header--transparent .main-nav .nav-link:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+  }
+
+  /* Desktop layout — single row: nav left, book now, logo right */
   @media (min-width: 768px) {
     .header-inner {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      gap: var(--space-2);
+      justify-content: space-between;
+      gap: var(--space-4);
       padding-block: var(--space-3);
-      position: relative;
+      flex-wrap: nowrap;
     }
 
     .nav-toggle {
@@ -328,15 +449,14 @@ const currentPath = Astro.url.pathname;
     .main-nav {
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: 100%;
+      flex-basis: auto;
       background: none;
       border: none;
+      order: 0;
     }
 
     .nav-list {
       flex-direction: row;
-      justify-content: center;
       gap: var(--space-1);
       padding: 0;
     }
@@ -365,6 +485,7 @@ const currentPath = Astro.url.pathname;
 
     .dropdown-link {
       padding: var(--space-2) var(--space-4);
+      color: var(--color-neutral-700);
     }
 
     .nav-item--has-dropdown:hover > .dropdown,
@@ -377,16 +498,70 @@ const currentPath = Astro.url.pathname;
       transform: rotate(180deg);
     }
 
-    /* Desktop: Book Now sits inline with nav, pinned to far right */
+    /* Desktop: Book Now sits between nav and logo */
     .mobile-book-now {
       display: none;
     }
 
     .desktop-book-now {
       display: inline-block;
-      position: absolute;
-      right: 0;
-      bottom: var(--space-3);
+      order: 2;
+      flex-shrink: 0;
+    }
+
+    .logo-link {
+      order: 3;
+      margin-left: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,
+    .hamburger-line,
+    .nav-link,
+    .dropdown,
+    .dropdown-arrow,
+    .dropdown-link,
+    .book-now-btn {
+      transition: none;
     }
   }
 </style>
+
+<script>
+  const header = document.querySelector('[data-transparent-header]');
+  if (header) {
+    const hero = document.querySelector('[data-hero]');
+    if (hero) {
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              header.classList.remove('site-header--scrolled');
+              header.classList.add('site-header--transparent');
+            } else {
+              header.classList.remove('site-header--transparent');
+              header.classList.add('site-header--scrolled');
+            }
+          },
+          { threshold: 0, rootMargin: '-1px 0px 0px 0px' }
+        );
+        observer.observe(hero);
+      } else {
+        // Fallback: scroll event
+        const onScroll = () => {
+          const heroBottom = hero.getBoundingClientRect().bottom;
+          if (heroBottom <= 0) {
+            header.classList.remove('site-header--transparent');
+            header.classList.add('site-header--scrolled');
+          } else {
+            header.classList.remove('site-header--scrolled');
+            header.classList.add('site-header--transparent');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+    }
+  }
+</script>

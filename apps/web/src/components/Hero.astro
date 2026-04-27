@@ -15,69 +15,107 @@ interface Props {
 
 const { heading, tagline, image, ctaText, ctaUrl, eyebrow, secondaryCtaText, secondaryCtaUrl } = Astro.props;
 
-const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
+const bgImageUrl = image ? sanityImageUrl(image, 1920, 1080) : null;
 ---
 
-<section class="hero" aria-label="Hero">
-  <div class="hero-inner">
-    <div class="hero-content">
-      <div class="hero-content-inner">
-        {eyebrow && <span class="eyebrow">{eyebrow}</span>}
-        <h1 class="hero-heading">{heading}</h1>
-        {tagline && <p class="hero-tagline">{tagline}</p>}
-        <div class="hero-cta-group">
-          {ctaText && ctaUrl && (
-            <a href={ctaUrl} class="hero-cta hero-cta--primary"
-               {...(ctaUrl?.includes('phorest') && { 'data-booking': '' })}>
-              {ctaText}
-            </a>
-          )}
-          {secondaryCtaText && secondaryCtaUrl && (
-            <a href={secondaryCtaUrl} class="hero-cta hero-cta--outline">
-              {secondaryCtaText}
-            </a>
-          )}
-        </div>
+<section class="hero" aria-labelledby="hero-heading" data-hero>
+  <div class="hero-image-wrapper">
+    {bgImageUrl ? (
+      <img
+        src={bgImageUrl}
+        alt=""
+        class="hero-image"
+        loading="eager"
+        fetchpriority="high"
+        width="1920"
+        height="1080"
+      />
+    ) : (
+      <img src="/images/hero.jpg" alt="" class="hero-image" loading="eager" fetchpriority="high" width="1920" height="1080" />
+    )}
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="hero-content container">
+    <div class="hero-content-inner">
+      {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+      <h1 id="hero-heading" class="hero-heading">{heading}</h1>
+      {tagline && <p class="hero-tagline">{tagline}</p>}
+      <div class="hero-cta-group">
+        {ctaText && ctaUrl && (
+          <a href={ctaUrl} class="hero-cta hero-cta--primary"
+             {...(ctaUrl?.includes('phorest') && { 'data-booking': '' })}>
+            {ctaText}
+          </a>
+        )}
+        {secondaryCtaText && secondaryCtaUrl && (
+          <a href={secondaryCtaUrl} class="hero-cta hero-cta--outline">
+            {secondaryCtaText}
+          </a>
+        )}
       </div>
-    </div>
-    <div class="hero-media">
-      {bgImageUrl ? (
-        <img
-          src={bgImageUrl}
-          alt={heading}
-          class="hero-image"
-          loading="eager"
-          decoding="async"
-        />
-      ) : (
-        <img src="/images/hero.jpg" alt="MARR Laser & Skin Clinic" class="hero-image" loading="eager" decoding="async" fetchpriority="high" width="1600" height="1600" />
-      )}
     </div>
   </div>
 </section>
 
 <style>
   .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
     overflow: hidden;
   }
 
-  .hero-inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    min-height: 70vh;
+  /* Full-bleed background image */
+  .hero-image-wrapper {
+    position: absolute;
+    inset: 0;
   }
 
-  /* Content panel — blush/accent background */
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Dark overlay — darker at top (nav readability) and bottom (text readability) */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.15) 40%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+  }
+
+  /* Content sits at bottom-left */
   .hero-content {
-    background-color: var(--color-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-12) var(--space-6);
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-16);
   }
 
   .hero-content-inner {
-    max-width: 32rem;
+    max-width: 36rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: var(--font-weight-heading-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--space-4);
   }
 
   .hero-heading {
@@ -85,7 +123,7 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
     font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-heading-light);
     line-height: 1.15;
-    color: var(--color-primary);
+    color: var(--color-white);
     margin-bottom: var(--space-5);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -96,7 +134,7 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-body-light);
     line-height: 1.65;
-    color: var(--color-neutral-600);
+    color: rgba(255, 255, 255, 0.85);
     margin-bottom: var(--space-8);
     letter-spacing: var(--body-letter-spacing);
   }
@@ -117,10 +155,10 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
     font-size: 0.6875rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-full);
     text-decoration: none;
     border: 1px solid transparent;
-    transition: background-color var(--transition-base), color var(--transition-base);
+    transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base);
   }
 
   .hero-cta--primary {
@@ -131,47 +169,29 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
 
   .hero-cta--primary:hover {
     background-color: var(--color-secondary-dark);
+    border-color: var(--color-secondary-dark);
   }
 
   .hero-cta--outline {
     background-color: transparent;
-    color: var(--color-primary);
-    border-color: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-white);
   }
 
   .hero-cta--outline:hover {
-    background-color: var(--color-primary);
-    color: var(--color-white);
+    background-color: var(--color-white);
+    color: var(--color-primary);
   }
 
   .hero-cta:focus-visible {
-    outline: 2px solid var(--color-secondary);
+    outline: 2px solid var(--color-white);
     outline-offset: 2px;
   }
 
-  /* Media panel — image side */
-  .hero-media {
-    position: relative;
-    overflow: hidden;
-    min-height: 300px;
-  }
-
-  .hero-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  /* Desktop: side-by-side split layout */
+  /* Desktop */
   @media (min-width: 768px) {
-    .hero-inner {
-      grid-template-columns: 1fr 1fr;
-      min-height: 75vh;
-    }
-
     .hero-content {
-      padding: var(--space-16) var(--space-12);
+      padding-bottom: var(--space-20);
     }
 
     .hero-heading {
@@ -185,7 +205,13 @@ const bgImageUrl = image ? sanityImageUrl(image, 1200, 900) : null;
 
   @media (min-width: 1024px) {
     .hero-content {
-      padding: var(--space-20) var(--space-16);
+      padding-bottom: var(--space-24);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-cta {
+      transition: none;
     }
   }
 </style>

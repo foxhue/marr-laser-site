@@ -13,9 +13,10 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  transparentHeader?: boolean;
 }
 
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, transparentHeader = false } = Astro.props;
 
 const settings: SiteSettings = await sanityClient.fetch(siteSettingsQuery);
 
@@ -98,12 +99,14 @@ const jsonLd = settings
   </head>
 
   <body>
+    <a href="#main-content" class="skip-link sr-only">Skip to main content</a>
     <Header
       siteName={settings?.siteName ?? 'MARR Laser & Skin Clinic'}
       logo={settings?.logo}
+      transparentHeader={transparentHeader}
     />
 
-    <main id="main-content">
+    <main id="main-content" class:list={[{ 'main--transparent-hero': transparentHeader }]}>
       <slot />
     </main>
 
@@ -118,3 +121,27 @@ const jsonLd = settings
     <BookingOverlay />
   </body>
 </html>
+
+<style>
+  .main--transparent-hero {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .skip-link:focus {
+    position: fixed;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: 9999;
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-primary);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    width: auto;
+    height: auto;
+    clip: auto;
+    white-space: normal;
+    overflow: visible;
+  }
+</style>
