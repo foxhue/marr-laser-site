@@ -277,9 +277,9 @@ const currentPath = Astro.url.pathname;
   .book-now-btn {
     display: inline-block;
     padding: var(--space-2) var(--space-6);
-    font-family: var(--font-heading);
+    font-family: var(--font-body);
     font-size: 0.6875rem;
-    font-weight: var(--font-weight-heading-regular);
+    font-weight: var(--font-weight-body-medium);
     color: var(--color-white);
     background-color: var(--color-primary);
     border: none;
@@ -512,6 +512,21 @@ const currentPath = Astro.url.pathname;
     .logo-link {
       order: 3;
       margin-left: 0;
+    }
+
+    /* Desktop: transparent nav must NOT have solid mobile background */
+    .site-header--transparent .main-nav {
+      background: none;
+      border: none;
+    }
+
+    .site-header--transparent .main-nav .nav-link {
+      color: var(--color-white);
+    }
+
+    .site-header--transparent .main-nav .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: var(--color-white);
     }
   }
 
