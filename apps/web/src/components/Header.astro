@@ -1,6 +1,6 @@
 ---
 import type { SanityImage } from '@foxhue/shared';
-import { sanityImageUrl } from '@lib/image';
+
 import { BOOKING_LINK } from '@lib/constants';
 
 interface Props {
@@ -86,33 +86,9 @@ const currentPath = Astro.url.pathname;
     </a>
 
     <a href="/" class="logo-link" aria-label={`${siteName} - Home`}>
-      {logo ? (
-        <>
-          <img
-            src={sanityImageUrl(logo, 180, 48)}
-            alt={siteName}
-            class="logo-image logo-image--dark"
-            width="180"
-            height="48"
-          />
-          {transparentHeader && (
-            <img
-              src="/logos/marr-wordmark-light.svg"
-              alt=""
-              class="logo-image logo-image--light"
-              width="180"
-              height="48"
-              aria-hidden="true"
-            />
-          )}
-        </>
-      ) : (
-        <>
-          <img src="/logos/marr-wordmark-dark.svg" alt={siteName} class="logo-image logo-image--dark" width="180" height="48" />
-          {transparentHeader && (
-            <img src="/logos/marr-wordmark-light.svg" alt="" class="logo-image logo-image--light" width="180" height="48" aria-hidden="true" />
-          )}
-        </>
+      <img src="/logos/marr-wordmark-dark.svg" alt={siteName} class="logo-image logo-image--dark" width="180" height="48" />
+      {transparentHeader && (
+        <img src="/logos/marr-wordmark-light.svg" alt="" class="logo-image logo-image--light" width="180" height="48" aria-hidden="true" />
       )}
     </a>
   </div>
@@ -136,14 +112,13 @@ const currentPath = Astro.url.pathname;
     min-height: 4.5rem;
   }
 
-  /* Logo — always far right */
+  /* Logo — always far left */
   .logo-link {
     text-decoration: none;
     display: flex;
     align-items: center;
-    order: 3;
+    order: 0;
     flex-shrink: 0;
-    margin-left: auto;
   }
 
   .logo-image {
@@ -173,7 +148,8 @@ const currentPath = Astro.url.pathname;
     cursor: pointer;
     border-radius: var(--radius-sm);
     transition: background-color var(--transition-fast);
-    order: 0;
+    order: 3;
+    margin-left: auto;
   }
 
   .nav-toggle:hover {
@@ -426,7 +402,7 @@ const currentPath = Astro.url.pathname;
     color: var(--color-white);
   }
 
-  /* Desktop layout — single row: nav left, book now, logo right */
+  /* Desktop layout — single row: logo left, nav centre, book now right */
   @media (min-width: 768px) {
     .header-inner {
       display: flex;
@@ -452,7 +428,7 @@ const currentPath = Astro.url.pathname;
       flex-basis: auto;
       background: none;
       border: none;
-      order: 0;
+      order: 1;
     }
 
     .nav-list {
@@ -498,7 +474,7 @@ const currentPath = Astro.url.pathname;
       transform: rotate(180deg);
     }
 
-    /* Desktop: Book Now sits between nav and logo */
+    /* Desktop: Book Now sits far right */
     .mobile-book-now {
       display: none;
     }
@@ -507,11 +483,7 @@ const currentPath = Astro.url.pathname;
       display: inline-block;
       order: 2;
       flex-shrink: 0;
-    }
-
-    .logo-link {
-      order: 3;
-      margin-left: 0;
+      margin-left: auto;
     }
 
     /* Desktop: transparent nav must NOT have solid mobile background */
